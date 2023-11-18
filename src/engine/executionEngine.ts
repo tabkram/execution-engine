@@ -1,5 +1,5 @@
-import { TraceableExecution } from "./trace/traceableExecution";
 import { v4 as uuidv4 } from "uuid";
+import { TraceableExecution } from "../trace/traceableExecution";
 
 /**
  * Represents a Contextual Execution with traceability features.

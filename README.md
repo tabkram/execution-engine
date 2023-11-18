@@ -31,6 +31,7 @@ const function2Output = result2.outputs // The output value returned by the func
 
 //Access the trace information:
 const trace = engine.getTrace();
+// trace is array containing nodes and edges of the execution trace
 console.log('Trace:', trace);
 ```
 
