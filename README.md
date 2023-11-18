@@ -16,6 +16,7 @@ npm install execution-engine
 
 ## Usage 📚
 
+- example:
 ```typescript
 import { ExecutionEngine } from 'execution-engine';
 
@@ -34,6 +35,67 @@ const trace = engine.getTrace();
 // trace is array containing nodes and edges of the execution trace
 console.log('Trace:', trace);
 ```
+
+- The `result` object has the following structure:
+
+```typescript
+result = {
+   inputs: [
+     param1Value,
+     param2Value
+   ],
+   // An array containing the input values passed to the function.
+   outputs: someResult,
+   // The output value returned by the function.
+   startTime: Date,
+   // The start time of the function execution.
+   endTime: Date,
+   // The end time of the function execution.
+   duration: number,
+   // The duration of the function execution in milliseconds.
+   // ...other properties depending on the configuration and trace options.
+}
+```
+
+- The `trace` object has the following structure:
+
+```typescript
+trace = [
+  {
+    data: {
+      id: function_uuid1,
+      label: functionLabel1
+      //... other properties of the "result1" of the executed function as mentioned above 
+    },
+    group: nodes
+  },
+  {
+    data: {
+      id: function_uuid2,
+      label: functionLabel2
+      //... other properties of the "result2" of the executed function as mentioned above
+    },
+    group: nodes
+  },
+  {
+    data: {
+      id: function_uuid1 -> function_uuid2,
+      source: function_uuid1,
+      target: function_uuid2,
+      parallel: false
+    },
+    group: edges
+  }
+];
+```
+
+- The trace object structure is a JSON array object that can be visualized in the:
+  - [json-to-graph online demo](https://tabkram.github.io/json-to-graph/)
+
+## Examples 📘
+For additional usage examples, please explore the **[/examples](https://github.com/tabkram/execution-engine/tree/main/examples)** directory in this repository.
+
+You'll find a variety of scenarios showcasing the capabilities of Execution Engine.
 
 # Contributing 🤝
 If you find any issues or have suggestions for improvement, feel free to open an issue or submit a pull request. Contributions are welcome!
