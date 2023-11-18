@@ -1,0 +1,24 @@
+.DS_Store
+*.iml
+.idea
+.idea/**
+report.**.json
+
+# Ignore yarn error logs
+**/yarn-error.log
+
+# Ignore js files
+**/src/**/*.js
+**/src/**/*.js.map
+
+# Node modules
+**/node_modules
+
+# Work folders
+**/lib
+**/dist
+
+# Yarn
+.yarn
+.yarn-cache/
+
