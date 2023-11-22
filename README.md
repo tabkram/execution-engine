@@ -97,8 +97,13 @@ For additional usage examples, please explore the **[/examples](https://github.c
 
 You'll find a variety of scenarios showcasing the capabilities of Execution Engine.
 
+## Changelog 📝
+For a detailed list of changes, enhancements, and bug fixes, please refer to our [Changelog](CHANGELOG.md).
+
 # Contributing 🤝
 If you find any issues or have suggestions for improvement, feel free to open an issue or submit a pull request. Contributions are welcome!
+
+Before getting started, please read our [Contribution Guidelines](CONTRIBUTING.md).
 
 # License 📄
 This project is licensed under the MIT License - see the LICENSE file for details.
