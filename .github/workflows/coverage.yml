@@ -7,6 +7,13 @@ on:
 jobs:
   coverage:
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      checks: write
+      contents: write
+      discussions: write
+      pages: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v3
       - uses: ArtiomTr/jest-coverage-report-action@v2
