@@ -11,6 +11,7 @@ import {
 } from "./trace.model";
 import { v4 as uuidv4 } from "uuid";
 import { extract } from "../common/jsonQuery";
+import { ExecutionTimer } from "../timer/executionTimer";
 
 export type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
 
@@ -191,12 +192,12 @@ export class TraceableExecution {
       ? undefined
       : options.config ?? DEFAULT_TRACE_CONFIG;
     const nodeTraceFromOptions = isNodeTrace(options) ? options : options.trace;
-    const startTime = new Date();
-
+    const executionTimer = new ExecutionTimer();
+    executionTimer?.start();
     const nodeTrace: NodeData = {
       id: [
         blockFunction.name ? blockFunction.name : "function",
-        startTime?.getTime(),
+        executionTimer?.getStartDate()?.getTime(),
         TraceableExecution.getUniqueString(),
       ]?.join("_"),
       label: [
@@ -214,7 +215,7 @@ export class TraceableExecution {
           const executionTrace = {
             inputs,
             outputs,
-            ...this.calculateTimeAndDuration(startTime),
+            ...this.calculateTimeAndDuration(executionTimer),
           };
           this.buildTrace<O>(
             nodeTrace,
@@ -227,7 +228,7 @@ export class TraceableExecution {
           const executionTrace = {
             inputs,
             errors: [{ name: e?.name, code: e?.code, message: e?.message }],
-            ...this.calculateTimeAndDuration(startTime),
+            ...this.calculateTimeAndDuration(executionTimer),
           };
           this.buildTrace<O>(
             nodeTrace,
@@ -250,7 +251,7 @@ export class TraceableExecution {
               const executionTrace = {
                 inputs,
                 outputs,
-                ...this.calculateTimeAndDuration(startTime),
+                ...this.calculateTimeAndDuration(executionTimer),
               };
               this.buildTrace<O>(
                 nodeTrace,
@@ -263,7 +264,7 @@ export class TraceableExecution {
               const executionTrace = {
                 inputs,
                 errors: [{ name: e?.name, code: e?.code, message: e?.message }],
-                ...this.calculateTimeAndDuration(startTime),
+                ...this.calculateTimeAndDuration(executionTimer),
               };
               this.buildTrace<O>(
                 nodeTrace,
@@ -282,7 +283,7 @@ export class TraceableExecution {
         const executionTrace: NodeExecutionTrace<Array<unknown>, O> = {
           inputs,
           outputs: outputsOrPromise,
-          ...this.calculateTimeAndDuration(startTime),
+          ...this.calculateTimeAndDuration(executionTimer),
         };
         this.buildTrace<O>(
           nodeTrace,
@@ -294,7 +295,7 @@ export class TraceableExecution {
         const executionTrace = {
           inputs,
           errors: [{ name: e?.name, code: e?.code, message: e?.message }],
-          ...this.calculateTimeAndDuration(startTime),
+          ...this.calculateTimeAndDuration(executionTimer),
         };
         this.buildTrace<O>(
           nodeTrace,
@@ -487,12 +488,12 @@ export class TraceableExecution {
     }
   }
 
-  private calculateTimeAndDuration(startTime: Date) {
-    const endTime = new Date();
+  private calculateTimeAndDuration(executionTimer: ExecutionTimer) {
+    executionTimer?.stop();
     return {
-      startTime,
-      endTime,
-      duration: endTime?.getTime() - startTime?.getTime(),
+      startTime: executionTimer?.getStartDate(),
+      endTime: executionTimer?.getEndDate(),
+      duration: executionTimer?.getDuration(),
     };
   }
 
