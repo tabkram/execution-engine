@@ -40,6 +40,7 @@ export interface NodeExecutionTrace<I, O> {
   startTime?: Date;
   endTime?: Date;
   duration?: number;
+  elapsedTime?: string;
 }
 
 export function isNodeTrace(config: NodeTrace | NodeData | unknown): config is Partial<NodeTrace> {

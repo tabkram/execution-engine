@@ -489,11 +489,12 @@ export class TraceableExecution {
   }
 
   private calculateTimeAndDuration(executionTimer: ExecutionTimer) {
-    executionTimer?.stop();
+    executionTimer.stop();
     return {
-      startTime: executionTimer?.getStartDate(),
-      endTime: executionTimer?.getEndDate(),
-      duration: executionTimer?.getDuration(),
+      startTime: executionTimer.getStartDate(),
+      endTime: executionTimer.getEndDate(),
+      duration: executionTimer.getDuration(),
+      elapsedTime: executionTimer.getElapsedTime(undefined, 3),
     };
   }
 
