@@ -39,18 +39,22 @@ export class ExecutionTimer {
   /**
    * Gets the duration of the execution timer in milliseconds.
    * @param executionId - An optional identifier for the execution timer. Defaults to 'default'.
+   * @param fractionDigits – The number of digits to appear after the decimal point; should be a value between 0 and 100, inclusive.
    * @returns The duration of the execution timer in milliseconds.
    */
-  getDuration(executionId?: string) {
+  getDuration(executionId?: string, fractionDigits?: number) {
     const timerId = executionId ?? "default";
     if (this.timer[executionId ?? "default"]?.startTime) {
       if (!this.timer[executionId ?? "default"].endTime) {
         this.stop(timerId);
       }
-      return (
+      const duration =
         this.timer[executionId ?? "default"].endTime -
-        this.timer[executionId ?? "default"].startTime
-      );
+        this.timer[executionId ?? "default"].startTime;
+
+      return Number.isFinite(fractionDigits)
+        ? Number(duration?.toFixed(fractionDigits))
+        : duration;
     }
   }
 
@@ -61,7 +65,10 @@ export class ExecutionTimer {
    */
   getStartDate(executionId?: string): Date | undefined {
     if (this.timer[executionId ?? "default"]?.startTime) {
-      return new Date(this.timer[executionId ?? "default"]?.startTime);
+      const currentTime =
+        performance.timeOrigin +
+        this.timer[executionId ?? "default"]?.startTime;
+      return new Date(currentTime);
     }
   }
 
@@ -72,22 +79,28 @@ export class ExecutionTimer {
    */
   getEndDate(executionId?: string): Date | undefined {
     if (this.timer[executionId ?? "default"]?.endTime) {
-      return new Date(this.timer[executionId ?? "default"]?.endTime);
+      const currentTime =
+        performance.timeOrigin + this.timer[executionId ?? "default"]?.endTime;
+      return new Date(currentTime);
     }
   }
 
   /**
    * Gets the human-readable elapsed time of the execution timer.
    * @param executionId - An optional identifier for the execution timer. Defaults to 'default'.
+   * @param fractionDigits – The number of digits to appear after the decimal point; should be a value between 0 and 100, inclusive.
    * @returns A string representing the human-readable elapsed time.
    */
-  getElapsedTime(executionId?: string): string | undefined {
+  getElapsedTime(
+    executionId?: string,
+    fractionDigits?: number
+  ): string | undefined {
     const duration = this.getDuration(executionId);
     if (duration === undefined) {
       return undefined;
     }
 
-    const milliseconds = Math.floor(duration % 1000);
+    const milliseconds = duration % 1000;
     const seconds = Math.floor((duration / 1000) % 60);
     const minutes = Math.floor((duration / (1000 * 60)) % 60);
     const hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
@@ -95,18 +108,21 @@ export class ExecutionTimer {
     const parts = [];
 
     if (hours > 0) {
-      parts.push(`${hours} hour${hours > 1 ? 's' : ''}`);
+      parts.push(`${hours} hour${hours > 1 ? "s" : ""}`);
     }
     if (minutes > 0) {
-      parts.push(`${minutes} minute${minutes > 1 ? 's' : ''}`);
+      parts.push(`${minutes} minute${minutes > 1 ? "s" : ""}`);
     }
     if (seconds > 0) {
-      parts.push(`${seconds} second${seconds > 1 ? 's' : ''}`);
+      parts.push(`${seconds} second${seconds > 1 ? "s" : ""}`);
+    }
+    if (parts?.length) {
+      parts.push("and");
     }
     if (milliseconds > 0) {
-      parts.push(`${milliseconds} ms`);
+      parts.push(`${milliseconds.toFixed(fractionDigits)} ms`);
     }
 
-    return parts.join(' ');
+    return parts.join(" ");
   }
 }
