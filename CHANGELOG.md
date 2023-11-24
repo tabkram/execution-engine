@@ -1,3 +1,18 @@
+## [0.0.3](https://github.com/tabkram/execution-engine/compare/v0.0.2...v0.0.3) (2023-11-24)
+
+
+### Bug Fixes
+
+* execution timer tests ([1ec91cc](https://github.com/tabkram/execution-engine/commit/1ec91cc33bf8f39890b26988ce1657f5d3b85183))
+
+
+### Features
+
+* add more examples to explain ExecutionEngine usage ([28feb55](https://github.com/tabkram/execution-engine/commit/28feb558c4b5a96b17a4af156c2fb641478055d8))
+* better duration measuring especially for short time intervals ([393429b](https://github.com/tabkram/execution-engine/commit/393429bcf156171d96a20cbd43057ba96c3faa55))
+
+
+
 ## [0.0.2](https://github.com/tabkram/execution-engine/compare/8243be45fd13a0fbb968c18bf9401b7ea657cf8e...v0.0.2) (2023-11-18)
 
 
