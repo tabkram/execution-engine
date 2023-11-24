@@ -3,6 +3,15 @@ import { ExecutionTimer } from "./executionTimer";
 describe("ExecutionTimer", () => {
   let timer: ExecutionTimer;
 
+  beforeAll(() => {
+    // redefining readonly property of the performance object
+    Object.defineProperty(performance, "now", {
+      value: performance.now,
+      configurable: true,
+      writable: true,
+    });
+  });
+
   beforeEach(() => {
     timer = new ExecutionTimer();
   });
