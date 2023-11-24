@@ -1,3 +1,12 @@
+## [0.0.5](https://github.com/tabkram/execution-engine/compare/v0.0.4...v0.0.5) (2023-11-24)
+
+
+### Bug Fixes
+
+* execution getStartDate and getEndDate and improve getElapsedTime ([8eb30cb](https://github.com/tabkram/execution-engine/commit/8eb30cb2306e737cdb54b671be47011459e0a575))
+
+
+
 ## [0.0.4](https://github.com/tabkram/execution-engine/compare/v0.0.3...v0.0.4) (2023-11-24)
 
 
