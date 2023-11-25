@@ -1,3 +1,12 @@
+## [0.0.7](https://github.com/tabkram/execution-engine/compare/v0.0.6...v0.0.7) (2023-11-25)
+
+
+### Bug Fixes
+
+* resolve narrative bug ([bcea36f](https://github.com/tabkram/execution-engine/commit/bcea36faf6da728512f0753e7e944828d4aad3c5))
+
+
+
 ## [0.0.6](https://github.com/tabkram/execution-engine/compare/v0.0.5...v0.0.6) (2023-11-25)
 
 
