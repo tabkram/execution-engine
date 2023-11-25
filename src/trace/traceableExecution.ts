@@ -383,8 +383,8 @@ export class TraceableExecution {
         data: {
           ...this.nodes[existingNodeIndex]?.data,
           ...filterExecutionTrace,
-          narratives: this.narratives?.[nodeTrace?.id],
           ...nodeTrace,
+          narratives: (nodeTrace.narratives ?? []).concat(this.narratives?.[nodeTrace?.id] ?? []),
           parallel: options?.parallel,
           abstract: isAutoCreated,
           updateTime: new Date()
@@ -395,8 +395,8 @@ export class TraceableExecution {
       this.nodes?.push({
         data: {
           ...filterExecutionTrace,
-          narratives: this.narratives?.[nodeTrace?.id],
           ...nodeTrace,
+          narratives: (nodeTrace.narratives ?? []).concat(this.narratives?.[nodeTrace?.id] ?? []),
           parallel: options?.parallel,
           abstract: isAutoCreated,
           createTime: new Date()
