@@ -18,7 +18,6 @@
     "format": "prettier --write src/**/*.ts",
     "prepublishOnly": "npm run build",
     "prepare": "npm audit",
-    "start": "node dist/index.js",
     "commitlint": "commitlint --edit"
   },
   "repository": {

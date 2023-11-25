@@ -53,6 +53,11 @@ export function isNodeExecutionTrace<I, O>(config: NodeExecutionTraceExtractor<I
 
 export interface NodeData<I = unknown, O = unknown> extends NodeTrace, NodeExecutionTrace<I, O> {}
 
+export interface Node {
+  data: NodeData;
+  group: 'nodes';
+}
+
 export interface EdgeData {
   id: string;
   source: string | number;
@@ -60,3 +65,10 @@ export interface EdgeData {
   parent?: string;
   parallel?: boolean | string;
 }
+
+export interface Edge {
+  data: EdgeData;
+  group: 'edges';
+}
+
+export type Trace = Array<Node | Edge>;

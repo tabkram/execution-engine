@@ -5,13 +5,15 @@ import { extract } from '../common/jsonQuery';
 import { ExecutionTimer } from '../timer/executionTimer';
 import {
   DEFAULT_TRACE_CONFIG,
-  EdgeData,
+  Edge,
   isNodeExecutionTrace,
   isNodeTrace,
+  Node,
   NodeData,
   NodeExecutionTrace,
   NodeExecutionTraceExtractor,
   NodeTrace,
+  Trace,
   TraceOptions
 } from './trace.model';
 
@@ -28,25 +30,18 @@ export type TraceableRunnerOptions = TraceOptions<Array<any>, unknown> | TraceOp
  * Represents a class for traceable execution of functions.
  */
 export class TraceableExecution {
-  private nodes: Array<{
-    data: NodeData;
-    group: 'nodes';
-  }>;
-  private edges: Array<{
-    data: EdgeData;
-    group: 'edges';
-  }>;
+  private nodes: Array<Node>;
+  private edges: Array<Edge>;
   private narratives: {
     [key: string]: Array<string>;
   };
 
-  constructor() {
-    this.initTrace();
-  }
-
-  private static getUniqueString() {
-    const uniqueId: string = uuidv4();
-    return uniqueId;
+  /**
+   * Initializes a new instance of the TraceableExecution class.
+   * @param initialTrace - The initial trace to be used.
+   */
+  constructor(initialTrace?: Trace) {
+    this.initTrace(initialTrace);
   }
 
   private static extractIOExecutionTraceWithConfig<I, O>(
@@ -81,9 +76,9 @@ export class TraceableExecution {
     }
   }
 
-  initTrace() {
-    this.nodes = [];
-    this.edges = [];
+  initTrace(initialTrace: Trace) {
+    this.nodes = (initialTrace?.filter((b) => b.group === 'nodes') as Array<Node>) ?? [];
+    this.edges = (initialTrace?.filter((b) => b.group === 'edges') as Array<Edge>) ?? [];
     this.narratives = {};
   }
 
@@ -91,7 +86,7 @@ export class TraceableExecution {
    * Gets the execution trace.
    * @returns An array containing nodes and edges of the execution trace.
    */
-  getTrace() {
+  getTrace(): Trace {
     return [...this.nodes, ...this.edges];
   }
 
@@ -159,7 +154,7 @@ export class TraceableExecution {
     inputs: Array<unknown> = [],
     options: TraceOptions<Array<any>, O> | TraceOptions<Array<any>, O>['trace'] = {
       trace: {
-        id: [blockFunction.name ? blockFunction.name : 'function', new Date()?.getTime(), TraceableExecution.getUniqueString()]?.join('_'),
+        id: [blockFunction.name ? blockFunction.name : 'function', new Date()?.getTime(), uuidv4()]?.join('_'),
         label: blockFunction.name ? blockFunction.name : 'function'
       },
       config: DEFAULT_TRACE_CONFIG
@@ -176,11 +171,7 @@ export class TraceableExecution {
     const executionTimer = new ExecutionTimer();
     executionTimer?.start();
     const nodeTrace: NodeData = {
-      id: [
-        blockFunction.name ? blockFunction.name : 'function',
-        executionTimer?.getStartDate()?.getTime(),
-        TraceableExecution.getUniqueString()
-      ]?.join('_'),
+      id: [blockFunction.name ? blockFunction.name : 'function', executionTimer?.getStartDate()?.getTime(), uuidv4()]?.join('_'),
       label: [(this.nodes?.length ?? 0) + 1, nodeTraceFromOptions?.id ?? (blockFunction.name ? blockFunction.name : 'function')]?.join(
         ' - '
       ),
