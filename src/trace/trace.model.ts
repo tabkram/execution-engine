@@ -48,7 +48,14 @@ export function isNodeTrace(config: NodeTrace | NodeData | unknown): config is P
 }
 
 export function isNodeExecutionTrace<I, O>(config: NodeExecutionTraceExtractor<I, O>): config is NodeExecutionTraceExtractor<I, O> {
-  return 'inputs' in config || 'outputs' in config || 'errors' in config || 'startTime' in config || 'endTime' in config;
+  return (
+    'inputs' in config ||
+    'outputs' in config ||
+    'errors' in config ||
+    'startTime' in config ||
+    'endTime' in config ||
+    'narratives' in config
+  );
 }
 
 export interface NodeData<I = unknown, O = unknown> extends NodeTrace, NodeExecutionTrace<I, O> {}
