@@ -142,6 +142,42 @@ describe('TraceableExecution', () => {
         }
       ]);
     });
+
+    it('should add narratives to a trace node, append narratives, and verify the updated trace and ordered narratives', () => {
+      // Define a sample function
+      const sampleFunction = (param: string) => `Result: ${param}`;
+
+      // Run the sample function using the run method and create nodes in the trace
+      const nodeId = 'sampleFunction_custom_id_1';
+      traceableExecution.run(sampleFunction, ['InputParam'], { trace: { id: nodeId } });
+      traceableExecution.run(sampleFunction, ['InputParam2'], { trace: { id: 'sampleFunction_custom_id_2' } });
+
+      // Get the initial trace and assert its length
+      const initialTrace = traceableExecution.getTrace();
+      expect(initialTrace?.length).toEqual(3);
+
+      // Use pushNarrative to add a single narrative to the specified node
+      traceableExecution.pushNarrative(nodeId, 'Narrative 1');
+
+      // Check if the narrative was added successfully
+      const nodeWithNarrative = traceableExecution.getTraceNodes().find((node) => node.data.id === nodeId);
+      expect(nodeWithNarrative?.data.narratives).toEqual(['Narrative 1']);
+
+      // Use appendNarratives to add an array of narratives to the same node
+      traceableExecution.appendNarratives(nodeId, ['Narrative 2', 'Narrative 3']);
+
+      // Check if the narratives were appended successfully
+      const nodeWithAppendedNarratives = traceableExecution.getTraceNodes().find((node) => node.data.id === nodeId);
+      expect(nodeWithAppendedNarratives?.data.narratives).toEqual(['Narrative 1', 'Narrative 2', 'Narrative 3']);
+
+      // Get the ordered narratives and verify their content
+      const orderedNarratives = traceableExecution.getOrderedNarratives();
+      expect(orderedNarratives).toEqual(['Narrative 1', 'Narrative 2', 'Narrative 3']);
+
+      // Get the final trace and assert its updated length
+      const finalTrace = traceableExecution.getTrace();
+      expect(finalTrace?.length).toEqual(3);
+    });
   });
 
   describe('TraceableExecution with initialTrace', () => {
