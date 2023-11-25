@@ -20,11 +20,8 @@ export function queryByXPath(
 ): unknown | Array<unknown> {
   if (Array.isArray(object) && options?.searchInArrayElements) {
     return options?.searchInArrayElements === 'ALL'
-      ? object?.map(o => queryByXPath(o, xPath))?.filter(x => !!x)
-      : queryByXPath(
-          object?.find(o => queryByXPath(o, xPath)),
-          xPath
-        );
+      ? object?.map((o) => queryByXPath(o, xPath))?.filter((x) => !!x)
+      : queryByXPath(object?.find((o) => queryByXPath(o, xPath)), xPath);
   }
   return xPath
     .replace('[', '.[')
@@ -35,9 +32,9 @@ export function queryByXPath(
         const [k, v] = accessor
           .replace(/(\[|\])/gi, '')
           .split('=')
-          .map(i => i.trim());
+          .map((i) => i.trim());
         if (Array.isArray(input)) {
-          return options?.searchInArrayElements === 'ALL' ? input?.filter(i => i?.[k] === v) : input?.find(i => i?.[k] === v);
+          return options?.searchInArrayElements === 'ALL' ? input?.filter((i) => i?.[k] === v) : input?.find((i) => i?.[k] === v);
         }
         if (input?.[k] === v) {
           return input;
@@ -48,8 +45,8 @@ export function queryByXPath(
             return input?.[accessor];
           }
           return options?.searchInArrayElements === 'ALL'
-            ? input?.map(i => i?.[accessor])
-            : input?.filter(i => i?.[accessor])?.[0]?.[accessor];
+            ? input?.map((i) => i?.[accessor])
+            : input?.filter((i) => i?.[accessor])?.[0]?.[accessor];
         }
         return input?.[accessor];
       }
