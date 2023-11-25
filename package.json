@@ -28,7 +28,12 @@
   "keywords": [
     "typescript",
     "execution",
+    "execution-engine",
+    "workflow",
+    "workflow-engine",
     "trace",
+    "json",
+    "graph",
     "visualization"
   ],
   "author": "Akram TABKA",
