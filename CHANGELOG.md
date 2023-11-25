@@ -1,3 +1,18 @@
+## [0.0.6](https://github.com/tabkram/execution-engine/compare/v0.0.5...v0.0.6) (2023-11-25)
+
+
+### Bug Fixes
+
+* eslint with plugin and config, include prettier ([a3aadfa](https://github.com/tabkram/execution-engine/commit/a3aadfa7908830339d7833808f156accac2102f9))
+
+
+### Features
+
+* add initial trace when instantiating new executions ([37693f2](https://github.com/tabkram/execution-engine/commit/37693f251e5f6f10608e8bec83a04792826f9bf1))
+* add npm repository keywords ([5f72831](https://github.com/tabkram/execution-engine/commit/5f7283198a94a79f1e779f800c73cb04cd766964))
+
+
+
 ## [0.0.5](https://github.com/tabkram/execution-engine/compare/v0.0.4...v0.0.5) (2023-11-24)
 
 
