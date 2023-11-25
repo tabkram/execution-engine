@@ -1,5 +1,6 @@
-import { v4 as uuidv4 } from "uuid";
-import { TraceableExecution } from "../trace/traceableExecution";
+import { v4 as uuidv4 } from 'uuid';
+
+import { TraceableExecution } from '../trace/traceableExecution';
 
 /**
  * Represents a Contextual Execution with traceability features.
@@ -36,13 +37,13 @@ export class ExecutionEngine<
     this.executionId =
       options?.executionId ??
       [
-        "exec",
+        'exec',
         this.executionDate
           .toISOString()
-          .replace(/[-:.Z]/g, "")
-          .replace("T", "_"),
-        uuidv4(),
-      ].join("_");
+          .replace(/[-:.Z]/g, '')
+          .replace('T', '_'),
+        uuidv4()
+      ].join('_');
 
     this.additionalAttributes = options?.additionalAttributes;
 
@@ -67,7 +68,7 @@ export class ExecutionEngine<
   updateContext(partialContext: Partial<CXT>): ExecutionEngine {
     this.context = {
       ...this.context,
-      ...partialContext,
+      ...partialContext
     };
     return this;
   }
@@ -79,14 +80,8 @@ export class ExecutionEngine<
    * @param {CXT[K]} partialContextAttribute - Partial information to update for the attribute.
    * @returns {ExecutionEngine} - The updated ContextualExecution instance.
    */
-  updateContextAttribute<K extends keyof CXT>(
-    key: K,
-    partialContextAttribute: CXT[K]
-  ): ExecutionEngine {
-    if (
-      partialContextAttribute === null ||
-      typeof partialContextAttribute !== "object"
-    ) {
+  updateContextAttribute<K extends keyof CXT>(key: K, partialContextAttribute: CXT[K]): ExecutionEngine {
+    if (partialContextAttribute === null || typeof partialContextAttribute !== 'object') {
       // If the provided attribute is not an object or is null,
       // directly update the attribute in the context.
       this.context[key] = partialContextAttribute;
@@ -94,7 +89,7 @@ export class ExecutionEngine<
       // If the provided attribute is an object, merge it with the existing attribute.
       this.context[key] = {
         ...(this.context?.[key] ?? {}),
-        ...partialContextAttribute,
+        ...partialContextAttribute
       };
     }
     return this;
@@ -114,7 +109,7 @@ export class ExecutionEngine<
    * @returns {T} - The cloned object.
    */
   private deepClone<T>(obj: T): T {
-    if (obj === null || typeof obj !== "object") {
+    if (obj === null || typeof obj !== 'object') {
       return obj;
     }
 

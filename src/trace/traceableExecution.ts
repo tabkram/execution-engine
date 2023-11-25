@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { v4 as uuidv4 } from 'uuid';
+
+import { extract } from '../common/jsonQuery';
+import { ExecutionTimer } from '../timer/executionTimer';
 import {
   DEFAULT_TRACE_CONFIG,
   EdgeData,
@@ -7,22 +12,17 @@ import {
   NodeExecutionTrace,
   NodeExecutionTraceExtractor,
   NodeTrace,
-  TraceOptions,
-} from "./trace.model";
-import { v4 as uuidv4 } from "uuid";
-import { extract } from "../common/jsonQuery";
-import { ExecutionTimer } from "../timer/executionTimer";
+  TraceOptions
+} from './trace.model';
 
 export type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 function isAsync(func: Function): boolean {
-  return func.constructor.name === "AsyncFunction";
+  return func.constructor.name === 'AsyncFunction';
 }
 
-export type TraceableRunnerOptions =
-  | TraceOptions<Array<any>, unknown>
-  | TraceOptions<Array<any>, unknown>["trace"];
+export type TraceableRunnerOptions = TraceOptions<Array<any>, unknown> | TraceOptions<Array<any>, unknown>['trace'];
 
 /**
  * Represents a class for traceable execution of functions.
@@ -30,11 +30,11 @@ export type TraceableRunnerOptions =
 export class TraceableExecution {
   private nodes: Array<{
     data: NodeData;
-    group: "nodes";
+    group: 'nodes';
   }>;
   private edges: Array<{
     data: EdgeData;
-    group: "edges";
+    group: 'edges';
   }>;
   private narratives: {
     [key: string]: Array<string>;
@@ -50,14 +50,11 @@ export class TraceableExecution {
   }
 
   private static extractIOExecutionTraceWithConfig<I, O>(
-    ioeExecTrace:
-      | NodeExecutionTrace<I, O>["inputs"]
-      | NodeExecutionTrace<I, O>["outputs"]
-      | NodeExecutionTrace<I, O>["errors"],
+    ioeExecTrace: NodeExecutionTrace<I, O>['inputs'] | NodeExecutionTrace<I, O>['outputs'] | NodeExecutionTrace<I, O>['errors'],
     extractionConfig: boolean | Array<string> | ((i: unknown) => unknown)
   ) {
     try {
-      if (typeof extractionConfig === "function") {
+      if (typeof extractionConfig === 'function') {
         return extractionConfig(ioeExecTrace);
       } else if (Array.isArray(extractionConfig)) {
         return extract(ioeExecTrace, extractionConfig);
@@ -65,26 +62,22 @@ export class TraceableExecution {
         return ioeExecTrace;
       }
     } catch (e) {
-      throw new Error(
-        `error when mapping/extracting ExecutionTrace with config: "${extractionConfig}", ${e?.message}`
-      );
+      throw new Error(`error when mapping/extracting ExecutionTrace with config: "${extractionConfig}", ${e?.message}`);
     }
   }
 
   private static extractNarrativeWithConfig<I, O>(
     executionTrace: NodeExecutionTrace<I, O>,
-    narrativeConfig: NodeExecutionTraceExtractor<I, O>["narratives"]
+    narrativeConfig: NodeExecutionTraceExtractor<I, O>['narratives']
   ): Array<string> {
     try {
-      if (typeof narrativeConfig === "string") {
+      if (typeof narrativeConfig === 'string') {
         return [narrativeConfig];
-      } else if (typeof narrativeConfig === "function") {
+      } else if (typeof narrativeConfig === 'function') {
         return narrativeConfig(executionTrace);
       }
     } catch (e) {
-      throw new Error(
-        `error when mapping/extracting Narrative with config: "${narrativeConfig}", ${e?.message}`
-      );
+      throw new Error(`error when mapping/extracting Narrative with config: "${narrativeConfig}", ${e?.message}`);
     }
   }
 
@@ -126,7 +119,7 @@ export class TraceableExecution {
   run<O>(
     blockFunction: (...params) => Promise<O>,
     inputs: Array<unknown>,
-    options?: TraceOptions<Array<any>, O>["trace"]
+    options?: TraceOptions<Array<any>, O>['trace']
   ): Promise<NodeExecutionTrace<Array<unknown>, Awaited<O>>>;
 
   /**
@@ -147,7 +140,7 @@ export class TraceableExecution {
   run<O>(
     blockFunction: (...params) => O,
     inputs: Array<unknown>,
-    options?: TraceOptions<Array<any>, O>["trace"]
+    options?: TraceOptions<Array<any>, O>['trace']
   ): NodeExecutionTrace<Array<unknown>, O>;
 
   /**
@@ -164,48 +157,34 @@ export class TraceableExecution {
   run<O>(
     blockFunction: (...params) => O | Promise<O>,
     inputs: Array<unknown> = [],
-    options:
-      | TraceOptions<Array<any>, O>
-      | TraceOptions<Array<any>, O>["trace"] = {
+    options: TraceOptions<Array<any>, O> | TraceOptions<Array<any>, O>['trace'] = {
       trace: {
-        id: [
-          blockFunction.name ? blockFunction.name : "function",
-          new Date()?.getTime(),
-          TraceableExecution.getUniqueString(),
-        ]?.join("_"),
-        label: blockFunction.name ? blockFunction.name : "function",
+        id: [blockFunction.name ? blockFunction.name : 'function', new Date()?.getTime(), TraceableExecution.getUniqueString()]?.join('_'),
+        label: blockFunction.name ? blockFunction.name : 'function'
       },
-      config: DEFAULT_TRACE_CONFIG,
+      config: DEFAULT_TRACE_CONFIG
     }
-  ):
-    | Promise<NodeExecutionTrace<Array<unknown>, Awaited<O>>>
-    | NodeExecutionTrace<Array<unknown>, O> {
-    const inputHasCircular = inputs.find(
-      (i) => i instanceof TraceableExecution
-    );
+  ): Promise<NodeExecutionTrace<Array<unknown>, Awaited<O>>> | NodeExecutionTrace<Array<unknown>, O> {
+    const inputHasCircular = inputs.find((i) => i instanceof TraceableExecution);
     if (inputHasCircular) {
       throw Error(
         `${blockFunction.name} could not have an instance of TraceableExecution as input, this will create circular dependency on trace`
       );
     }
-    const nodeTraceConfigFromOptions = isNodeTrace(options)
-      ? undefined
-      : options.config ?? DEFAULT_TRACE_CONFIG;
+    const nodeTraceConfigFromOptions = isNodeTrace(options) ? undefined : options.config ?? DEFAULT_TRACE_CONFIG;
     const nodeTraceFromOptions = isNodeTrace(options) ? options : options.trace;
     const executionTimer = new ExecutionTimer();
     executionTimer?.start();
     const nodeTrace: NodeData = {
       id: [
-        blockFunction.name ? blockFunction.name : "function",
+        blockFunction.name ? blockFunction.name : 'function',
         executionTimer?.getStartDate()?.getTime(),
-        TraceableExecution.getUniqueString(),
-      ]?.join("_"),
-      label: [
-        (this.nodes?.length ?? 0) + 1,
-        nodeTraceFromOptions?.id ??
-          (blockFunction.name ? blockFunction.name : "function"),
-      ]?.join(" - "),
-      ...nodeTraceFromOptions,
+        TraceableExecution.getUniqueString()
+      ]?.join('_'),
+      label: [(this.nodes?.length ?? 0) + 1, nodeTraceFromOptions?.id ?? (blockFunction.name ? blockFunction.name : 'function')]?.join(
+        ' - '
+      ),
+      ...nodeTraceFromOptions
     };
 
     if (isAsync(blockFunction)) {
@@ -215,27 +194,19 @@ export class TraceableExecution {
           const executionTrace = {
             inputs,
             outputs,
-            ...this.calculateTimeAndDuration(executionTimer),
+            ...this.calculateTimeAndDuration(executionTimer)
           };
-          this.buildTrace<O>(
-            nodeTrace,
-            executionTrace,
-            nodeTraceConfigFromOptions
-          );
+          this.buildTrace<O>(nodeTrace, executionTrace, nodeTraceConfigFromOptions);
           return executionTrace;
         })
         .catch((e) => {
           const executionTrace = {
             inputs,
             errors: [{ name: e?.name, code: e?.code, message: e?.message }],
-            ...this.calculateTimeAndDuration(executionTimer),
+            ...this.calculateTimeAndDuration(executionTimer)
           };
-          this.buildTrace<O>(
-            nodeTrace,
-            executionTrace,
-            nodeTraceConfigFromOptions
-          );
-          if (nodeTraceConfigFromOptions.errors === "catch") {
+          this.buildTrace<O>(nodeTrace, executionTrace, nodeTraceConfigFromOptions);
+          if (nodeTraceConfigFromOptions.errors === 'catch') {
             return executionTrace;
           } else {
             throw e;
@@ -251,27 +222,19 @@ export class TraceableExecution {
               const executionTrace = {
                 inputs,
                 outputs,
-                ...this.calculateTimeAndDuration(executionTimer),
+                ...this.calculateTimeAndDuration(executionTimer)
               };
-              this.buildTrace<O>(
-                nodeTrace,
-                executionTrace,
-                nodeTraceConfigFromOptions
-              );
+              this.buildTrace<O>(nodeTrace, executionTrace, nodeTraceConfigFromOptions);
               return executionTrace;
             })
             .catch((e) => {
               const executionTrace = {
                 inputs,
                 errors: [{ name: e?.name, code: e?.code, message: e?.message }],
-                ...this.calculateTimeAndDuration(executionTimer),
+                ...this.calculateTimeAndDuration(executionTimer)
               };
-              this.buildTrace<O>(
-                nodeTrace,
-                executionTrace,
-                nodeTraceConfigFromOptions
-              );
-              if (nodeTraceConfigFromOptions.errors === "catch") {
+              this.buildTrace<O>(nodeTrace, executionTrace, nodeTraceConfigFromOptions);
+              if (nodeTraceConfigFromOptions.errors === 'catch') {
                 return executionTrace;
               } else {
                 throw e;
@@ -283,26 +246,18 @@ export class TraceableExecution {
         const executionTrace: NodeExecutionTrace<Array<unknown>, O> = {
           inputs,
           outputs: outputsOrPromise,
-          ...this.calculateTimeAndDuration(executionTimer),
+          ...this.calculateTimeAndDuration(executionTimer)
         };
-        this.buildTrace<O>(
-          nodeTrace,
-          executionTrace,
-          nodeTraceConfigFromOptions
-        );
+        this.buildTrace<O>(nodeTrace, executionTrace, nodeTraceConfigFromOptions);
         return executionTrace;
       } catch (e) {
         const executionTrace = {
           inputs,
           errors: [{ name: e?.name, code: e?.code, message: e?.message }],
-          ...this.calculateTimeAndDuration(executionTimer),
+          ...this.calculateTimeAndDuration(executionTimer)
         };
-        this.buildTrace<O>(
-          nodeTrace,
-          executionTrace,
-          nodeTraceConfigFromOptions
-        );
-        if (nodeTraceConfigFromOptions.errors === "catch") {
+        this.buildTrace<O>(nodeTrace, executionTrace, nodeTraceConfigFromOptions);
+        if (nodeTraceConfigFromOptions.errors === 'catch') {
           return executionTrace;
         } else {
           throw e;
@@ -317,18 +272,13 @@ export class TraceableExecution {
    * @param narrative - The narrative to be pushed.
    * @returns The updated instance of TraceableExecution.
    */
-  pushNarrative(nodeId: NodeTrace["id"], narrative: string) {
-    const existingNodeIndex = this.nodes?.findIndex(
-      (n) => n.data.id === nodeId
-    );
+  pushNarrative(nodeId: NodeTrace['id'], narrative: string) {
+    const existingNodeIndex = this.nodes?.findIndex((n) => n.data.id === nodeId);
     if (existingNodeIndex >= 0) {
       // it means that we are too late and node has already been created with narratives:
       this.nodes[existingNodeIndex].data = {
         ...this.nodes[existingNodeIndex]?.data,
-        narratives: [
-          ...(this.nodes[existingNodeIndex]?.data?.narratives ?? []),
-          narrative,
-        ],
+        narratives: [...(this.nodes[existingNodeIndex]?.data?.narratives ?? []), narrative]
       };
     }
     this.narratives[nodeId] = this.narratives[nodeId] ?? [];
@@ -342,22 +292,16 @@ export class TraceableExecution {
    * @param narratives - An array of narratives to be appended.
    * @returns The updated instance of TraceableExecution.
    */
-  appendNarratives(nodeId: NodeTrace["id"], narratives: Array<string>) {
-    const existingNodeIndex = this.nodes?.findIndex(
-      (n) => n.data.id === nodeId
-    );
+  appendNarratives(nodeId: NodeTrace['id'], narratives: Array<string>) {
+    const existingNodeIndex = this.nodes?.findIndex((n) => n.data.id === nodeId);
     if (existingNodeIndex >= 0) {
       // it means that we are too late and node has already been created with narratives:
       this.nodes[existingNodeIndex].data = {
         ...this.nodes[existingNodeIndex]?.data,
-        narratives: (
-          this.nodes[existingNodeIndex]?.data?.narratives ?? []
-        )?.concat(narratives),
+        narratives: (this.nodes[existingNodeIndex]?.data?.narratives ?? [])?.concat(narratives)
       };
     }
-    this.narratives[nodeId] = (this.narratives[nodeId] ?? [])?.concat(
-      narratives
-    );
+    this.narratives[nodeId] = (this.narratives[nodeId] ?? [])?.concat(narratives);
     return this;
   }
 
@@ -372,17 +316,14 @@ export class TraceableExecution {
   private buildTrace<O>(
     nodeTrace: NodeData,
     executionTrace?: NodeExecutionTrace<Array<unknown>, O>,
-    options: TraceOptions<Array<unknown>, O>["config"] = DEFAULT_TRACE_CONFIG,
+    options: TraceOptions<Array<unknown>, O>['config'] = DEFAULT_TRACE_CONFIG,
     isAutoCreated = false
   ) {
-    if (
-      nodeTrace.parent &&
-      !this.nodes?.find((n) => n.data.id === nodeTrace.parent)
-    ) {
+    if (nodeTrace.parent && !this.nodes?.find((n) => n.data.id === nodeTrace.parent)) {
       this.buildTrace<O>(
         {
           id: nodeTrace.parent,
-          label: nodeTrace.parent,
+          label: nodeTrace.parent
         },
         { errors: executionTrace.errors },
         DEFAULT_TRACE_CONFIG,
@@ -393,27 +334,18 @@ export class TraceableExecution {
     if (!isAutoCreated) {
       let parallelEdge = undefined;
       if (options.parallel === true) {
-        parallelEdge = this.edges?.find(
-          (edge) => edge.data.parallel && edge.data.parent === nodeTrace.parent
-        );
-      } else if (typeof options.parallel === "string") {
-        parallelEdge = this.edges?.find(
-          (edge) => edge.data.parallel === options.parallel
-        );
+        parallelEdge = this.edges?.find((edge) => edge.data.parallel && edge.data.parent === nodeTrace.parent);
+      } else if (typeof options.parallel === 'string') {
+        parallelEdge = this.edges?.find((edge) => edge.data.parallel === options.parallel);
       }
 
-      this.edges?.find(
-        (edge) => edge.data.parallel && edge.data.parent === nodeTrace.parent
-      );
+      this.edges?.find((edge) => edge.data.parallel && edge.data.parent === nodeTrace.parent);
       const previousNodes = !parallelEdge
         ? this.nodes?.filter(
             (node) =>
               !node.data.abstract &&
               node.data.parent === nodeTrace.parent &&
-              (!options?.parallel ||
-                !node.data.parallel ||
-                !node.data.parent ||
-                !nodeTrace.parent) &&
+              (!options?.parallel || !node.data.parallel || !node.data.parent || !nodeTrace.parent) &&
               node.data.id !== nodeTrace.id &&
               node.data.parent !== nodeTrace.id &&
               node.data.id !== nodeTrace.parent &&
@@ -428,9 +360,9 @@ export class TraceableExecution {
             source: previousNode.data.id,
             target: nodeTrace.id,
             parent: nodeTrace.parent,
-            parallel: options?.parallel,
+            parallel: options?.parallel
           },
-          group: "edges" as const,
+          group: 'edges' as const
         })) ?? []),
         ...(parallelEdge
           ? [
@@ -440,26 +372,21 @@ export class TraceableExecution {
                   source: parallelEdge.data.source,
                   target: nodeTrace.id,
                   parent: nodeTrace.parent,
-                  parallel: options?.parallel,
+                  parallel: options?.parallel
                 },
-                group: "edges" as const,
-              },
+                group: 'edges' as const
+              }
             ]
-          : []),
+          : [])
       ];
     }
 
-    const filterExecutionTrace = this.filterExecutionTrace(
-      executionTrace,
-      options?.traceExecution
-    );
+    const filterExecutionTrace = this.filterExecutionTrace(executionTrace, options?.traceExecution);
     if (filterExecutionTrace?.narratives?.length) {
       this.appendNarratives(nodeTrace.id, filterExecutionTrace?.narratives);
     }
     // si ne node existe déjà (un parent auto-créé):
-    const existingNodeIndex = this.nodes?.findIndex(
-      (n) => n.data.id === nodeTrace?.id
-    );
+    const existingNodeIndex = this.nodes?.findIndex((n) => n.data.id === nodeTrace?.id);
     if (existingNodeIndex >= 0) {
       this.nodes[existingNodeIndex] = {
         data: {
@@ -469,9 +396,9 @@ export class TraceableExecution {
           ...nodeTrace,
           parallel: options?.parallel,
           abstract: isAutoCreated,
-          updateTime: new Date(),
+          updateTime: new Date()
         },
-        group: "nodes",
+        group: 'nodes'
       };
     } else {
       this.nodes?.push({
@@ -481,9 +408,9 @@ export class TraceableExecution {
           ...nodeTrace,
           parallel: options?.parallel,
           abstract: isAutoCreated,
-          createTime: new Date(),
+          createTime: new Date()
         },
-        group: "nodes",
+        group: 'nodes'
       });
     }
   }
@@ -494,13 +421,13 @@ export class TraceableExecution {
       startTime: executionTimer.getStartDate(),
       endTime: executionTimer.getEndDate(),
       duration: executionTimer.getDuration(),
-      elapsedTime: executionTimer.getElapsedTime(undefined, 3),
+      elapsedTime: executionTimer.getElapsedTime(undefined, 3)
     };
   }
 
   private filterExecutionTrace<I, O>(
     executionTrace?: NodeExecutionTrace<I, O>,
-    doTraceExecution?: TraceOptions<I, O>["config"]["traceExecution"]
+    doTraceExecution?: TraceOptions<I, O>['config']['traceExecution']
   ) {
     if (!doTraceExecution) {
       return {};
@@ -519,23 +446,11 @@ export class TraceableExecution {
     }
     if (isNodeExecutionTrace(doTraceExecution)) {
       const execTrace: NodeExecutionTrace<unknown, unknown> = {};
-      execTrace.inputs = TraceableExecution.extractIOExecutionTraceWithConfig<
-        I,
-        O
-      >(executionTrace.inputs, doTraceExecution.inputs);
-      execTrace.outputs = TraceableExecution.extractIOExecutionTraceWithConfig<
-        I,
-        O
-      >(executionTrace.outputs, doTraceExecution.outputs);
-      execTrace.errors = TraceableExecution.extractIOExecutionTraceWithConfig<
-        I,
-        O
-      >(executionTrace.errors, doTraceExecution.errors);
+      execTrace.inputs = TraceableExecution.extractIOExecutionTraceWithConfig<I, O>(executionTrace.inputs, doTraceExecution.inputs);
+      execTrace.outputs = TraceableExecution.extractIOExecutionTraceWithConfig<I, O>(executionTrace.outputs, doTraceExecution.outputs);
+      execTrace.errors = TraceableExecution.extractIOExecutionTraceWithConfig<I, O>(executionTrace.errors, doTraceExecution.errors);
 
-      execTrace.narratives = TraceableExecution.extractNarrativeWithConfig<
-        I,
-        O
-      >(executionTrace, doTraceExecution.narratives);
+      execTrace.narratives = TraceableExecution.extractNarrativeWithConfig<I, O>(executionTrace, doTraceExecution.narratives);
 
       if (doTraceExecution.startTime === true) {
         execTrace.startTime = executionTrace.startTime;
@@ -543,10 +458,7 @@ export class TraceableExecution {
       if (doTraceExecution.endTime === true) {
         execTrace.endTime = executionTrace.endTime;
       }
-      if (
-        doTraceExecution.startTime === true &&
-        doTraceExecution.endTime === true
-      ) {
+      if (doTraceExecution.startTime === true && doTraceExecution.endTime === true) {
         execTrace.duration = executionTrace.duration;
       }
       return execTrace;

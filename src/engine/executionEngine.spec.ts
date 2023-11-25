@@ -1,4 +1,3 @@
-
 import { ExecutionEngine } from './executionEngine';
 
 class TestExecutionEngine extends ExecutionEngine<{ user: { name?: string; age?: number }; itemsBought?: Array<string> }> {
