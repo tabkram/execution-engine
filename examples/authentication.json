@@ -6,15 +6,15 @@
         "secure_password"
       ],
       "outputs": "User john_doe successfully registered",
-      "startTime": "2023-11-24T22:19:37.121Z",
-      "endTime": "2023-11-24T22:19:42.123Z",
-      "duration": 5002.637415990233,
-      "elapsedTime": "5 seconds and 2.637 ms",
-      "id": "registerUser_1700864377121_53cd575d-bfb7-4c23-b2b6-088d0f3d3d8d",
+      "startTime": "2023-11-25T01:03:39.432Z",
+      "endTime": "2023-11-25T01:03:44.433Z",
+      "duration": 5001.653791993856,
+      "elapsedTime": "5 seconds and 1.654 ms",
+      "id": "registerUser_1700874219431_1d36da54-2bac-4d4f-bfac-65f2523d90c6",
       "label": "registerUser",
       "parallel": false,
       "abstract": false,
-      "createTime": "2023-11-24T22:19:42.125Z"
+      "createTime": "2023-11-25T01:03:44.433Z"
     },
     "group": "nodes"
   },
@@ -25,15 +25,15 @@
         "secure_password"
       ],
       "outputs": "User john_doe successfully logged in",
-      "startTime": "2023-11-24T22:19:42.125Z",
-      "endTime": "2023-11-24T22:19:45.127Z",
-      "duration": 3002.193583995104,
-      "elapsedTime": "3 seconds and 2.194 ms",
-      "id": "loginUser_1700864382125_4eb50a99-b855-4284-b599-99f1d1f017fa",
+      "startTime": "2023-11-25T01:03:44.433Z",
+      "endTime": "2023-11-25T01:03:47.435Z",
+      "duration": 3001.4909159839153,
+      "elapsedTime": "3 seconds and 1.491 ms",
+      "id": "loginUser_1700874224433_068689d5-2c61-4b33-a2be-8d72c8748e10",
       "label": "loginUser",
       "parallel": false,
       "abstract": false,
-      "createTime": "2023-11-24T22:19:45.128Z"
+      "createTime": "2023-11-25T01:03:47.436Z"
     },
     "group": "nodes"
   },
@@ -43,32 +43,32 @@
         "john_doe"
       ],
       "outputs": "User Information for john_doe: Full Name - John Doe, Email - john.doe@example.com, Role - User",
-      "startTime": "2023-11-24T22:19:45.128Z",
-      "endTime": "2023-11-24T22:19:46.130Z",
-      "duration": 1001.459207996726,
-      "elapsedTime": "1 second and 1.459 ms",
-      "id": "getUserInformation_1700864385128_34448989-c957-42e0-b7a3-a019b41092e7",
+      "startTime": "2023-11-25T01:03:47.436Z",
+      "endTime": "2023-11-25T01:03:48.438Z",
+      "duration": 1002.438874989748,
+      "elapsedTime": "1 second and 2.439 ms",
+      "id": "getUserInformation_1700874227436_30684d33-74df-45ef-a56c-4f3ad26084b8",
       "label": "getUserInformation",
       "parallel": false,
       "abstract": false,
-      "createTime": "2023-11-24T22:19:46.130Z"
+      "createTime": "2023-11-25T01:03:48.439Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "registerUser_1700864377121_53cd575d-bfb7-4c23-b2b6-088d0f3d3d8d->loginUser_1700864382125_4eb50a99-b855-4284-b599-99f1d1f017fa",
-      "source": "registerUser_1700864377121_53cd575d-bfb7-4c23-b2b6-088d0f3d3d8d",
-      "target": "loginUser_1700864382125_4eb50a99-b855-4284-b599-99f1d1f017fa",
+      "id": "registerUser_1700874219431_1d36da54-2bac-4d4f-bfac-65f2523d90c6->loginUser_1700874224433_068689d5-2c61-4b33-a2be-8d72c8748e10",
+      "source": "registerUser_1700874219431_1d36da54-2bac-4d4f-bfac-65f2523d90c6",
+      "target": "loginUser_1700874224433_068689d5-2c61-4b33-a2be-8d72c8748e10",
       "parallel": false
     },
     "group": "edges"
   },
   {
     "data": {
-      "id": "loginUser_1700864382125_4eb50a99-b855-4284-b599-99f1d1f017fa->getUserInformation_1700864385128_34448989-c957-42e0-b7a3-a019b41092e7",
-      "source": "loginUser_1700864382125_4eb50a99-b855-4284-b599-99f1d1f017fa",
-      "target": "getUserInformation_1700864385128_34448989-c957-42e0-b7a3-a019b41092e7",
+      "id": "loginUser_1700874224433_068689d5-2c61-4b33-a2be-8d72c8748e10->getUserInformation_1700874227436_30684d33-74df-45ef-a56c-4f3ad26084b8",
+      "source": "loginUser_1700874224433_068689d5-2c61-4b33-a2be-8d72c8748e10",
+      "target": "getUserInformation_1700874227436_30684d33-74df-45ef-a56c-4f3ad26084b8",
       "parallel": false
     },
     "group": "edges"

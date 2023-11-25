@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
+import { Trace } from '../trace/trace.model';
 import { TraceableExecution } from '../trace/traceableExecution';
 
 /**
@@ -25,14 +26,16 @@ export class ExecutionEngine<
    * @param {Object} [options] - Options for initializing the execution.
    * @param {Date} [options.executionDate] - Date of the execution.
    * @param {string} [options.executionId] - Unique identifier for the execution.
+   * @param {string} [options.initialTrace] - The initial trace for the execution.
    * @param {Object} [options.additionalAttributes] - Additional attributes for the execution.
    */
   constructor(options?: {
     executionDate?: Date;
     executionId?: string;
+    initialTrace?: Trace;
     additionalAttributes?: { [key: string]: string | number | boolean };
   }) {
-    super();
+    super(options?.initialTrace);
     this.executionDate = options?.executionDate ?? new Date();
     this.executionId =
       options?.executionId ??
