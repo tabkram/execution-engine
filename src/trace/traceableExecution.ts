@@ -273,7 +273,7 @@ export class TraceableExecution {
    * @param narratives - The narrative or array of narratives to be processed.
    * @returns The updated instance of TraceableExecution.
    */
-  appendNarratives(nodeId: NodeTrace['id'], narratives: string | string[]) {
+  pushNarratives(nodeId: NodeTrace['id'], narratives: string | string[]) {
     const existingNodeIndex = this.nodes?.findIndex((n) => n.data.id === nodeId);
 
     if (existingNodeIndex >= 0) {
@@ -291,6 +291,18 @@ export class TraceableExecution {
     }
 
     return this;
+  }
+
+  /**
+   * @deprecated Use `pushNarratives` instead. This method will be removed in future versions.
+   * Appends narratives to a trace node.
+   * @param nodeId - The ID of the node.
+   * @param narratives - The narrative or array of narratives to be processed.
+   * @returns The updated instance of TraceableExecution.
+   */
+  appendNarratives(nodeId: NodeTrace['id'], narratives: string | string[]) {
+    console.warn('The use of appendNarratives is deprecated. Use pushNarratives instead.');
+    return this.pushNarratives(nodeId, narratives);
   }
 
   /**
@@ -374,7 +386,7 @@ export class TraceableExecution {
       ...this.filterNodeExecutionTrace({ ...executionTrace, ...nodeTrace }, options?.traceExecution)
     };
     if (filteredNodeData?.narratives?.length) {
-      this.appendNarratives(nodeTrace.id, filteredNodeData?.narratives);
+      this.pushNarratives(nodeTrace.id, filteredNodeData?.narratives);
     }
     // si ne node existe déjà (un parent auto-créé):
     const existingNodeIndex = this.nodes?.findIndex((n) => n.data.id === nodeTrace?.id);
