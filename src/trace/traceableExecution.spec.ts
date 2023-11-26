@@ -144,30 +144,31 @@ describe('TraceableExecution', () => {
     });
 
     it('should add narratives to a trace node and verify the updated trace and ordered narratives', () => {
-      // Define a sample function
       const sampleFunction = (param: string) => `Result: ${param}`;
 
-      // Run the sample function using the run method and create nodes in the trace
       const nodeId = 'sampleFunction_custom_id_1';
       traceableExecution.run(sampleFunction, ['InputParam'], {
         trace: { id: nodeId, narratives: ['Narrative 0'] },
-        config: {
-          traceExecution: {
-            narratives: (res) => {
-              return [`Narrative 0 with ${res.outputs}`];
-            }
-          }
-        }
+        config: { traceExecution: { narratives: (res) => [`Narrative 0 with ${res.outputs}`] } }
       });
-      traceableExecution.run(sampleFunction, ['InputParam2'], {
-        trace: {
-          id: 'sampleFunction_custom_id_2',
-          narratives: ['Narrative 0 for function 2']
-        }
+
+      traceableExecution.run(sampleFunction, ['InputParam'], {
+        trace: { id: 'sampleFunction_custom_id_2', narratives: ['Narrative 0 for function 2'] },
+        config: { traceExecution: { narratives: ['Narrative 1 for function 2', 'Narrative 2 for function 2'] } }
+      });
+
+      traceableExecution.run(sampleFunction, ['InputParam'], {
+        trace: { id: 'sampleFunction_custom_id_3', narratives: ['Narrative 0 for function 3'] },
+        config: { traceExecution: { narratives: true } }
+      });
+
+      traceableExecution.run(sampleFunction, ['InputParam'], {
+        trace: { id: 'sampleFunction_custom_id_4', narratives: ['Narrative 0 for function 4, non traced!!'] },
+        config: { traceExecution: { narratives: false } }
       });
 
       const trace = traceableExecution.getTrace();
-      expect(trace?.length).toEqual(3);
+      expect(trace?.length).toEqual(7);
 
       // Use pushNarrative to add a single narrative to the specified node
       traceableExecution.pushNarrative(nodeId, 'Narrative 1');
@@ -197,7 +198,10 @@ describe('TraceableExecution', () => {
         'Narrative 1',
         'Narrative 2',
         'Narrative 3',
-        'Narrative 0 for function 2'
+        'Narrative 0 for function 2',
+        'Narrative 1 for function 2',
+        'Narrative 2 for function 2',
+        'Narrative 0 for function 3'
       ]);
     });
 

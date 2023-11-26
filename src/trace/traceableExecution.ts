@@ -66,10 +66,12 @@ export class TraceableExecution {
     narrativeConfig: NodeExecutionTraceExtractor<I, O>['narratives']
   ): Array<string> {
     try {
-      if (typeof narrativeConfig === 'string') {
-        return [narrativeConfig];
-      } else if (typeof narrativeConfig === 'function') {
-        return narrativeConfig(executionTrace);
+      if (typeof narrativeConfig === 'function') {
+        return (executionTrace.narratives ?? []).concat(narrativeConfig(executionTrace));
+      } else if (Array.isArray(narrativeConfig)) {
+        return (executionTrace.narratives ?? []).concat(narrativeConfig);
+      } else if (narrativeConfig === true) {
+        return executionTrace.narratives;
       }
     } catch (e) {
       throw new Error(`error when mapping/extracting Narrative with config: "${narrativeConfig}", ${e?.message}`);
@@ -452,9 +454,7 @@ export class TraceableExecution {
       execTrace.outputs = TraceableExecution.extractIOExecutionTraceWithConfig<I, O>(executionTrace.outputs, doTraceExecution.outputs);
       execTrace.errors = TraceableExecution.extractIOExecutionTraceWithConfig<I, O>(executionTrace.errors, doTraceExecution.errors);
 
-      execTrace.narratives = (executionTrace.narratives ?? []).concat(
-        TraceableExecution.extractNarrativeWithConfig<I, O>(executionTrace, doTraceExecution.narratives) ?? []
-      );
+      execTrace.narratives = TraceableExecution.extractNarrativeWithConfig<I, O>(executionTrace, doTraceExecution.narratives);
 
       if (doTraceExecution.startTime === true) {
         execTrace.startTime = executionTrace.startTime;
