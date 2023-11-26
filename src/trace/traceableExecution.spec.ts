@@ -157,6 +157,10 @@ describe('TraceableExecution', () => {
         config: { traceExecution: { narratives: ['Narrative 1 for function 2', 'Narrative 2 for function 2'] } }
       });
 
+      traceableExecution.pushNarrative(
+        'sampleFunction_custom_id_3',
+        'Narrative -1 for function 3, anticipated narrative before node creation'
+      );
       traceableExecution.run(sampleFunction, ['InputParam'], {
         trace: { id: 'sampleFunction_custom_id_3', narratives: ['Narrative 0 for function 3'] },
         config: { traceExecution: { narratives: true } }
@@ -201,6 +205,7 @@ describe('TraceableExecution', () => {
         'Narrative 0 for function 2',
         'Narrative 1 for function 2',
         'Narrative 2 for function 2',
+        'Narrative -1 for function 3, anticipated narrative before node creation',
         'Narrative 0 for function 3'
       ]);
     });
