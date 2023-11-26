@@ -211,7 +211,7 @@ describe('TraceableExecution', () => {
     });
 
     it('should enhance trace details for a sample function with various configurations', () => {
-      const sampleFunction = (param: string) => `Result: ${param}`;
+      const sampleFunction = (param: unknown) => `Result: ${param}`;
       // Run the sample function using the run method and create nodes in the trace
       const traceExecutionConfig = {
         inputs: (i) => 'better input for trace: ' + i,
@@ -249,9 +249,38 @@ describe('TraceableExecution', () => {
       });
 
       const nodeId4 = 'sampleFunction_custom_id_4';
+      traceableExecution.run(
+        sampleFunction,
+        [
+          'InputParam',
+          {
+            name: {
+              value1: 'not traced',
+              value2: ['this is traced', 'but not this', 'this is traced also']
+            },
+            name2: { traced: 'yes, this should be traced too..', noTrace: 'no, not this one..' }
+          },
+          { name3: 'trace of the 3rd input' }
+        ],
+        {
+          trace: {
+            id: nodeId4,
+            narratives: ['Narrative 0'],
+            label: 'sampleFunction with filtered input tracing'
+          },
+          config: {
+            traceExecution: {
+              inputs: ['1.name.value2.0', '1.name.value2.2', 'name2.traced', 'name3'],
+              outputs: true
+            }
+          }
+        }
+      );
+
+      const nodeId5 = 'sampleFunction_custom_id_5';
       traceableExecution.run(sampleFunction, ['InputParam', 'InputParam2'], {
         trace: {
-          id: nodeId4,
+          id: nodeId5,
           narratives: ['Narrative 0'],
           label: 'sampleFunction with disabled tracing',
           inputs: 'custom input not traced'
@@ -260,7 +289,7 @@ describe('TraceableExecution', () => {
       });
 
       const trace = traceableExecution.getTrace();
-      expect(trace?.length).toEqual(7);
+      expect(trace?.length).toEqual(9);
       expect(trace?.find((node) => node.group === 'nodes' && node.data.id === nodeId)).toEqual({
         data: {
           id: expect.stringMatching(/^sampleFunction_.*$/),
@@ -313,6 +342,26 @@ describe('TraceableExecution', () => {
       });
 
       expect(trace?.find((node) => node.group === 'nodes' && node.data.id === nodeId4)).toEqual({
+        data: {
+          id: expect.stringMatching(/^sampleFunction_.*$/),
+          label: 'sampleFunction with filtered input tracing',
+          narratives: undefined,
+          inputs: [
+            { '1.name.value2.0': 'this is traced' },
+            { '1.name.value2.2': 'this is traced also' },
+            { 'name2.traced': 'yes, this should be traced too..' },
+            { name3: 'trace of the 3rd input' }
+          ],
+          outputs: 'Result: InputParam',
+          errors: undefined,
+          abstract: false,
+          parallel: undefined,
+          createTime: expect.any(Date)
+        },
+        group: 'nodes'
+      });
+
+      expect(trace?.find((node) => node.group === 'nodes' && node.data.id === nodeId5)).toEqual({
         data: {
           id: expect.stringMatching(/^sampleFunction_.*$/),
           label: 'sampleFunction with disabled tracing',
