@@ -1,3 +1,13 @@
+# [1.0.0](https://github.com/tabkram/execution-engine/compare/v0.0.10...v1.0.0) (2023-11-26)
+
+
+### Features (⚠️ Breaking Changes)
+
+* remove `tags` attribute of `ExecutionEngine` and consider them as part of `context` attribute ([df39ab2](https://github.com/tabkram/execution-engine/commit/df39ab2be6d929308b8f4e34ad98c8924929097f))
+* remove `pushNarrative` function and update `appendNarratives` in order to be used instead  ([73aad23](https://github.com/tabkram/execution-engine/commit/73aad234b8219c69f3ec6008fc3d73be2255648d))
+
+
+
 ## [0.0.10](https://github.com/tabkram/execution-engine/compare/v0.0.9...v0.0.10) (2023-11-26)
 
 
