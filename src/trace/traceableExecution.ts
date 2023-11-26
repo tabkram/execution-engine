@@ -294,18 +294,6 @@ export class TraceableExecution {
   }
 
   /**
-   * @deprecated Use `pushNarratives` instead. This method will be removed in future versions.
-   * Appends narratives to a trace node.
-   * @param nodeId - The ID of the node.
-   * @param narratives - The narrative or array of narratives to be processed.
-   * @returns The updated instance of TraceableExecution.
-   */
-  appendNarratives(nodeId: NodeTrace['id'], narratives: string | string[]) {
-    console.warn('The use of appendNarratives is deprecated. Use pushNarratives instead.');
-    return this.pushNarratives(nodeId, narratives);
-  }
-
-  /**
    * Gets an ordered array of narratives.
    * @returns An array containing ordered narratives.
    */
