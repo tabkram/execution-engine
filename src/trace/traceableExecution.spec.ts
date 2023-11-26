@@ -143,6 +143,64 @@ describe('TraceableExecution', () => {
       ]);
     });
 
+    it('should trace sync and async errors in throwErrorFunction and asyncThrowErrorFunction', async () => {
+      function throwErrorFunction(param: string) {
+        throw new Error(`Sample Error: ${param}`);
+      }
+
+      jest.useFakeTimers();
+
+      async function asyncThrowErrorFunction(param: string) {
+        jest.advanceTimersByTime(1000);
+        throw new Error(`Sample Async Error: ${param}`);
+      }
+
+      const nodeId = 'errorTrace_custom_id_1';
+      traceableExecution.run(throwErrorFunction, ['InputParam'], {
+        trace: { id: nodeId },
+        config: { errors: 'catch', traceExecution: { errors: true } }
+      });
+
+      const nodeId2 = 'errorTrace_custom_id_2';
+      await traceableExecution.run(asyncThrowErrorFunction, ['InputParam2'], {
+        trace: { id: nodeId2 },
+        config: { errors: 'catch', traceExecution: { errors: true } }
+      });
+
+      const trace = traceableExecution.getTrace();
+      expect(trace?.length).toEqual(3);
+
+      // Check if the errors are traced for sampleFunction
+      const node1 = traceableExecution.getTraceNodes().find((node) => node.data.id === nodeId);
+      expect(node1?.data).toEqual({
+        abstract: false,
+        createTime: expect.any(Date),
+        errors: [
+          {
+            message: 'Sample Error: InputParam',
+            name: 'Error'
+          }
+        ],
+        id: 'errorTrace_custom_id_1',
+        label: expect.stringMatching(/errorTrace_custom_id_1/)
+      });
+
+      // Check if the errors are traced for sampleFunction2
+      const node2 = traceableExecution.getTraceNodes().find((node) => node.data.id === nodeId2);
+      expect(node2?.data).toEqual({
+        abstract: false,
+        createTime: expect.any(Date),
+        errors: [
+          {
+            message: 'Sample Async Error: InputParam2',
+            name: 'Error'
+          }
+        ],
+        id: 'errorTrace_custom_id_2',
+        label: expect.stringMatching(/errorTrace_custom_id_2/)
+      });
+    });
+
     it('should add narratives to a trace node and verify the updated trace and ordered narratives', () => {
       const sampleFunction = (param: string) => `Result: ${param}`;
 
