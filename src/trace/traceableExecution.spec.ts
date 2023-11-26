@@ -9,12 +9,12 @@ describe('TraceableExecution', () => {
       traceableExecution = new TraceableExecution();
     });
 
-    it('should create a trace of consecutive calls', async () => {
+    it('should create a trace of consecutive user-related actions', async () => {
       function registerUser(username: string, password: string) {
         if (username && password) {
           return Promise.resolve(`User ${username} successfully registered`);
         } else {
-          Promise.reject('Invalid registration information');
+          return Promise.reject('Invalid registration information');
         }
       }
 
@@ -36,24 +36,24 @@ describe('TraceableExecution', () => {
       }
 
       // Sequential consecutive calls for user registration, login, and retrieving user information
-      const newUser = {
+      const newUserCredentials = {
         username: 'john_doe',
         password: 'secure_password'
       };
-      await traceableExecution.run(registerUser, [newUser.username, newUser.password]);
-      traceableExecution.run(loginUser, [newUser.username, newUser.password]);
-      traceableExecution.run(getUserInformation, [newUser.username]);
+      await traceableExecution.run(registerUser, [newUserCredentials.username, newUserCredentials.password]);
+      traceableExecution.run(loginUser, [newUserCredentials.username, newUserCredentials.password]);
+      traceableExecution.run(getUserInformation, [newUserCredentials.username]);
 
       // Retrieve the trace
       const finalTrace = traceableExecution.getTrace();
 
       // Perform assertions on the finalTrace
       expect(finalTrace?.length).toEqual(5);
-      expect(finalTrace?.filter((n) => n.group === 'nodes')?.length).toEqual(3);
-      expect(finalTrace?.filter((n) => n.group === 'edges')?.length).toEqual(2);
+      expect(finalTrace?.filter((node) => node.group === 'nodes')?.length).toEqual(3);
+      expect(finalTrace?.filter((node) => node.group === 'edges')?.length).toEqual(2);
     });
 
-    it('should create a trace of fetching data simultaneously from two functions using Promise.all', async () => {
+    it('should create a trace of fetching weather information simultaneously', async () => {
       async function fetchCurrentTemperature(city: string) {
         return Promise.resolve(`Current Temperature in ${city}: 25°C`);
       }
@@ -85,8 +85,8 @@ describe('TraceableExecution', () => {
       await traceableExecution.run(getWeatherInformation, ['Paris']);
       // Retrieve the trace
       const finalTrace = traceableExecution.getTrace();
-      expect(finalTrace?.filter((n) => n.group === 'nodes')?.length).toEqual(3);
-      expect(finalTrace?.filter((n) => n.group === 'edges')?.length).toEqual(0);
+      expect(finalTrace?.filter((node) => node.group === 'nodes')?.length).toEqual(3);
+      expect(finalTrace?.filter((node) => node.group === 'edges')?.length).toEqual(0);
       // Perform assertions on the finalTrace
       expect(finalTrace).toMatchObject([
         {
@@ -143,7 +143,7 @@ describe('TraceableExecution', () => {
       ]);
     });
 
-    it('should add narratives to a trace node, append narratives, and verify the updated trace and ordered narratives', () => {
+    it('should add narratives to a trace node and verify the updated trace and ordered narratives', () => {
       // Define a sample function
       const sampleFunction = (param: string) => `Result: ${param}`;
 
@@ -201,7 +201,7 @@ describe('TraceableExecution', () => {
       ]);
     });
 
-    it('should enhance trace details for a sample function', () => {
+    it('should enhance trace details for a sample function with various configurations', () => {
       const sampleFunction = (param: string) => `Result: ${param}`;
       // Run the sample function using the run method and create nodes in the trace
       const traceExecutionConfig = {
@@ -234,15 +234,25 @@ describe('TraceableExecution', () => {
         trace: {
           id: nodeId3,
           narratives: ['Narrative 0'],
-          label: 'sampleFunction3',
+          label: 'sampleFunction with mentioned trace config in array format'
+        },
+        config: { traceExecution: ['inputs', 'outputs'] }
+      });
+
+      const nodeId4 = 'sampleFunction_custom_id_4';
+      traceableExecution.run(sampleFunction, ['InputParam', 'InputParam2'], {
+        trace: {
+          id: nodeId4,
+          narratives: ['Narrative 0'],
+          label: 'sampleFunction with disabled tracing',
           inputs: 'custom input not traced'
         },
         config: { traceExecution: false }
       });
 
       const trace = traceableExecution.getTrace();
-      expect(trace?.length).toEqual(5);
-      expect(trace?.find((n) => n.group === 'nodes' && n.data.id === nodeId)).toEqual({
+      expect(trace?.length).toEqual(7);
+      expect(trace?.find((node) => node.group === 'nodes' && node.data.id === nodeId)).toEqual({
         data: {
           id: expect.stringMatching(/^sampleFunction_.*$/),
           label: 'sampleFunction',
@@ -261,7 +271,7 @@ describe('TraceableExecution', () => {
         group: 'nodes'
       });
 
-      expect(trace?.find((n) => n.group === 'nodes' && n.data.id === nodeId2)).toEqual({
+      expect(trace?.find((node) => node.group === 'nodes' && node.data.id === nodeId2)).toEqual({
         data: {
           id: expect.stringMatching(/^sampleFunction_.*$/),
           label: 'sampleFunction2',
@@ -280,10 +290,23 @@ describe('TraceableExecution', () => {
         group: 'nodes'
       });
 
-      expect(trace?.find((n) => n.group === 'nodes' && n.data.id === nodeId3)).toEqual({
+      expect(trace?.find((node) => node.group === 'nodes' && node.data.id === nodeId3)).toEqual({
         data: {
           id: expect.stringMatching(/^sampleFunction_.*$/),
-          label: 'sampleFunction3',
+          label: 'sampleFunction with mentioned trace config in array format',
+          abstract: false,
+          parallel: undefined,
+          createTime: expect.any(Date),
+          inputs: ['InputParam', 'InputParam2'],
+          outputs: 'Result: InputParam'
+        },
+        group: 'nodes'
+      });
+
+      expect(trace?.find((node) => node.group === 'nodes' && node.data.id === nodeId4)).toEqual({
+        data: {
+          id: expect.stringMatching(/^sampleFunction_.*$/),
+          label: 'sampleFunction with disabled tracing',
           abstract: false,
           parallel: undefined,
           createTime: expect.any(Date)
