@@ -7,13 +7,12 @@ import { TraceableExecution } from '../trace/traceableExecution';
  * Represents a Contextual Execution with traceability features.
  *
  * @template CXT - Type of the context object.
- * @template TAG - Type of the tags associated with the execution.
  */
 export class ExecutionEngine<
-  CXT extends { [key: string]: unknown } = { [key: string]: unknown },
-  TAG extends string = string
+  CXT extends { [key: string]: unknown } = {
+    [key: string]: unknown;
+  }
 > extends TraceableExecution {
-  protected tags: Array<TAG> = [];
   protected context: CXT;
 
   protected executionDate: Date;
@@ -95,11 +94,6 @@ export class ExecutionEngine<
         ...partialContextAttribute
       };
     }
-    return this;
-  }
-
-  tag(tag: TAG) {
-    this.tags.push(tag);
     return this;
   }
 
