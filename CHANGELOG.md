@@ -1,3 +1,12 @@
+## [1.0.1](https://github.com/tabkram/execution-engine/compare/v1.0.0...v1.0.1) (2023-11-26)
+
+
+### Features
+
+* make `appendNarratives` deprecated and replace it with `pushNarratives` ([a42f882](https://github.com/tabkram/execution-engine/commit/a42f882320baa059eca81c9ece2ec8f9a5aff568))
+
+
+
 # [1.0.0](https://github.com/tabkram/execution-engine/compare/v0.0.10...v1.0.0) (2023-11-26)
 
 
