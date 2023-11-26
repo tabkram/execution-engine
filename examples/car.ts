@@ -1,5 +1,3 @@
-import * as fs from 'fs';
-
 import { ExecutionEngine } from '../src';
 import { writeTrace } from './common/writeTrace';
 

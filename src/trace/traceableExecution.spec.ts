@@ -166,9 +166,8 @@ describe('TraceableExecution', () => {
         }
       });
 
-      // Get the initial trace and assert its length
-      const initialTrace = traceableExecution.getTrace();
-      expect(initialTrace?.length).toEqual(3);
+      const trace = traceableExecution.getTrace();
+      expect(trace?.length).toEqual(3);
 
       // Use pushNarrative to add a single narrative to the specified node
       traceableExecution.pushNarrative(nodeId, 'Narrative 1');
@@ -200,10 +199,97 @@ describe('TraceableExecution', () => {
         'Narrative 3',
         'Narrative 0 for function 2'
       ]);
+    });
 
-      // Get the final trace and assert its updated length
-      const finalTrace = traceableExecution.getTrace();
-      expect(finalTrace?.length).toEqual(3);
+    it('should enhance trace details for a sample function', () => {
+      const sampleFunction = (param: string) => `Result: ${param}`;
+      // Run the sample function using the run method and create nodes in the trace
+      const traceExecutionConfig = {
+        inputs: (i) => 'better input for trace: ' + i,
+        outputs: (o) => 'better output for trace: ' + o,
+        narratives: (res) => {
+          return [`Narrative 0 with ${res.outputs}`];
+        }
+      };
+      const nodeId = 'sampleFunction_custom_id_1';
+      traceableExecution.run(sampleFunction, ['InputParam', 'InputParam2'], {
+        trace: { id: nodeId, narratives: ['Narrative 0'], label: 'sampleFunction' },
+        config: { traceExecution: traceExecutionConfig }
+      });
+
+      const nodeId2 = 'sampleFunction_custom_id_2';
+      traceableExecution.run(sampleFunction, ['InputParam', 'InputParam2'], {
+        trace: {
+          id: nodeId2,
+          narratives: ['Narrative 0'],
+          label: 'sampleFunction2',
+          inputs: ['overwritten InputParam', ' just for logging'],
+          outputs: ['overwritten InputParam', ' just for logging output']
+        },
+        config: { traceExecution: { ...traceExecutionConfig, startTime: true, endTime: true } }
+      });
+
+      const nodeId3 = 'sampleFunction_custom_id_3';
+      traceableExecution.run(sampleFunction, ['InputParam', 'InputParam2'], {
+        trace: {
+          id: nodeId3,
+          narratives: ['Narrative 0'],
+          label: 'sampleFunction3',
+          inputs: 'custom input not traced'
+        },
+        config: { traceExecution: false }
+      });
+
+      const trace = traceableExecution.getTrace();
+      expect(trace?.length).toEqual(5);
+      expect(trace?.find((n) => n.group === 'nodes' && n.data.id === nodeId)).toEqual({
+        data: {
+          id: expect.stringMatching(/^sampleFunction_.*$/),
+          label: 'sampleFunction',
+          inputs: 'better input for trace: InputParam,InputParam2',
+          outputs: 'better output for trace: Result: InputParam',
+          errors: undefined,
+          narratives: ['Narrative 0', 'Narrative 0 with Result: InputParam'],
+          parallel: undefined,
+          startTime: undefined,
+          endTime: undefined,
+          duration: undefined,
+          elapsedTime: undefined,
+          abstract: false,
+          createTime: expect.any(Date)
+        },
+        group: 'nodes'
+      });
+
+      expect(trace?.find((n) => n.group === 'nodes' && n.data.id === nodeId2)).toEqual({
+        data: {
+          id: expect.stringMatching(/^sampleFunction_.*$/),
+          label: 'sampleFunction2',
+          inputs: 'better input for trace: overwritten InputParam, just for logging',
+          outputs: 'better output for trace: overwritten InputParam, just for logging output',
+          errors: undefined,
+          narratives: ['Narrative 0', 'Narrative 0 with overwritten InputParam, just for logging output'],
+          parallel: undefined,
+          startTime: expect.any(Date),
+          endTime: expect.any(Date),
+          duration: expect.any(Number),
+          elapsedTime: expect.any(String),
+          abstract: false,
+          createTime: expect.any(Date)
+        },
+        group: 'nodes'
+      });
+
+      expect(trace?.find((n) => n.group === 'nodes' && n.data.id === nodeId3)).toEqual({
+        data: {
+          id: expect.stringMatching(/^sampleFunction_.*$/),
+          label: 'sampleFunction3',
+          abstract: false,
+          parallel: undefined,
+          createTime: expect.any(Date)
+        },
+        group: 'nodes'
+      });
     });
   });
 
