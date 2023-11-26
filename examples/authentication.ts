@@ -1,5 +1,3 @@
-import * as fs from 'fs';
-
 import { ExecutionEngine } from '../src';
 import { writeTrace } from './common/writeTrace';
 
@@ -8,7 +6,7 @@ async function registerUser(username: string, password: string) {
     await new Promise((resolve) => setTimeout(resolve, 5000));
     return Promise.resolve(`User ${username} successfully registered`);
   } else {
-    Promise.reject('Invalid registration information');
+    await Promise.reject('Invalid registration information');
   }
 }
 

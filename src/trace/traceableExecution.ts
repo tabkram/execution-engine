@@ -372,9 +372,12 @@ export class TraceableExecution {
       ];
     }
 
-    const filterExecutionTrace = this.filterExecutionTrace(executionTrace, options?.traceExecution);
-    if (filterExecutionTrace?.narratives?.length) {
-      this.appendNarratives(nodeTrace.id, filterExecutionTrace?.narratives);
+    const filteredNodeData = {
+      ...this.filterNodeTrace(nodeTrace),
+      ...this.filterNodeExecutionTrace({ ...executionTrace, ...nodeTrace }, options?.traceExecution)
+    };
+    if (filteredNodeData?.narratives?.length) {
+      this.appendNarratives(nodeTrace.id, filteredNodeData?.narratives);
     }
     // si ne node existe déjà (un parent auto-créé):
     const existingNodeIndex = this.nodes?.findIndex((n) => n.data.id === nodeTrace?.id);
@@ -382,9 +385,7 @@ export class TraceableExecution {
       this.nodes[existingNodeIndex] = {
         data: {
           ...this.nodes[existingNodeIndex]?.data,
-          ...filterExecutionTrace,
-          ...nodeTrace,
-          narratives: (nodeTrace.narratives ?? []).concat(this.narratives?.[nodeTrace?.id] ?? []),
+          ...filteredNodeData,
           parallel: options?.parallel,
           abstract: isAutoCreated,
           updateTime: new Date()
@@ -394,9 +395,7 @@ export class TraceableExecution {
     } else {
       this.nodes?.push({
         data: {
-          ...filterExecutionTrace,
-          ...nodeTrace,
-          narratives: (nodeTrace.narratives ?? []).concat(this.narratives?.[nodeTrace?.id] ?? []),
+          ...filteredNodeData,
           parallel: options?.parallel,
           abstract: isAutoCreated,
           createTime: new Date()
@@ -416,7 +415,19 @@ export class TraceableExecution {
     };
   }
 
-  private filterExecutionTrace<I, O>(
+  private filterNodeTrace(nodeData?: NodeData): NodeTrace {
+    return {
+      id: nodeData?.id,
+      label: nodeData?.label,
+      ...(nodeData?.parent ? { parent: nodeData?.parent } : {}),
+      ...(nodeData?.parallel ? { parallel: nodeData?.parallel } : {}),
+      ...(nodeData?.abstract ? { abstract: nodeData?.abstract } : {}),
+      ...(nodeData?.createTime ? { createTime: nodeData?.createTime } : {}),
+      ...(nodeData?.updateTime ? { updateTime: nodeData?.updateTime } : {})
+    };
+  }
+
+  private filterNodeExecutionTrace<I, O>(
     executionTrace?: NodeExecutionTrace<I, O>,
     doTraceExecution?: TraceOptions<I, O>['config']['traceExecution']
   ) {
@@ -441,7 +452,9 @@ export class TraceableExecution {
       execTrace.outputs = TraceableExecution.extractIOExecutionTraceWithConfig<I, O>(executionTrace.outputs, doTraceExecution.outputs);
       execTrace.errors = TraceableExecution.extractIOExecutionTraceWithConfig<I, O>(executionTrace.errors, doTraceExecution.errors);
 
-      execTrace.narratives = TraceableExecution.extractNarrativeWithConfig<I, O>(executionTrace, doTraceExecution.narratives);
+      execTrace.narratives = (executionTrace.narratives ?? []).concat(
+        TraceableExecution.extractNarrativeWithConfig<I, O>(executionTrace, doTraceExecution.narratives) ?? []
+      );
 
       if (doTraceExecution.startTime === true) {
         execTrace.startTime = executionTrace.startTime;
@@ -451,6 +464,7 @@ export class TraceableExecution {
       }
       if (doTraceExecution.startTime === true && doTraceExecution.endTime === true) {
         execTrace.duration = executionTrace.duration;
+        execTrace.elapsedTime = executionTrace.elapsedTime;
       }
       return execTrace;
     }
