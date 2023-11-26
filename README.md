@@ -1,6 +1,12 @@
 # Execution Engine
 
-Execution Engine is a TypeScript library that enables tracing and visualization of code execution workflows in projects with multiple successive and embedded TypeScript modules. Gain insights into the dynamic sequence of code execution by capturing detailed traces in JSON format, easily parseable into graphs.
+ <a href="https://www.npmjs.com/package/execution-engine">
+    <img src="https://img.shields.io/npm/v/execution-engine.svg?logo=npm&logoColor=fff&label=NPM+package&color=limegreen" alt="execution-engine on npm" />
+  </a>
+
+Execution Engine is a TypeScript library that enables tracing and visualization of code execution workflows in projects
+with multiple successive and embedded TypeScript modules. Gain insights into the dynamic sequence of code execution by
+capturing detailed traces in JSON format, easily parseable into graphs.
 
 ## Features ✨
 
@@ -17,6 +23,7 @@ npm install execution-engine
 ## Usage 📚
 
 - example:
+
 ```typescript
 import { ExecutionEngine } from 'execution-engine';
 
@@ -40,20 +47,20 @@ console.log('Trace:', trace);
 
 ```typescript
 result = {
-   inputs: [
-     param1Value,
-     param2Value
-   ],
-   // An array containing the input values passed to the function.
-   outputs: someResult,
-   // The output value returned by the function.
-   startTime: Date,
-   // The start time of the function execution.
-   endTime: Date,
-   // The end time of the function execution.
-   duration: number,
-   // The duration of the function execution in milliseconds.
-   // ...other properties depending on the configuration and trace options.
+  inputs: [
+    param1Value,
+    param2Value
+  ],
+  // An array containing the input values passed to the function.
+  outputs: someResult,
+  // The output value returned by the function.
+  startTime: Date,
+  // The start time of the function execution.
+  endTime: Date,
+  // The end time of the function execution.
+  duration: number,
+  // The duration of the function execution in milliseconds.
+  // ...other properties depending on the configuration and trace options.
 }
 ```
 
@@ -90,20 +97,29 @@ trace = [
 ```
 
 - The trace object structure is a JSON array object that can be visualized in the:
-  - [json-to-graph online demo](https://tabkram.github.io/json-to-graph/)
+    - [json-to-graph online demo](https://tabkram.github.io/json-to-graph/)
 
 ## Examples 📘
-For additional usage examples, please explore the **[/examples](https://github.com/tabkram/execution-engine/tree/main/examples)** directory in this repository.
+
+For additional usage examples, please explore the *
+*[/examples](https://github.com/tabkram/execution-engine/tree/main/examples)** directory in this repository.
 
 You'll find a variety of scenarios showcasing the capabilities of Execution Engine.
 
 ## Changelog 📝
+
 For a detailed list of changes, enhancements, and bug fixes, please refer to our [Changelog](CHANGELOG.md).
 
 # Contributing 🤝
-If you find any issues or have suggestions for improvement, feel free to open an issue or submit a pull request. Contributions are welcome!
+
+If you find any issues or have suggestions for improvement, feel free to open an issue or submit a pull request.
+Contributions are welcome!
 
 Before getting started, please read our [Contribution Guidelines](CONTRIBUTING.md).
 
+# Community 👥
+Love `execution-engine` ? Give our repo a star ⭐ ⬆️.
+
 # License 📄
+
 This project is licensed under the MIT License - see the LICENSE file for details.
