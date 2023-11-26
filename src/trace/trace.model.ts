@@ -17,7 +17,7 @@ export interface NodeExecutionTraceExtractor<I, O> {
   inputs?: boolean | Array<string> | ((i: I) => unknown);
   outputs?: boolean | Array<string> | ((o: O) => unknown);
   errors?: boolean | Array<string> | ((e: Array<unknown>) => unknown);
-  narratives?: string | ((execTrace: NodeExecutionTrace<I, O>) => Array<string>);
+  narratives?: boolean | Array<string> | ((execTrace: NodeExecutionTrace<I, O>) => Array<string>);
   startTime?: boolean;
   endTime?: boolean;
 }

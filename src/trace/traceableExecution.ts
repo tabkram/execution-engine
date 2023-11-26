@@ -32,7 +32,13 @@ export type TraceableRunnerOptions = TraceOptions<Array<any>, unknown> | TraceOp
 export class TraceableExecution {
   private nodes: Array<Node>;
   private edges: Array<Edge>;
-  private narratives: {
+
+  /**
+   * A temporary storage for narratives associated with non-found nodes.
+   * Narratives are stored in memory until the corresponding node is created.
+   * @private
+   */
+  private narrativesForNonFoundNodes: {
     [key: string]: Array<string>;
   };
 
@@ -61,15 +67,19 @@ export class TraceableExecution {
     }
   }
 
-  private static extractNarrativeWithConfig<I, O>(
-    executionTrace: NodeExecutionTrace<I, O>,
+  private extractNarrativeWithConfig<I, O>(
+    nodeData: NodeData<I, O>,
     narrativeConfig: NodeExecutionTraceExtractor<I, O>['narratives']
   ): Array<string> {
     try {
-      if (typeof narrativeConfig === 'string') {
-        return [narrativeConfig];
-      } else if (typeof narrativeConfig === 'function') {
-        return narrativeConfig(executionTrace);
+      const narratives = (this.narrativesForNonFoundNodes[nodeData.id] ?? [])?.concat(nodeData.narratives ?? []);
+      delete this.narrativesForNonFoundNodes[nodeData.id];
+      if (typeof narrativeConfig === 'function') {
+        return narratives.concat(narrativeConfig(nodeData));
+      } else if (Array.isArray(narrativeConfig)) {
+        return narratives.concat(narrativeConfig);
+      } else if (narrativeConfig === true) {
+        return narratives;
       }
     } catch (e) {
       throw new Error(`error when mapping/extracting Narrative with config: "${narrativeConfig}", ${e?.message}`);
@@ -79,7 +89,7 @@ export class TraceableExecution {
   initTrace(initialTrace: Trace) {
     this.nodes = (initialTrace?.filter((b) => b.group === 'nodes') as Array<Node>) ?? [];
     this.edges = (initialTrace?.filter((b) => b.group === 'edges') as Array<Edge>) ?? [];
-    this.narratives = {};
+    this.narrativesForNonFoundNodes = {};
   }
 
   /**
@@ -271,9 +281,11 @@ export class TraceableExecution {
         ...this.nodes[existingNodeIndex]?.data,
         narratives: [...(this.nodes[existingNodeIndex]?.data?.narratives ?? []), narrative]
       };
+    } else {
+      this.narrativesForNonFoundNodes[nodeId] = this.narrativesForNonFoundNodes[nodeId] ?? [];
+      this.narrativesForNonFoundNodes[nodeId]?.push(narrative);
     }
-    this.narratives[nodeId] = this.narratives[nodeId] ?? [];
-    this.narratives[nodeId]?.push(narrative);
+
     return this;
   }
 
@@ -291,8 +303,9 @@ export class TraceableExecution {
         ...this.nodes[existingNodeIndex]?.data,
         narratives: (this.nodes[existingNodeIndex]?.data?.narratives ?? [])?.concat(narratives)
       };
+    } else {
+      this.narrativesForNonFoundNodes[nodeId] = (this.narrativesForNonFoundNodes[nodeId] ?? [])?.concat(narratives);
     }
-    this.narratives[nodeId] = (this.narratives[nodeId] ?? [])?.concat(narratives);
     return this;
   }
 
@@ -427,44 +440,39 @@ export class TraceableExecution {
     };
   }
 
-  private filterNodeExecutionTrace<I, O>(
-    executionTrace?: NodeExecutionTrace<I, O>,
-    doTraceExecution?: TraceOptions<I, O>['config']['traceExecution']
-  ) {
+  private filterNodeExecutionTrace<I, O>(nodeData?: NodeData<I, O>, doTraceExecution?: TraceOptions<I, O>['config']['traceExecution']) {
     if (!doTraceExecution) {
       return {};
     }
     if (doTraceExecution === true) {
-      return executionTrace;
+      return nodeData;
     }
     if (Array.isArray(doTraceExecution)) {
       const execTrace: NodeExecutionTrace<unknown, unknown> = {};
-      Object.keys(executionTrace).forEach((k) => {
+      Object.keys(nodeData).forEach((k) => {
         if (doTraceExecution.includes(k as keyof NodeExecutionTrace<I, O>)) {
-          execTrace[k] = executionTrace[k];
+          execTrace[k] = nodeData[k];
         }
       });
       return execTrace;
     }
     if (isNodeExecutionTrace(doTraceExecution)) {
       const execTrace: NodeExecutionTrace<unknown, unknown> = {};
-      execTrace.inputs = TraceableExecution.extractIOExecutionTraceWithConfig<I, O>(executionTrace.inputs, doTraceExecution.inputs);
-      execTrace.outputs = TraceableExecution.extractIOExecutionTraceWithConfig<I, O>(executionTrace.outputs, doTraceExecution.outputs);
-      execTrace.errors = TraceableExecution.extractIOExecutionTraceWithConfig<I, O>(executionTrace.errors, doTraceExecution.errors);
+      execTrace.inputs = TraceableExecution.extractIOExecutionTraceWithConfig<I, O>(nodeData.inputs, doTraceExecution.inputs);
+      execTrace.outputs = TraceableExecution.extractIOExecutionTraceWithConfig<I, O>(nodeData.outputs, doTraceExecution.outputs);
+      execTrace.errors = TraceableExecution.extractIOExecutionTraceWithConfig<I, O>(nodeData.errors, doTraceExecution.errors);
 
-      execTrace.narratives = (executionTrace.narratives ?? []).concat(
-        TraceableExecution.extractNarrativeWithConfig<I, O>(executionTrace, doTraceExecution.narratives) ?? []
-      );
+      execTrace.narratives = this.extractNarrativeWithConfig<I, O>(nodeData, doTraceExecution.narratives);
 
       if (doTraceExecution.startTime === true) {
-        execTrace.startTime = executionTrace.startTime;
+        execTrace.startTime = nodeData.startTime;
       }
       if (doTraceExecution.endTime === true) {
-        execTrace.endTime = executionTrace.endTime;
+        execTrace.endTime = nodeData.endTime;
       }
       if (doTraceExecution.startTime === true && doTraceExecution.endTime === true) {
-        execTrace.duration = executionTrace.duration;
-        execTrace.elapsedTime = executionTrace.elapsedTime;
+        execTrace.duration = nodeData.duration;
+        execTrace.elapsedTime = nodeData.elapsedTime;
       }
       return execTrace;
     }
