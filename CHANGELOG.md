@@ -1,3 +1,12 @@
+## [0.0.8](https://github.com/tabkram/execution-engine/compare/v0.0.7...v0.0.8) (2023-11-26)
+
+
+### Bug Fixes
+
+* filtering trace node data based on options trace data an trace config ([5c58ba1](https://github.com/tabkram/execution-engine/commit/5c58ba1dc8cf08f6bdb8aada38ea6101068eb96e))
+
+
+
 ## [0.0.7](https://github.com/tabkram/execution-engine/compare/v0.0.6...v0.0.7) (2023-11-25)
 
 
