@@ -268,44 +268,28 @@ export class TraceableExecution {
   }
 
   /**
-   * Push a string narrative to a trace node
+   * Pushes or appends narratives to a trace node.
    * @param nodeId - The ID of the node.
-   * @param narrative - The narrative to be pushed.
+   * @param narratives - The narrative or array of narratives to be processed.
    * @returns The updated instance of TraceableExecution.
    */
-  pushNarrative(nodeId: NodeTrace['id'], narrative: string) {
+  appendNarratives(nodeId: NodeTrace['id'], narratives: string | string[]) {
     const existingNodeIndex = this.nodes?.findIndex((n) => n.data.id === nodeId);
+
     if (existingNodeIndex >= 0) {
-      // it means that we are too late and node has already been created with narratives:
+      // Node already exists, update its narratives
       this.nodes[existingNodeIndex].data = {
         ...this.nodes[existingNodeIndex]?.data,
-        narratives: [...(this.nodes[existingNodeIndex]?.data?.narratives ?? []), narrative]
+        narratives: [...(this.nodes[existingNodeIndex]?.data?.narratives ?? []), ...(Array.isArray(narratives) ? narratives : [narratives])]
       };
     } else {
-      this.narrativesForNonFoundNodes[nodeId] = this.narrativesForNonFoundNodes[nodeId] ?? [];
-      this.narrativesForNonFoundNodes[nodeId]?.push(narrative);
+      // Node doesn't exist, store narratives for later use
+      this.narrativesForNonFoundNodes[nodeId] = [
+        ...(this.narrativesForNonFoundNodes[nodeId] ?? []),
+        ...(Array.isArray(narratives) ? narratives : [narratives])
+      ];
     }
 
-    return this;
-  }
-
-  /**
-   * Appends an array of narratives to a trace node.
-   * @param nodeId - The ID of the node.
-   * @param narratives - An array of narratives to be appended.
-   * @returns The updated instance of TraceableExecution.
-   */
-  appendNarratives(nodeId: NodeTrace['id'], narratives: Array<string>) {
-    const existingNodeIndex = this.nodes?.findIndex((n) => n.data.id === nodeId);
-    if (existingNodeIndex >= 0) {
-      // it means that we are too late and node has already been created with narratives:
-      this.nodes[existingNodeIndex].data = {
-        ...this.nodes[existingNodeIndex]?.data,
-        narratives: (this.nodes[existingNodeIndex]?.data?.narratives ?? [])?.concat(narratives)
-      };
-    } else {
-      this.narrativesForNonFoundNodes[nodeId] = (this.narrativesForNonFoundNodes[nodeId] ?? [])?.concat(narratives);
-    }
     return this;
   }
 

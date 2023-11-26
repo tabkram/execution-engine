@@ -215,7 +215,7 @@ describe('TraceableExecution', () => {
         config: { traceExecution: { narratives: ['Narrative 1 for function 2', 'Narrative 2 for function 2'] } }
       });
 
-      traceableExecution.pushNarrative(
+      traceableExecution.appendNarratives(
         'sampleFunction_custom_id_3',
         'Narrative -1 for function 3, anticipated narrative before node creation'
       );
@@ -233,7 +233,7 @@ describe('TraceableExecution', () => {
       expect(trace?.length).toEqual(7);
 
       // Use pushNarrative to add a single narrative to the specified node
-      traceableExecution.pushNarrative(nodeId, 'Narrative 1');
+      traceableExecution.appendNarratives(nodeId, 'Narrative 1');
 
       // Check if the narrative was added successfully
       const nodeWithNarrative = traceableExecution.getTraceNodes().find((node) => node.data.id === nodeId);
