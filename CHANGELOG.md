@@ -1,3 +1,13 @@
+## [0.0.9](https://github.com/tabkram/execution-engine/compare/v0.0.8...v0.0.9) (2023-11-26)
+
+
+### Bug Fixes
+
+* the temporary storage for narratives associated with non-found nodes in order to improve them ([97545b2](https://github.com/tabkram/execution-engine/commit/97545b28bb609722c232bf231328a113b2ffe1f8))
+* trace narratives extraction and configuration ([4806da8](https://github.com/tabkram/execution-engine/commit/4806da8df051603fef62602cdd909f4acce034dc))
+
+
+
 ## [0.0.8](https://github.com/tabkram/execution-engine/compare/v0.0.7...v0.0.8) (2023-11-26)
 
 
