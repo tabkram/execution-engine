@@ -1,4 +1,4 @@
-# Execution Engine  [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) <a href="https://www.npmjs.com/package/execution-engine"><img src="https://img.shields.io/npm/v/execution-engine.svg?logo=npm&logoColor=fff&label=NPM+package&color=limegreen" alt="execution-engine on npm" /></a>
+# Execution Engine <a href="https://www.npmjs.com/package/execution-engine"><img src="https://img.shields.io/npm/v/execution-engine.svg?logo=npm&logoColor=fff&label=NPM+package&color=limegreen" alt="execution-engine on npm" /></a> [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![Documentation](https://img.shields.io/badge/documentation-grey?logo=githubpages)](https://tabkram.github.io/execution-engine)
 
 Execution Engine is a TypeScript library that enables tracing and visualization of code execution workflows in projects
 with multiple successive and embedded TypeScript modules. Gain insights into the dynamic sequence of code execution by
@@ -94,6 +94,10 @@ trace = [
 
 - The trace object structure is a JSON array object that can be visualized in the:
     - [json-to-graph online demo](https://tabkram.github.io/json-to-graph/)
+
+## Documentation 📔
+
+Explore the comprehensive __[documentation](https://tabkram.github.io/execution-engine)__ for this project.
 
 ## Examples 📘
 

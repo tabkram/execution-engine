@@ -8,12 +8,28 @@ The class also supports the addition of narratives to describe the execution flo
 framework for tracking and visualizing the execution of functions, especially in asynchronous or promise-based
 scenarios.
 
+## Overview
+
+The `TraceableExecution` class allows users to run functions in a traceable manner, capturing detailed information about
+each execution step. The key features include:
+
+- **Execution Trace:**
+    - The module maintains an execution trace, consisting of nodes and edges, representing the flow of execution.
+    - Each node represents a function execution, and edges connect nodes to represent the execution order.
+
+- **Narratives:**
+    - Users can attach narratives to nodes, providing additional context or information about specific execution steps.
+
+- **Timing Information:**
+    - The module captures timing information, including the start time, end time, duration, and elapsed time for each
+      function execution.
+
 ## Usage
 
 1. Import the `TraceableExecution` class:
 
     ```typescript
-    import { TraceableExecution } from 'path-to/TraceableExecution';
+    import { TraceableExecution } from "execution-engine";
     ```
 
 2. Create an instance of `TraceableExecution`:
@@ -37,7 +53,7 @@ scenarios.
         );
         ```
 
-    - Use the run method for **synchronous** functions:
+    - for **synchronous** functions:
 
         ```typescript
         const result = traceableExecution.run(
@@ -51,8 +67,8 @@ scenarios.
 
     - The `result` object has the following structure:
 
-        ```json lines
-        {
+        ```typescript
+        result = {
           inputs: [
             param1Value,
             param2Value
@@ -80,7 +96,7 @@ scenarios.
 5. Optionally, add narratives to describe the execution flow:
 
     ```typescript
-    traceableExecution.pushNarrative(nodeId, 'Narrative description');
+    traceableExecution.pushNarratives(nodeId, 'Narrative description');
     ```
 
 ## Advanced Configuration
@@ -200,3 +216,64 @@ const finalTrace = traceableExecution.getTrace();
 // Perform assertions on the finalTrace
 console.log(JSON.stringify(finalTrace, null, 2));
    ```
+
+# API
+
+## Constructor
+
+### `constructor(initialTrace?: Trace)`
+
+Initializes a new instance of the `TraceableExecution` class.
+
+- `initialTrace` (optional): The initial trace to be used.
+
+## Methods
+
+### `initTrace(initialTrace: Trace): void`
+
+Initializes the trace with the provided initial trace.
+
+- `initialTrace`: The initial trace to be used.
+
+### `getTrace(): Trace`
+
+Gets the execution trace.
+
+Returns an array containing nodes and edges of the execution trace.
+
+### `getTraceNodes(): Array<Node>`
+
+Gets the nodes of the execution trace.
+
+Returns an array containing nodes of the execution trace.
+
+### `run<O>(blockFunction: (...params) => O | Promise<O>, inputs?: Array<unknown>, options?: TraceOptions<Array<any>, O>): Promise<NodeExecutionTrace<Array<unknown>, Awaited<O>>> | NodeExecutionTrace<Array<unknown>, O>`
+
+Executes a function and captures the trace.
+
+- `blockFunction`: The function to be executed.
+- `inputs` (optional): Array of arguments given as input to the function `blockFunction` parameter.
+- `options` (optional): Execution options.
+
+Returns a promise that resolves to the execution trace.
+
+### `pushNarratives(nodeId: NodeTrace['id'], narratives: string | string[]): TraceableExecution`
+
+Pushes or appends narratives to a trace node.
+
+- `nodeId`: The ID of the node.
+- `narratives`: The narrative or array of narratives to be processed.
+
+Returns the updated instance of `TraceableExecution`.
+
+### `getOrderedNarratives(): Array<string>`
+
+Gets an ordered array of narratives.
+
+Returns an array containing ordered narratives.
+
+## Additional Information
+
+This class provides functionality for traceable execution of functions. It captures the execution trace, including nodes and edges, during function execution. The `run` method is used to execute functions and capture their traces.
+
+Note: This documentation is a basic overview. For detailed information on each method's parameters and return types, refer to the TypeScript source code.

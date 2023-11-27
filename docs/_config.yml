@@ -1,0 +1,17 @@
+title: Execution Engine
+description: A TypeScript library for tracing and visualizing code execution workflows
+author:
+  name: tabkram
+
+theme: jekyll-theme-cayman
+
+navbar-links:
+  Getting started: "README"
+  Components:
+    - Execution Timer: "ExecutionTimer"
+    - Traceable Execution: "TraceableExecution"
+    - Execution Engine: "ExecutionEngine"
+
+version: 1.1.0
+license: MIT License
+licenseUrl: http://opensource.org/licenses/MIT
