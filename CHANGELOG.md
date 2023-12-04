@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/tabkram/execution-engine/compare/v1.1.0...v1.2.0) (2023-12-04)
+
+
+### Features
+
+* use async_hooks local storage in trace in order to auto detect parent node ([ee98fa8](https://github.com/tabkram/execution-engine/commit/ee98fa8cc095096d1ead02bc57e054201bdd9d45))
+
+
+
 # [1.1.0](https://github.com/tabkram/execution-engine/compare/v1.0.1...v1.1.0) (2023-11-26)
 
 
