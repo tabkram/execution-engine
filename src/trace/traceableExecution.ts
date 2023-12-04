@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { AsyncLocalStorage } from 'async_hooks';
 import { v4 as uuidv4 } from 'uuid';
 
 import { extract } from '../common/jsonQuery';
@@ -32,6 +33,7 @@ export type TraceableRunnerOptions = TraceOptions<Array<any>, unknown> | TraceOp
 export class TraceableExecution {
   private nodes: Array<Node>;
   private edges: Array<Edge>;
+  private asyncLocalStorage = new AsyncLocalStorage<string>();
 
   /**
    * A temporary storage for narratives associated with non-found nodes.
@@ -177,7 +179,8 @@ export class TraceableExecution {
       );
     }
     const nodeTraceConfigFromOptions = isNodeTrace(options) ? undefined : options.config ?? DEFAULT_TRACE_CONFIG;
-    const nodeTraceFromOptions = isNodeTrace(options) ? options : options.trace;
+    const nodeTraceFromOptions = (isNodeTrace(options) ? options : options.trace) ?? {};
+    nodeTraceFromOptions.parent = nodeTraceFromOptions?.parent ?? this.asyncLocalStorage.getStore();
     const executionTimer = new ExecutionTimer();
     executionTimer?.start();
     const nodeTrace: NodeData = {
@@ -189,33 +192,35 @@ export class TraceableExecution {
     };
 
     if (isAsync(blockFunction)) {
-      return blockFunction
-        .bind(this)(...inputs, nodeTrace)
-        .then((outputs: O) => {
-          const executionTrace = {
-            inputs,
-            outputs,
-            ...this.calculateTimeAndDuration(executionTimer)
-          };
-          this.buildTrace<O>(nodeTrace, executionTrace, nodeTraceConfigFromOptions);
-          return executionTrace;
-        })
-        .catch((e) => {
-          const executionTrace = {
-            inputs,
-            errors: [{ name: e?.name, code: e?.code, message: e?.message }],
-            ...this.calculateTimeAndDuration(executionTimer)
-          };
-          this.buildTrace<O>(nodeTrace, executionTrace, nodeTraceConfigFromOptions);
-          if (nodeTraceConfigFromOptions.errors === 'catch') {
+      return this.asyncLocalStorage.run(nodeTrace.id, () =>
+        blockFunction
+          .bind(this)(...inputs, nodeTrace)
+          .then((outputs: O) => {
+            const executionTrace = {
+              inputs,
+              outputs,
+              ...this.calculateTimeAndDuration(executionTimer)
+            };
+            this.buildTrace<O>(nodeTrace, executionTrace, nodeTraceConfigFromOptions);
             return executionTrace;
-          } else {
-            throw e;
-          }
-        });
+          })
+          .catch((e) => {
+            const executionTrace = {
+              inputs,
+              errors: [{ name: e?.name, code: e?.code, message: e?.message }],
+              ...this.calculateTimeAndDuration(executionTimer)
+            };
+            this.buildTrace<O>(nodeTrace, executionTrace, nodeTraceConfigFromOptions);
+            if (nodeTraceConfigFromOptions.errors === 'catch') {
+              return executionTrace;
+            } else {
+              throw e;
+            }
+          })
+      );
     } else {
       try {
-        const outputsOrPromise = blockFunction.bind(this)(...inputs, nodeTrace);
+        const outputsOrPromise = this.asyncLocalStorage.run(nodeTrace.id, () => blockFunction.bind(this)(...inputs, nodeTrace));
         // recheck if blockFunction is not async but returns a promise too:
         if (outputsOrPromise instanceof Promise) {
           return outputsOrPromise
