@@ -11,8 +11,7 @@ export function run() {
     () => {
       executionEngine.run(() => 'Vehicle Design ok!', ['projectX'], {
         trace: {
-          label: 'Vehicle Design',
-          parent: 'designAndPlanning'
+          label: 'Vehicle Design'
         },
         config: {
           parallel: true
@@ -20,8 +19,7 @@ export function run() {
       });
       executionEngine.run(() => 'Production Planning ok!', ['projectX'], {
         trace: {
-          label: 'Production Planning',
-          parent: 'designAndPlanning'
+          label: 'Production Planning'
         },
         config: {
           parallel: true

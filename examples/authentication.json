@@ -1,74 +1,74 @@
 [
   {
     "data": {
-      "id": "registerUser_1700959367569_88728e4a-ba6f-4315-ab86-7d670b3d44f4",
+      "id": "registerUser_1701725970804_9c8d31ba-00f4-49e5-8c2d-b02130673628",
       "label": "registerUser",
       "inputs": [
         "john_doe",
         "secure_password"
       ],
       "outputs": "User john_doe successfully registered",
-      "startTime": "2023-11-26T00:42:47.569Z",
-      "endTime": "2023-11-26T00:42:52.572Z",
-      "duration": 5003.4342920184135,
-      "elapsedTime": "5 seconds and 3.434 ms",
+      "startTime": "2023-12-04T21:39:30.804Z",
+      "endTime": "2023-12-04T21:39:35.807Z",
+      "duration": 5002.803583979607,
+      "elapsedTime": "5 seconds and 2.804 ms",
       "parallel": false,
       "abstract": false,
-      "createTime": "2023-11-26T00:42:52.574Z"
+      "createTime": "2023-12-04T21:39:35.808Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "loginUser_1700959372574_56d9c88e-a911-4d4e-94f5-38976209c095",
+      "id": "loginUser_1701725975808_eebd0661-80f4-4de1-95f5-6d4ddc22e85b",
       "label": "loginUser",
       "inputs": [
         "john_doe",
         "secure_password"
       ],
       "outputs": "User john_doe successfully logged in",
-      "startTime": "2023-11-26T00:42:52.574Z",
-      "endTime": "2023-11-26T00:42:55.575Z",
-      "duration": 3001.52583399415,
-      "elapsedTime": "3 seconds and 1.526 ms",
+      "startTime": "2023-12-04T21:39:35.808Z",
+      "endTime": "2023-12-04T21:39:38.810Z",
+      "duration": 3002.385375022888,
+      "elapsedTime": "3 seconds and 2.385 ms",
       "parallel": false,
       "abstract": false,
-      "createTime": "2023-11-26T00:42:55.576Z"
+      "createTime": "2023-12-04T21:39:38.811Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "getUserInformation_1700959375576_93196be8-e7d4-428e-84a4-d2bae3257163",
+      "id": "getUserInformation_1701725978811_1b4e6206-faa9-488e-9bef-909d9fbbb7fe",
       "label": "getUserInformation",
       "inputs": [
         "john_doe"
       ],
       "outputs": "User Information for john_doe: Full Name - John Doe, Email - john.doe@example.com, Role - User",
-      "startTime": "2023-11-26T00:42:55.576Z",
-      "endTime": "2023-11-26T00:42:56.578Z",
-      "duration": 1001.4693329930305,
-      "elapsedTime": "1 second and 1.469 ms",
+      "startTime": "2023-12-04T21:39:38.811Z",
+      "endTime": "2023-12-04T21:39:39.813Z",
+      "duration": 1001.3823750019073,
+      "elapsedTime": "1 second and 1.382 ms",
       "parallel": false,
       "abstract": false,
-      "createTime": "2023-11-26T00:42:56.579Z"
+      "createTime": "2023-12-04T21:39:39.813Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "registerUser_1700959367569_88728e4a-ba6f-4315-ab86-7d670b3d44f4->loginUser_1700959372574_56d9c88e-a911-4d4e-94f5-38976209c095",
-      "source": "registerUser_1700959367569_88728e4a-ba6f-4315-ab86-7d670b3d44f4",
-      "target": "loginUser_1700959372574_56d9c88e-a911-4d4e-94f5-38976209c095",
+      "id": "registerUser_1701725970804_9c8d31ba-00f4-49e5-8c2d-b02130673628->loginUser_1701725975808_eebd0661-80f4-4de1-95f5-6d4ddc22e85b",
+      "source": "registerUser_1701725970804_9c8d31ba-00f4-49e5-8c2d-b02130673628",
+      "target": "loginUser_1701725975808_eebd0661-80f4-4de1-95f5-6d4ddc22e85b",
       "parallel": false
     },
     "group": "edges"
   },
   {
     "data": {
-      "id": "loginUser_1700959372574_56d9c88e-a911-4d4e-94f5-38976209c095->getUserInformation_1700959375576_93196be8-e7d4-428e-84a4-d2bae3257163",
-      "source": "loginUser_1700959372574_56d9c88e-a911-4d4e-94f5-38976209c095",
-      "target": "getUserInformation_1700959375576_93196be8-e7d4-428e-84a4-d2bae3257163",
+      "id": "loginUser_1701725975808_eebd0661-80f4-4de1-95f5-6d4ddc22e85b->getUserInformation_1701725978811_1b4e6206-faa9-488e-9bef-909d9fbbb7fe",
+      "source": "loginUser_1701725975808_eebd0661-80f4-4de1-95f5-6d4ddc22e85b",
+      "target": "getUserInformation_1701725978811_1b4e6206-faa9-488e-9bef-909d9fbbb7fe",
       "parallel": false
     },
     "group": "edges"

@@ -143,6 +143,51 @@ describe('TraceableExecution', () => {
       ]);
     });
 
+    it('should generate a trace with implicit parent associations and coherent settings based on AsyncLocalStorage', async () => {
+      async function fetchCurrentTemperature(city: string) {
+        return Promise.resolve(`Current Temperature in ${city}: 25°C`);
+      }
+
+      async function fetchDailyForecast(city: string) {
+        return Promise.resolve(`Daily Forecast in ${city}: Sunny`);
+      }
+
+      async function getWeatherInformation(city: string) {
+        const [temperature, forecast] = await Promise.all([
+          (await traceableExecution.run(fetchCurrentTemperature, [city], { config: { parallel: true } }))?.outputs,
+          (await traceableExecution.run(fetchDailyForecast, [city], { config: { parallel: true } }))?.outputs
+        ]);
+
+        // Simulate a complex decision-making process with nested traces
+        traceableExecution.run(
+          (t, f) => {
+            traceableExecution.run(() => 'parents are thinking!', [t], { trace: { label: 'thinking' } });
+            traceableExecution.run(
+              (f1) => {
+                traceableExecution.run(() => 'child1 is thinking!', [f1], { trace: { label: 'thinking' } });
+                traceableExecution.run(() => 'child2 is deciding!', ['so?'], { trace: { label: 'deciding' } });
+                return 'child1 has decided!';
+              },
+              [f]
+            );
+            return 'parent have decided!';
+          },
+          [temperature, forecast]
+        );
+
+        return Promise.resolve(`Weather information: ${temperature}, ${forecast}`);
+      }
+
+      await traceableExecution.run(getWeatherInformation, ['Paris']);
+      // Retrieve the trace
+      const finalTrace = traceableExecution.getTrace();
+      expect(finalTrace?.filter((node) => node.group === 'nodes')?.length).toEqual(8);
+      expect(finalTrace?.filter((node) => node.group === 'edges')?.length).toEqual(4);
+      expect(finalTrace?.find((node) => node.group === 'nodes' && node.data.label === 'deciding')?.data.parent).toEqual(
+        expect.stringMatching(/^function_.*$/)
+      );
+    });
+
     it('should trace sync and async errors in throwErrorFunction and asyncThrowErrorFunction', async () => {
       function throwErrorFunction(param: string) {
         throw new Error(`Sample Error: ${param}`);
