@@ -2,6 +2,9 @@
 
 A TypeScript library for tracing and visualizing code execution workflows
 
+[![Github repo](https://img.shields.io/badge/github-grey?logo=github)](https://github.com/tabkram/execution-engine)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 ## Table of Contents
 
 - [Installation](#installation-)

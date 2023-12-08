@@ -1,0 +1,47 @@
+[
+  {
+    "data": {
+      "id": "function_1702032864206_62f71e51-ad5a-4c3e-9f75-75fed6778267",
+      "label": "function",
+      "inputs": [
+        "param1"
+      ],
+      "outputs": "result1 for param1",
+      "startTime": "2023-12-08T10:54:24.206Z",
+      "endTime": "2023-12-08T10:54:24.207Z",
+      "duration": 0.25304198265075684,
+      "elapsedTime": "0.253 ms",
+      "parallel": false,
+      "abstract": false,
+      "createTime": "2023-12-08T10:54:24.207Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "function_1702032864207_ada0abb6-1039-4716-90aa-5c6c6ce56107",
+      "label": "function",
+      "inputs": [
+        "result1 for param1"
+      ],
+      "outputs": "result2 for result1 for param1",
+      "startTime": "2023-12-08T10:54:24.207Z",
+      "endTime": "2023-12-08T10:54:24.207Z",
+      "duration": 0.14383304119110107,
+      "elapsedTime": "0.144 ms",
+      "parallel": false,
+      "abstract": false,
+      "createTime": "2023-12-08T10:54:24.207Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "function_1702032864206_62f71e51-ad5a-4c3e-9f75-75fed6778267->function_1702032864207_ada0abb6-1039-4716-90aa-5c6c6ce56107",
+      "source": "function_1702032864206_62f71e51-ad5a-4c3e-9f75-75fed6778267",
+      "target": "function_1702032864207_ada0abb6-1039-4716-90aa-5c6c6ce56107",
+      "parallel": false
+    },
+    "group": "edges"
+  }
+]
