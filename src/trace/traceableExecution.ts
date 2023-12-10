@@ -25,8 +25,6 @@ function isAsync(func: Function): boolean {
   return func.constructor.name === 'AsyncFunction';
 }
 
-export type TraceableRunnerOptions = TraceOptions<Array<any>, unknown> | TraceOptions<Array<any>, unknown>['trace'];
-
 /**
  * Represents a class for traceable execution of functions.
  */
@@ -166,8 +164,8 @@ export class TraceableExecution {
     inputs: Array<unknown> = [],
     options: TraceOptions<Array<any>, O> | TraceOptions<Array<any>, O>['trace'] = {
       trace: {
-        id: [blockFunction.name ? blockFunction.name : 'function', new Date()?.getTime(), uuidv4()]?.join('_'),
-        label: blockFunction.name ? blockFunction.name : 'function'
+        id: [blockFunction.name ? blockFunction.name.replace('bound ', '') : 'function', new Date()?.getTime(), uuidv4()]?.join('_'),
+        label: blockFunction.name ? blockFunction.name.replace('bound ', '') : 'function'
       },
       config: DEFAULT_TRACE_CONFIG
     }
@@ -184,10 +182,15 @@ export class TraceableExecution {
     const executionTimer = new ExecutionTimer();
     executionTimer?.start();
     const nodeTrace: NodeData = {
-      id: [blockFunction.name ? blockFunction.name : 'function', executionTimer?.getStartDate()?.getTime(), uuidv4()]?.join('_'),
-      label: [(this.nodes?.length ?? 0) + 1, nodeTraceFromOptions?.id ?? (blockFunction.name ? blockFunction.name : 'function')]?.join(
-        ' - '
-      ),
+      id: [
+        blockFunction.name ? blockFunction.name.replace('bound ', '') : 'function',
+        executionTimer?.getStartDate()?.getTime(),
+        uuidv4()
+      ]?.join('_'),
+      label: [
+        (this.nodes?.length ?? 0) + 1,
+        nodeTraceFromOptions?.id ?? (blockFunction.name ? blockFunction.name.replace('bound ', '') : 'function')
+      ]?.join(' - '),
       ...nodeTraceFromOptions
     };
 
@@ -332,7 +335,6 @@ export class TraceableExecution {
         parallelEdge = this.edges?.find((edge) => edge.data.parallel === options.parallel);
       }
 
-      this.edges?.find((edge) => edge.data.parallel && edge.data.parent === nodeTrace.parent);
       const previousNodes = !parallelEdge
         ? this.nodes?.filter(
             (node) =>

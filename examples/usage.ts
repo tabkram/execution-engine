@@ -5,10 +5,10 @@ export async function run() {
   const engine = new ExecutionEngine();
 
   // for sync functions:
-  const result1 = engine.run((param) => `result1 for ${param}`, ['param1']);
+  const res1 = engine.run((param) => `result1 for ${param}`, ['param1']);
 
   // for async functions:
-  const result2 = await engine.run(async (param) => `result2 for ${param}`, [result1.outputs]);
+  const res2 = await engine.run(async (param) => `result2 for ${param}`, [res1.outputs]);
 
   // Retrieve the trace
   const trace = engine.getTrace();
@@ -16,4 +16,4 @@ export async function run() {
   writeTrace(jsonString);
 }
 
-run();
+run().then();
