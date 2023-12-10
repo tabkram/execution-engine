@@ -34,7 +34,7 @@ yarn add execution-engine
 
 ## Usage 📚
 
-- example:
+### Example 1: Basic Usage
 
 ```typescript
 import { ExecutionEngine } from "execution-engine";
@@ -42,38 +42,58 @@ import { ExecutionEngine } from "execution-engine";
 const engine = new ExecutionEngine();
 
 // for sync functions:
-const result1 = engine.run((param) => `result1 for ${param}`, ['param1']);
+const res1 = engine.run((param) => `result1 for ${param}`, ['param1']);
 
 // for async functions:
-const result2 = await engine.run(async (param) => `result2 for ${param}`, [result1.outputs]);
+const res2 = await engine.run(async (param) => `result2 for ${param}`, [res1.outputs]);
 
 // Retrieve the trace
 const trace = engine.getTrace();
 console.log('Trace:', trace);
 ```
 
-- The `result` object contains function output (`outputs`), input parameters (`inputs`), and other attributes related to
-  the engine. It has the following structure:
+You can:
+
+- view the **complete code** in [examples/usage.ts](examples/usage.ts)
+- inspect the **trace output** in [examples/usage.json](examples/usage.json).
+- visualize the **trace graph** using the json-to-graph online tool. [→ See the result ←](https://tabkram.github.io/json-to-graph/?data=https://raw.githubusercontent.com/tabkram/execution-engine/main/examples/usage.json)
+
+### Example 2: Usage with Decorators
 
 ```typescript
-result = {
-  // An array containing the input values passed to thunction:
-  inputs: [
-    "param1"
-  ],
-  // The output value returned by the function:
-  outputs: "result1 for param1",
-  // The start time of the function execution:
-  startTime: Date,
-  // The end time of the function execution:
-  endTime: Date,
-  // The duration of the function execution in milliseconds:
-  duration: number,
-  // ...other properties depending on the configuration and trace options.
+import { engine, run } from "execution-engine";
+
+@engine({ id: "uniqueEngineId" })
+class MyClass extends EngineTask {
+  @run()
+  myMethod1(param: string) {
+    return `result1 for ${param}`;
+  }
+
+  @run()
+  async myMethod2(param: string) {
+    return `result2 for ${param}`;
+  }
 }
+
+const myInstance = new MyClass();
+myInstance.myMethod2("param1");
+await myInstance.myMethod2("param2");
+
+// Retrieve the trace
+const trace = myInstance.engine.getTrace();
+console.log("Trace:", trace);
 ```
 
-- The `trace` object is an array containing **nodes** and **edges**. It has the following structure:
+You can:
+
+- view the **complete code** in [examples/usage2.ts](examples/usage2.ts)
+- inspect the **trace output** in [examples/usage2.json](examples/usage2.json)
+- visualize the **trace graph** using the json-to-graph online tool. [→ See the result ←](https://tabkram.github.io/json-to-graph/?data=https://raw.githubusercontent.com/tabkram/execution-engine/main/examples/usage2.json)
+
+### Understanding the Trace 🧭
+
+The `trace` object is an array containing **nodes** and **edges**. It has the following structure:
 
 ```typescript
 trace = [
@@ -81,7 +101,7 @@ trace = [
     data: {
       id: function_uuid1,
       label: "function"
-      //... other properties of the "result1" of the executed function as mentioned above 
+      //... other properties of the result of the executed function as mentioned above 
     },
     group: nodes
   },
@@ -89,7 +109,7 @@ trace = [
     data: {
       id: function_uuid2,
       label: "function"
-      //... other properties of the "result2" of the executed function as mentioned above
+      //... other properties of the result of the executed function as mentioned above
     },
     group: nodes
   },
@@ -104,11 +124,6 @@ trace = [
   }
 ];
 ```
-
-- Visualize the `trace` object using the json-to-graph online tool. [→ See the result ←](https://tabkram.github.io/json-to-graph/?data=https://raw.githubusercontent.com/tabkram/execution-engine/main/examples/usage.json)
-
-You can view the complete code in [examples/usage.ts](examples/usage.ts) and inspect the entire trace output
-in [examples/usage.json](examples/usage.json).
 
 ## Examples 📘
 

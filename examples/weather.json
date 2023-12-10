@@ -1,0 +1,282 @@
+[
+  {
+    "data": {
+      "id": "bound fetchCurrentTemperature_1702216345479_1b134ccc-eecc-44e1-957c-376dec9ebfb5",
+      "label": "bound fetchCurrentTemperature",
+      "inputs": [
+        "Monastir"
+      ],
+      "outputs": "Current Temperature in Monastir: 25°C",
+      "startTime": "2023-12-10T13:52:25.479Z",
+      "endTime": "2023-12-10T13:52:25.480Z",
+      "duration": 0.5530421733856201,
+      "elapsedTime": "0.553 ms",
+      "parallel": false,
+      "abstract": false,
+      "createTime": "2023-12-10T13:52:25.480Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "bound fetchDailyForecast_1702216345480_7e1a045f-8c56-4ab7-a054-0fead082e080",
+      "label": "bound fetchDailyForecast",
+      "inputs": [
+        "Monastir"
+      ],
+      "outputs": "Daily Forecast in Monastir: Sunny",
+      "startTime": "2023-12-10T13:52:25.480Z",
+      "endTime": "2023-12-10T13:52:25.480Z",
+      "duration": 0.1039581298828125,
+      "elapsedTime": "0.104 ms",
+      "parallel": false,
+      "abstract": false,
+      "createTime": "2023-12-10T13:52:25.480Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "bound recommendation_1702216345480_8f0b20f0-786f-4aeb-a641-78bad609dbd7",
+      "label": "bound recommendation",
+      "errors": [
+        {
+          "name": "Error",
+          "message": "Next year too far!, could not decide for Monastir"
+        }
+      ],
+      "parallel": false,
+      "abstract": false,
+      "createTime": "2023-12-10T13:52:25.481Z",
+      "inputs": [
+        "Monastir"
+      ],
+      "outputs": [
+        "As daily Forecast in Monastir is Daily Forecast in Monastir: Sunny and the temperature is Current Temperature in Monastir: 25°C, vigilance is GREEN and you can go out",
+        null
+      ],
+      "startTime": "2023-12-10T13:52:25.480Z",
+      "endTime": "2023-12-10T13:52:25.481Z",
+      "duration": 0.7205419540405273,
+      "elapsedTime": "0.721 ms",
+      "updateTime": "2023-12-10T13:52:25.481Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "bound decideIfIShouldGoOutNextYear_1702216345480_fd4c9ad1-1e69-41cd-aff0-9b9082ea33d4",
+      "label": "3 - bound decideIfIShouldGoOutNextYear",
+      "parent": "bound recommendation_1702216345480_8f0b20f0-786f-4aeb-a641-78bad609dbd7",
+      "inputs": [
+        "Monastir"
+      ],
+      "errors": [
+        {
+          "name": "Error",
+          "message": "Next year too far!, could not decide for Monastir"
+        }
+      ],
+      "startTime": "2023-12-10T13:52:25.480Z",
+      "endTime": "2023-12-10T13:52:25.481Z",
+      "duration": 0.13033390045166016,
+      "elapsedTime": "0.130 ms",
+      "parallel": true,
+      "abstract": false,
+      "createTime": "2023-12-10T13:52:25.481Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "decideIfIShouldGoOut_custom_id",
+      "label": "3 - decideIfIShouldGoOut_custom_id",
+      "parallel": true,
+      "abstract": false,
+      "createTime": "2023-12-10T13:52:25.481Z",
+      "narratives": [
+        "Narrative 0 GoOut",
+        "Narrative 1 GoOut",
+        "Narrative 2 GoOut"
+      ],
+      "parent": "bound recommendation_1702216345480_8f0b20f0-786f-4aeb-a641-78bad609dbd7",
+      "inputs": [
+        "Monastir"
+      ],
+      "outputs": "As daily Forecast in Monastir is Daily Forecast in Monastir: Sunny and the temperature is Current Temperature in Monastir: 25°C, vigilance is GREEN and you can go out",
+      "updateTime": "2023-12-10T13:52:25.481Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "bound fetchCurrentTemperature_1702216345480_a0464478-44d7-4215-b9bb-20fbac4b377d",
+      "label": "bound fetchCurrentTemperature",
+      "parent": "decideIfIShouldGoOut_custom_id",
+      "inputs": [
+        "Monastir"
+      ],
+      "outputs": "Current Temperature in Monastir: 25°C",
+      "startTime": "2023-12-10T13:52:25.480Z",
+      "endTime": "2023-12-10T13:52:25.481Z",
+      "duration": 0.24079203605651855,
+      "elapsedTime": "0.241 ms",
+      "parallel": false,
+      "abstract": false,
+      "createTime": "2023-12-10T13:52:25.481Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "bound fetchDailyForecast_1702216345481_348e3ae4-c639-48bc-915a-8ec1ab9eb7dc",
+      "label": "bound fetchDailyForecast",
+      "parent": "decideIfIShouldGoOut_custom_id",
+      "inputs": [
+        "Monastir"
+      ],
+      "outputs": "Daily Forecast in Monastir: Sunny",
+      "startTime": "2023-12-10T13:52:25.481Z",
+      "endTime": "2023-12-10T13:52:25.481Z",
+      "duration": 0.03716707229614258,
+      "elapsedTime": "0.037 ms",
+      "parallel": false,
+      "abstract": false,
+      "createTime": "2023-12-10T13:52:25.481Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "function_1702216345481_5a2d51ad-e2e6-4256-9884-cc26868b91b5",
+      "label": "color",
+      "parent": "decideIfIShouldGoOut_custom_id",
+      "inputs": [
+        "Current Temperature in Monastir: 25°C",
+        "Daily Forecast in Monastir: Sunny"
+      ],
+      "outputs": "GREEN",
+      "startTime": "2023-12-10T13:52:25.481Z",
+      "endTime": "2023-12-10T13:52:25.481Z",
+      "duration": 0.01750016212463379,
+      "elapsedTime": "0.018 ms",
+      "parallel": true,
+      "abstract": false,
+      "createTime": "2023-12-10T13:52:25.481Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "function_1702216345481_988e1087-e959-4b69-b344-159e3b317a2f",
+      "label": "decide",
+      "parent": "decideIfIShouldGoOut_custom_id",
+      "inputs": [
+        "Current Temperature in Monastir: 25°C",
+        "Daily Forecast in Monastir: Sunny"
+      ],
+      "outputs": "go out",
+      "startTime": "2023-12-10T13:52:25.481Z",
+      "endTime": "2023-12-10T13:52:25.481Z",
+      "duration": 0.08037519454956055,
+      "elapsedTime": "0.080 ms",
+      "parallel": true,
+      "abstract": false,
+      "createTime": "2023-12-10T13:52:25.481Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "bound validateDecision_1702216345481_026692e0-b3da-4240-a119-fcdc99ce7e70",
+      "label": "bound validateDecision",
+      "inputs": [
+        "As daily Forecast in Monastir is Daily Forecast in Monastir: Sunny and the temperature is Current Temperature in Monastir: 25°C, vigilance is GREEN and you can go out"
+      ],
+      "outputs": true,
+      "startTime": "2023-12-10T13:52:25.481Z",
+      "endTime": "2023-12-10T13:52:25.481Z",
+      "duration": 0.07454109191894531,
+      "elapsedTime": "0.075 ms",
+      "parallel": false,
+      "abstract": false,
+      "createTime": "2023-12-10T13:52:25.481Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "bound fetchCurrentTemperature_1702216345479_1b134ccc-eecc-44e1-957c-376dec9ebfb5->bound fetchDailyForecast_1702216345480_7e1a045f-8c56-4ab7-a054-0fead082e080",
+      "source": "bound fetchCurrentTemperature_1702216345479_1b134ccc-eecc-44e1-957c-376dec9ebfb5",
+      "target": "bound fetchDailyForecast_1702216345480_7e1a045f-8c56-4ab7-a054-0fead082e080",
+      "parallel": false
+    },
+    "group": "edges"
+  },
+  {
+    "data": {
+      "id": "bound fetchCurrentTemperature_1702216345480_a0464478-44d7-4215-b9bb-20fbac4b377d->bound fetchDailyForecast_1702216345481_348e3ae4-c639-48bc-915a-8ec1ab9eb7dc",
+      "source": "bound fetchCurrentTemperature_1702216345480_a0464478-44d7-4215-b9bb-20fbac4b377d",
+      "target": "bound fetchDailyForecast_1702216345481_348e3ae4-c639-48bc-915a-8ec1ab9eb7dc",
+      "parent": "decideIfIShouldGoOut_custom_id",
+      "parallel": false
+    },
+    "group": "edges"
+  },
+  {
+    "data": {
+      "id": "bound fetchDailyForecast_1702216345481_348e3ae4-c639-48bc-915a-8ec1ab9eb7dc->function_1702216345481_5a2d51ad-e2e6-4256-9884-cc26868b91b5",
+      "source": "bound fetchDailyForecast_1702216345481_348e3ae4-c639-48bc-915a-8ec1ab9eb7dc",
+      "target": "function_1702216345481_5a2d51ad-e2e6-4256-9884-cc26868b91b5",
+      "parent": "decideIfIShouldGoOut_custom_id",
+      "parallel": true
+    },
+    "group": "edges"
+  },
+  {
+    "data": {
+      "id": "bound fetchDailyForecast_1702216345481_348e3ae4-c639-48bc-915a-8ec1ab9eb7dc->function_1702216345481_988e1087-e959-4b69-b344-159e3b317a2f",
+      "source": "bound fetchDailyForecast_1702216345481_348e3ae4-c639-48bc-915a-8ec1ab9eb7dc",
+      "target": "function_1702216345481_988e1087-e959-4b69-b344-159e3b317a2f",
+      "parent": "decideIfIShouldGoOut_custom_id",
+      "parallel": true
+    },
+    "group": "edges"
+  },
+  {
+    "data": {
+      "id": "bound fetchDailyForecast_1702216345480_7e1a045f-8c56-4ab7-a054-0fead082e080->bound recommendation_1702216345480_8f0b20f0-786f-4aeb-a641-78bad609dbd7",
+      "source": "bound fetchDailyForecast_1702216345480_7e1a045f-8c56-4ab7-a054-0fead082e080",
+      "target": "bound recommendation_1702216345480_8f0b20f0-786f-4aeb-a641-78bad609dbd7",
+      "parallel": false
+    },
+    "group": "edges"
+  },
+  {
+    "data": {
+      "id": "bound recommendation_1702216345480_8f0b20f0-786f-4aeb-a641-78bad609dbd7->bound validateDecision_1702216345481_026692e0-b3da-4240-a119-fcdc99ce7e70",
+      "source": "bound recommendation_1702216345480_8f0b20f0-786f-4aeb-a641-78bad609dbd7",
+      "target": "bound validateDecision_1702216345481_026692e0-b3da-4240-a119-fcdc99ce7e70",
+      "parallel": false
+    },
+    "group": "edges"
+  },
+  {
+    "data": {
+      "id": "bound validateDecision_1702216345481_e28a1df1-285f-4a45-b3d0-38703a730e3d",
+      "label": "bound validateDecision",
+      "inputs": [
+        "As daily Forecast in Monastir is Daily Forecast in Monastir: Sunny and the temperature is Current Temperature in Monastir: 25°C, vigilance is GREEN and you can go out"
+      ],
+      "outputs": true,
+      "startTime": "2023-12-10T13:52:25.481Z",
+      "endTime": "2023-12-10T13:52:25.481Z",
+      "duration": 0.012207984924316406,
+      "elapsedTime": "0.012 ms",
+      "parallel": false,
+      "abstract": false,
+      "createTime": "2023-12-10T13:52:25.481Z"
+    },
+    "group": "nodes"
+  }
+]
