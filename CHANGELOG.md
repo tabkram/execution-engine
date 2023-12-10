@@ -1,3 +1,12 @@
+# [2.0.0](https://github.com/tabkram/execution-engine/compare/v1.2.0...v2.0.0) (2023-12-10)
+
+
+### Features
+
+* add EngineTask and engine decorators `@engine` and `@run` ([447fec9](https://github.com/tabkram/execution-engine/commit/447fec9c393f428ed9c1ca2edc27a312626166e4))
+
+
+
 # [1.2.0](https://github.com/tabkram/execution-engine/compare/v1.1.0...v1.2.0) (2023-12-04)
 
 
