@@ -68,7 +68,7 @@ export function run<O>(options?: TraceOptions<Array<any>, O>) {
       if (isAsync(originalMethod)) {
         return this.engine.run(originalMethod.bind(this), args, options)?.then((r) => r.outputs);
       } else {
-        this.engine.run(originalMethod.bind(this), args, options)?.outputs;
+        return this.engine.run(originalMethod.bind(this), args, options)?.outputs;
       }
     };
 
