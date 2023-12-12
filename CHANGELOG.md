@@ -1,3 +1,12 @@
+## [2.0.1](https://github.com/tabkram/execution-engine/compare/v2.0.0...v2.0.1) (2023-12-12)
+
+
+### Bug Fixes
+
+* engineTask run annotation for sync methods ([eb979ee](https://github.com/tabkram/execution-engine/commit/eb979eeef60b50cdf53dcba0ba9943bea32b6979))
+
+
+
 # [2.0.0](https://github.com/tabkram/execution-engine/compare/v1.2.0...v2.0.0) (2023-12-10)
 
 
