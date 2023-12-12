@@ -1,7 +1,7 @@
 # Execution Engine
 
 [![execution-engine on npm](https://img.shields.io/npm/v/execution-engine.svg?logo=npm&label=NPM+package&color=limegreen)](https://www.npmjs.com/package/execution-engine)
-![npm](https://img.shields.io/npm/dm/execution-engine?color=limegreen)
+[![npm](https://img.shields.io/npm/dm/execution-engine?color=limegreen)](https://www.npmjs.com/package/execution-engine)
 [![install size](https://packagephobia.com/badge?p=execution-engine)](https://packagephobia.com/result?p=execution-engine)
 [![Github repo](https://img.shields.io/badge/github-grey?logo=github)](https://github.com/tabkram/execution-engine)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -139,17 +139,17 @@ Explore the comprehensive __[documentation](https://tabkram.github.io/execution-
 
 For a detailed list of changes, enhancements, and bug fixes, please refer to our [Changelog](CHANGELOG.md).
 
-# Contributing 🤝
+## Contributing 🤝
 
 If you find any issues or have suggestions for improvement, feel free to open an issue or submit a pull request.
 Contributions are welcome!
 
 Before getting started, please read our [Contribution Guidelines](CONTRIBUTING.md).
 
-# Community 👥
+## Community 👥
 
 Love `execution-engine` ? Give our repo a star ⭐ ⬆️.
 
-# License 📄
+## License 📄
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

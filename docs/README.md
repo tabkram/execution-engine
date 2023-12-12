@@ -12,6 +12,7 @@ A TypeScript library for tracing and visualizing code execution workflows
     - [ExecutionTimer](#executiontimer)
     - [TraceableExecution](#traceableexecution)
     - [ExecutionEngine](#executionengine)
+    - [EngineTask with @engine and @run Decorators](#enginetask-with-engine-and-run-decorators)
 
 ## Installation 📦
 
@@ -49,8 +50,9 @@ console.log('Trace:', trace);
 
 You can:
 
-- view the **complete code** in [examples/usage.ts](examples/usage.ts)
-- inspect the **trace output** in [examples/usage.json](examples/usage.json).
+- view the **complete code** in [usage.ts](https://github.com/tabkram/execution-engine/blob/main/examples/usage.ts)
+- inspect the **trace output**
+  in [usage.json](https://github.com/tabkram/execution-engine/blob/main/examples/usage.json).
 - visualize the **trace graph** using the json-to-graph online
   tool. [→ See the result ←](https://tabkram.github.io/json-to-graph/?data=https://raw.githubusercontent.com/tabkram/execution-engine/main/examples/usage.json)
 
@@ -83,8 +85,9 @@ console.log("Trace:", trace);
 
 You can:
 
-- view the **complete code** in [examples/usage2.ts](examples/usage2.ts)
-- inspect the **trace output** in [examples/usage2.json](examples/usage2.json)
+- view the **complete code** in [usage2.ts](https://github.com/tabkram/execution-engine/blob/main/examples/usage2.ts)
+- inspect the **trace output**
+  in [usage2.json](https://github.com/tabkram/execution-engine/blob/main/examples/usage2.json)
 - visualize the **trace graph** using the json-to-graph online
   tool. [→ See the result ←](https://tabkram.github.io/json-to-graph/?data=https://raw.githubusercontent.com/tabkram/execution-engine/main/examples/usage2.json)
 
@@ -104,7 +107,7 @@ The __[ExecutionEngine](./ExecutionEngine.md)__ enhances traceable execution by 
 capturing additional relevant information.
 It builds upon the functionality of [TraceableExecution](./TraceableExecution.md).
 
-### EngineTask Class and @engine/@run Decorators
+### EngineTask with @engine and @run Decorators
 
 The __[EngineTask](./EngineTask.md)__ class works in conjunction with the `@engine` decorator and the `@run` decorator
 to integrate the ExecutionEngine into your classes, providing tracing capabilities for methods.
