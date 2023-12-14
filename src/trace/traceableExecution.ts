@@ -436,6 +436,7 @@ export class TraceableExecution {
       return {};
     }
     if (doTraceExecution === true) {
+      nodeData.narratives = this.extractNarrativeWithConfig<I, O>(nodeData, true);
       return nodeData;
     }
     if (Array.isArray(doTraceExecution)) {
