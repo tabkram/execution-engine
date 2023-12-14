@@ -5,6 +5,7 @@
 | [authentication.ts](authentication.ts) | [authentication.json](authentication.json) | [Graph Results](https://tabkram.github.io/json-to-graph/?data=https://raw.githubusercontent.com/tabkram/execution-engine/main/examples/authentication.json) |
 | [car.ts](car.ts)                       | [car.json](car.json)                       | [Graph Results](https://tabkram.github.io/json-to-graph/?data=https://raw.githubusercontent.com/tabkram/execution-engine/main/examples/car.json)            |
 | [weather.ts](weather.ts)               | [weather.json](weather.json)               | [Graph Results](https://tabkram.github.io/json-to-graph/?data=https://raw.githubusercontent.com/tabkram/execution-engine/main/examples/weather.json)        |
+| [greeting.ts](greeting.ts)             | [greeting.json](greeting.json)             | [Graph Results](https://tabkram.github.io/json-to-graph/?data=https://raw.githubusercontent.com/tabkram/execution-engine/main/examples/greeting.json)       |
 | [usage.ts](usage.ts)                   | [usage.json](usage.json)                   | [Graph Results](https://tabkram.github.io/json-to-graph/?data=https://raw.githubusercontent.com/tabkram/execution-engine/main/examples/usage.json)          |
 | [usage2.ts](usage2.ts)                 | [usage2.json](usage2.json)                 | [Graph Results](https://tabkram.github.io/json-to-graph/?data=https://raw.githubusercontent.com/tabkram/execution-engine/main/examples/usage2.json)         |
 | [usage3.ts](usage2.ts)                 | [usage3.json](usage2.json)                 | [Graph Results](https://tabkram.github.io/json-to-graph/?data=https://raw.githubusercontent.com/tabkram/execution-engine/main/examples/usage3.json)         |
@@ -28,3 +29,5 @@
   versatility in handling complex workflows through decorators (`@engine` and `@run`) within TypeScript classes.
 
 - **[usage3.ts](usage3.ts)**: example of a trace with a deep workflow and consecutive tasks.
+
+- **[greeting.ts](greeting.ts)**: Advanced example demonstrating the Execution Engine's traceOptions through decorators (`@engine` and `@run`).

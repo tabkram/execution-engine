@@ -1,4 +1,4 @@
-import { Node } from '../trace/trace.model';
+import { Node, NodeData } from '../trace/trace.model';
 import { engine, EngineTask, run } from './executionEngineDecorators';
 
 describe('decorators', () => {
@@ -31,23 +31,87 @@ describe('decorators', () => {
     });
 
     it('should apply the run decorator with options to a method', async () => {
-      const id = 'testId';
-      const traceOptions = {
-        /* your trace options here */
-      };
+      const id = 'greetingId';
 
       @engine({ id })
-      class TestClass {
-        @run(traceOptions)
-        async testMethod() {
-          return 'Test Result';
+      class GreetingTask extends EngineTask {
+        @run({
+          config: {
+            traceExecution: {
+              inputs: ['0.name', '0.age', '0.address.city', '1.name'],
+              outputs: (out: unknown) => `the output I want to trace is: '${out['fullGreeting']}'`,
+              errors: true,
+              narratives: true,
+              startTime: true,
+              endTime: false
+            }
+          }
+        })
+        generateGreeting(person: { [key: string]: unknown }, greeter: { [key: string]: string }, nodeData?: NodeData) {
+          this.engine.pushNarratives(nodeData.id, [`here is tracing narrative for greeting ${person.name}`]);
+          return {
+            greeting: {
+              fr: `Hello, ${person.name}`,
+              es: `¡Hola, ${person.name}!`,
+              en: `Hello, ${person.name}!`
+            },
+            greeter: `I'm ${greeter.name}.`,
+            hobbies: [`Let's explore the world of ${(person.hobbies as Array<string>).join(', ')} together!`],
+            get fullGreeting() {
+              return [this.greeting.en, this.greeter, ...this.hobbies].join(' ');
+            }
+          };
         }
       }
 
-      const instance = new TestClass();
-      const result = await instance.testMethod();
-
-      expect(result).toBe('Test Result');
+      const instance = new GreetingTask();
+      const result = instance.generateGreeting(
+        {
+          name: 'John Doe',
+          age: 30,
+          isStudent: false,
+          grades: [85, 90, 78, 95],
+          address: {
+            street: '123 Main Street',
+            city: 'Cityville',
+            zipcode: '12345'
+          },
+          contact: {
+            email: 'john.doe@example.com',
+            phone: '+1 555-1234'
+          },
+          hobbies: ['reading', 'traveling', 'coding'],
+          isActive: true,
+          birthday: '1992-05-15',
+          isMarried: null
+        },
+        {
+          name: 'Akram'
+        }
+      );
+      const greetingTrace = instance.engine.getTrace();
+      expect(greetingTrace?.length).toEqual(1);
+      expect(greetingTrace[0]).toEqual({
+        data: {
+          id: expect.stringMatching(/^generateGreeting_.*$/),
+          label: expect.any(String),
+          inputs: [{ '0.name': 'John Doe' }, { '0.age': 30 }, { '0.address.city': 'Cityville' }, { '1.name': 'Akram' }],
+          outputs:
+            "the output I want to trace is: 'Hello, John Doe! I'm Akram. Let's explore the world of reading, traveling, coding together!'",
+          errors: undefined,
+          startTime: expect.any(Date),
+          endTime: undefined,
+          duration: undefined,
+          elapsedTime: undefined,
+          parallel: undefined,
+          abstract: false,
+          createTime: expect.any(Date),
+          narratives: ['here is tracing narrative for greeting John Doe']
+        },
+        group: 'nodes'
+      });
+      expect(result.greeter).toEqual("I'm Akram.");
+      expect(result.greeting).toEqual({ en: 'Hello, John Doe!', es: '¡Hola, John Doe!', fr: 'Hello, John Doe' });
     });
   });
 

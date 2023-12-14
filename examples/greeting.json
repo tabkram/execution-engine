@@ -1,0 +1,30 @@
+[
+  {
+    "data": {
+      "id": "generateGreeting_1702590700140_d2eb4ec9-0656-4c37-b5af-06e1b9debca7",
+      "label": "1 - generateGreeting",
+      "inputs": [
+        {
+          "0.name": "John Doe"
+        },
+        {
+          "0.age": 30
+        },
+        {
+          "0.address.city": "Cityville"
+        },
+        {
+          "1.name": "Akram"
+        }
+      ],
+      "outputs": "the output I want to trace is: 'Hello, John Doe! I'm Akram. Let's explore the world of reading, traveling, coding together!'",
+      "narratives": [
+        "here is tracing narrative for greeting John Doe"
+      ],
+      "startTime": "2023-12-14T21:51:40.140Z",
+      "abstract": false,
+      "createTime": "2023-12-14T21:51:40.140Z"
+    },
+    "group": "nodes"
+  }
+]
