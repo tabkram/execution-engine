@@ -1,3 +1,12 @@
+## [2.0.2](https://github.com/tabkram/execution-engine/compare/v2.0.1...v2.0.2) (2023-12-14)
+
+
+### Bug Fixes
+
+* display narratives when no traceOptions is mentioned ([42e9c9d](https://github.com/tabkram/execution-engine/commit/42e9c9d238a68cb76dc2a2abe14282b6610b75c2))
+
+
+
 ## [2.0.1](https://github.com/tabkram/execution-engine/compare/v2.0.0...v2.0.1) (2023-12-12)
 
 
