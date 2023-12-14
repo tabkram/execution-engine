@@ -5,9 +5,10 @@
 Use this section to inform users about the currently supported versions of Execution Engine that receive security updates.
 
 | Version | Supported          |
-| ------- | ------------------ |
+|---------|--------------------|
+| 2.0.x   | :white_check_mark: |
 | 1.2.x   | :white_check_mark: |
-| 1.1.x   | :white_check_mark: |
+| 1.1.x   | :x:                |
 | 1.0.x   | :x:                |
 | < 1.0   | :x:                |
 
