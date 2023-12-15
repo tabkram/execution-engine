@@ -5,6 +5,7 @@
     "module": "commonjs",
     "lib": ["es2021"],
     "declaration": true,
+    "declarationMap": true,
     "outDir": "./dist",
     "rootDir": "./src",
 //    "strict": true,

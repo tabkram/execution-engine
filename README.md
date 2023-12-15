@@ -6,6 +6,7 @@
 [![Github repo](https://img.shields.io/badge/github-grey?logo=github)](https://github.com/tabkram/execution-engine)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Documentation](https://img.shields.io/badge/documentation-grey?logo=githubpages&color=blue)](https://tabkram.github.io/execution-engine)
+[![jsDocs.io](https://img.shields.io/badge/jsDocs.io-reference-blue)](https://www.jsdocs.io/package/execution-engine)
 
 Execution Engine is a TypeScript library that enables tracing and visualization of code execution workflows in your
 project. Gain insights into the dynamic sequence of code execution by
