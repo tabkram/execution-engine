@@ -4,6 +4,7 @@
 .idea/**
 report.**.json
 coverage
+reports
 
 # Ignore yarn error logs
 **/yarn-error.log
