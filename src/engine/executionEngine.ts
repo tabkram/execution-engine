@@ -17,7 +17,6 @@ export class ExecutionEngine<
 
   protected executionDate: Date;
   protected executionId: string;
-  protected additionalAttributes: { [key: string]: string | number | boolean };
 
   /**
    * Creates an instance of ContextualExecution.
@@ -26,14 +25,8 @@ export class ExecutionEngine<
    * @param {Date} [options.executionDate] - Date of the execution.
    * @param {string} [options.executionId] - Unique identifier for the execution.
    * @param {string} [options.initialTrace] - The initial trace for the execution.
-   * @param {Object} [options.additionalAttributes] - Additional attributes for the execution.
    */
-  constructor(options?: {
-    executionDate?: Date;
-    executionId?: string;
-    initialTrace?: Trace;
-    additionalAttributes?: { [key: string]: string | number | boolean };
-  }) {
+  constructor(options?: { executionDate?: Date; executionId?: string; initialTrace?: Trace }) {
     super(options?.initialTrace);
     this.executionDate = options?.executionDate ?? new Date();
     this.executionId =
@@ -46,8 +39,6 @@ export class ExecutionEngine<
           .replace('T', '_'),
         uuidv4()
       ].join('_');
-
-    this.additionalAttributes = options?.additionalAttributes;
 
     return this;
   }

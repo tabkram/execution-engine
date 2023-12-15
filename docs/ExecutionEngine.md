@@ -2,8 +2,6 @@
 
 The `ExecutionEngine` class extends the [`TraceableExecution`](./TraceableExecution.md) class, inheriting traceability
 features and adding contextual execution capabilities.
-This class allows you to manage context, and additional attributes associated with an execution, enhancing traceability
-in your applications.
 
 ## Usage
 
@@ -20,6 +18,17 @@ To create an instance of `ExecutionEngine`, use the constructor:
 ```typescript
 const execution = new ExecutionEngine();
 ```
+
+The constructor supports a custom `options` argument for initialization, allowing you to specify the execution date, ID, and an initial trace.
+```typescript
+const executionWithOptions = new ExecutionEngine({
+  executionDate: new Date(),
+  executionId: "customId",
+  initialTrace: [] // Initial trace can be provided to continue tracing based on it
+});
+```
+
+> The `initialTrace` parameter is a JSON trace for initializing tracing. It lets you start from a predefined state instead of an empty trace, facilitating the continuation of tracing based on the provided data.
 
 ### Method Chaining
 
@@ -42,20 +51,6 @@ console.log(finalContext);
 You can manage the context using methods like `setContext`, `getContext`, `updateContext`, and `updateContextAttribute`.
 These methods allow you to set, retrieve, and update the execution context.
 
-### Additional Options
-
-The constructor supports additional options for initialization, such as specifying the execution date, ID, and
-additional attributes.
-
-```typescript
-const executionWithOptions = new ExecutionEngine({
-  executionDate: new Date(),
-  executionId: "customId",
-  additionalAttributes: { priority: "high" },
-  initialTrace: []
-});
-```
-
 # API
 
 ## Constructor
@@ -68,7 +63,6 @@ Creates an instance of `ExecutionEngine`.
     - `executionDate` (optional): Date of the execution.
     - `executionId` (optional): Unique identifier for the execution.
     - `initialTrace` (optional): The initial trace for the execution.
-    - `additionalAttributes` (optional): Additional attributes for the execution.
 
 ## Methods
 
