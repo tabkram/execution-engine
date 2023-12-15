@@ -86,10 +86,17 @@ export class TraceableExecution {
     }
   }
 
-  initTrace(initialTrace: Trace) {
+  /**
+   * Initializes the trace with given initialTrace.
+   *
+   * @param {Trace} initialTrace - The initial trace to initialize: the nodes and edges.
+   * @return {TraceableExecution} - The traceable execution object after initialization.
+   */
+  initTrace(initialTrace: Trace): TraceableExecution {
     this.nodes = (initialTrace?.filter((b) => b.group === 'nodes') as Array<Node>) ?? [];
     this.edges = (initialTrace?.filter((b) => b.group === 'edges') as Array<Edge>) ?? [];
     this.narrativesForNonFoundNodes = {};
+    return this;
   }
 
   /**
@@ -302,10 +309,11 @@ export class TraceableExecution {
   }
 
   /**
-   * Gets an ordered array of narratives.
-   * @returns An array containing ordered narratives.
+   * Retrieves an ordered array of narratives.
+   *
+   * @returns {Array<string>} An array that contains the ordered narratives. If no narratives are found, an empty array is returned.
    */
-  getOrderedNarratives(): Array<string> {
+  getNarratives(): Array<string> {
     return this.nodes?.flatMap?.((n) => n.data?.narratives)?.filter((n) => !!n);
   }
 
