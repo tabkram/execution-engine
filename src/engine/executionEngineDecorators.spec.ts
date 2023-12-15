@@ -14,10 +14,8 @@ describe('decorators', () => {
     });
 
     it('should apply the run decorator to a method', async () => {
-      const id = 'testId';
-
-      @engine({ id })
-      class TestClass {
+      @engine()
+      class TestClass extends EngineTask {
         @run()
         async testMethod() {
           return 'Test Result';
@@ -26,7 +24,7 @@ describe('decorators', () => {
 
       const instance = new TestClass();
       const result = await instance.testMethod();
-
+      expect(instance.engine.getOptions().executionId).toEqual(expect.stringMatching(/^exec.*$/));
       expect(result).toBe('Test Result');
     });
 
@@ -90,6 +88,7 @@ describe('decorators', () => {
         }
       );
       const greetingTrace = instance.engine.getTrace();
+      expect(instance.engine.getOptions().executionId).toEqual('greetingId');
       expect(greetingTrace?.length).toEqual(1);
       expect(greetingTrace[0]).toEqual({
         data: {
@@ -139,7 +138,10 @@ describe('decorators', () => {
     class MyVigilanceTask extends EngineTask {
       @run({
         trace: { id: 'decideIfIShouldGoOut_custom_id', narratives: ['Narrative 0 GoOut'] },
-        config: { parallel: true, traceExecution: { inputs: true, outputs: true, narratives: ['Narrative 1 GoOut', 'Narrative 2 GoOut'] } }
+        config: {
+          parallel: true,
+          traceExecution: { inputs: true, outputs: true, narratives: ['Narrative 1 GoOut', 'Narrative 2 GoOut'] }
+        }
       })
       async decideIfIShouldGoOut(city: string) {
         const temperature = await new MyWeatherTask().fetchCurrentTemperature(city);

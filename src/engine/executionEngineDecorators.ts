@@ -24,7 +24,7 @@ export abstract class EngineTask {
  * A class decorator that enhances a class with execution engine capabilities.
  * @param options - Configuration options for the execution engine.
  */
-export function engine(options: { id: string }): ClassDecorator {
+export function engine(options?: { id: string }): ClassDecorator {
   /**
    * The actual decorator function.
    * @param target - The target class.
@@ -38,10 +38,13 @@ export function engine(options: { id: string }): ClassDecorator {
      */
     const newConstructor: any = function (...args: any[]) {
       const instance = new originalConstructor(...args);
-      if (!executionEngines[options.id]) {
-        executionEngines[options.id] = new ExecutionEngine();
+      let executionId = options?.id;
+      if (!executionId || !executionEngines[executionId]) {
+        const engineInstance = new ExecutionEngine({ executionId: options?.id });
+        executionId = engineInstance.getOptions().executionId;
+        executionEngines[executionId] = engineInstance;
       }
-      instance.engine = executionEngines[options.id];
+      instance.engine = executionEngines[executionId];
       return instance;
     };
 

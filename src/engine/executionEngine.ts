@@ -43,6 +43,16 @@ export class ExecutionEngine<
     return this;
   }
 
+  /**
+   * Get the current options of the Execution Engine.
+   *
+   * @returns {Object} An object containing the execution date and ID.
+   * @public
+   */
+  getOptions(): { executionDate: Date; executionId: string } {
+    return { executionDate: this.executionDate, executionId: this.executionId };
+  }
+
   setContext(value: CXT) {
     this.context = this.deepClone(value);
     return this;
