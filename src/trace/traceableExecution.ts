@@ -86,10 +86,17 @@ export class TraceableExecution {
     }
   }
 
-  initTrace(initialTrace: Trace) {
+  /**
+   * Initializes the trace with given initialTrace.
+   *
+   * @param {Trace} initialTrace - The initial trace to initialize: the nodes and edges.
+   * @return {TraceableExecution} - The traceable execution object after initialization.
+   */
+  initTrace(initialTrace: Trace): TraceableExecution {
     this.nodes = (initialTrace?.filter((b) => b.group === 'nodes') as Array<Node>) ?? [];
     this.edges = (initialTrace?.filter((b) => b.group === 'edges') as Array<Edge>) ?? [];
     this.narrativesForNonFoundNodes = {};
+    return this;
   }
 
   /**

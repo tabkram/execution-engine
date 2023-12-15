@@ -58,10 +58,11 @@ export function engine(options?: { id: string }): ClassDecorator {
 
 /**
  * A method decorator that enables tracing for the decorated method.
- * @param options - Trace options for the execution.
- * @returns A decorator function.
+ *
+ * @param {TraceOptions<Array<any>, O> | TraceOptions<Array<any>, O>['trace']} [options] - Optional tracing options.
+ * @returns {Function} - A decorator function.
  */
-export function run<O>(options?: TraceOptions<Array<any>, O>) {
+export function run<O>(options?: TraceOptions<Array<any>, O> | TraceOptions<Array<any>, O>['trace']) {
   return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     // Store the original method
     const originalMethod = descriptor.value;
