@@ -309,10 +309,11 @@ export class TraceableExecution {
   }
 
   /**
-   * Gets an ordered array of narratives.
-   * @returns An array containing ordered narratives.
+   * Retrieves an ordered array of narratives.
+   *
+   * @returns {Array<string>} An array that contains the ordered narratives. If no narratives are found, an empty array is returned.
    */
-  getOrderedNarratives(): Array<string> {
+  getNarratives(): Array<string> {
     return this.nodes?.flatMap?.((n) => n.data?.narratives)?.filter((n) => !!n);
   }
 

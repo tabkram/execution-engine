@@ -298,7 +298,7 @@ describe('TraceableExecution', () => {
       ]);
 
       // Get the ordered narratives and verify their content
-      const orderedNarratives = traceableExecution.getOrderedNarratives();
+      const orderedNarratives = traceableExecution.getNarratives();
       expect(orderedNarratives).toEqual([
         'Narrative 0',
         'Narrative 0 with Result: InputParam',
