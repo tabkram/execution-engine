@@ -1,3 +1,22 @@
+# [2.1.0](https://github.com/tabkram/execution-engine/compare/v2.0.2...v2.1.0) (2023-12-15)
+
+
+### Features
+
+* make in trace return The traceable execution object ([c38efe9](https://github.com/tabkram/execution-engine/commit/c38efe9e7dceddf915de26c2ffc7b651ccb15edf))
+* remove options.additionalAttributes from ExecutionEngine constructor ([11962ef](https://github.com/tabkram/execution-engine/commit/11962ef62d56327de39f813aee78a833a6574a72))
+* rename `getOrderedNarratives` to `getNarratives` ([ec8aea9](https://github.com/tabkram/execution-engine/commit/ec8aea96c4b0e414bd73d3c539a0eb530eca3ab7))
+* use engine.options.id when provided as ExecutionId for ExecutionEngine ([73f539a](https://github.com/tabkram/execution-engine/commit/73f539a30438fa7e15d1e85c78a6c8db75abf162))
+
+
+### BREAKING CHANGES
+
+* Replace 'getOrderedNarratives' method with 'getNarratives'
+
+This method retrieves an ordered array of narratives from the nodes property.
+
+
+
 ## [2.0.2](https://github.com/tabkram/execution-engine/compare/v2.0.1...v2.0.2) (2023-12-14)
 
 
