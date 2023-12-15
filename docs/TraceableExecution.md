@@ -266,7 +266,7 @@ Pushes or appends narratives to a trace node.
 
 Returns the updated instance of `TraceableExecution`.
 
-### `getOrderedNarratives(): Array<string>`
+### `getNarratives(): Array<string>`
 
 Gets an ordered array of narratives.
 
