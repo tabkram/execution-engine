@@ -14,6 +14,7 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
+    "examples": "for file in examples/*.ts; do ts-node \"$file\"; done\n",
     "lint": "eslint src --fix",
     "format": "prettier --write src/**/*.ts",
     "prepublishOnly": "npm run build",
