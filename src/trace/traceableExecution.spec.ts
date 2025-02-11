@@ -193,7 +193,7 @@ describe('TraceableExecution', () => {
         throw new Error(`Sample Error: ${param}`);
       }
 
-      jest.useFakeTimers();
+      jest.useFakeTimers({ doNotFake: ['performance'] });
 
       async function asyncThrowErrorFunction(param: string) {
         jest.advanceTimersByTime(1000);
@@ -203,13 +203,13 @@ describe('TraceableExecution', () => {
       const nodeId = 'errorTrace_custom_id_1';
       traceableExecution.run(throwErrorFunction, ['InputParam'], {
         trace: { id: nodeId },
-        config: { errors: 'catch', traceExecution: { errors: true } }
+        config: { errors: 'catch', traceExecution: { errors: true, startTime: true, endTime: true } }
       });
 
       const nodeId2 = 'errorTrace_custom_id_2';
       await traceableExecution.run(asyncThrowErrorFunction, ['InputParam2'], {
         trace: { id: nodeId2 },
-        config: { errors: 'catch', traceExecution: { errors: true } }
+        config: { errors: 'catch', traceExecution: { errors: true, startTime: true, endTime: true } }
       });
 
       const trace = traceableExecution.getTrace();
@@ -220,6 +220,10 @@ describe('TraceableExecution', () => {
       expect(node1?.data).toEqual({
         abstract: false,
         createTime: expect.any(Date),
+        startTime: expect.any(Date),
+        endTime: expect.any(Date),
+        duration: expect.any(Number),
+        elapsedTime: expect.any(String),
         errors: [
           {
             message: 'Sample Error: InputParam',
@@ -235,6 +239,10 @@ describe('TraceableExecution', () => {
       expect(node2?.data).toEqual({
         abstract: false,
         createTime: expect.any(Date),
+        startTime: expect.any(Date),
+        endTime: expect.any(Date),
+        duration: expect.any(Number),
+        elapsedTime: expect.any(String),
         errors: [
           {
             message: 'Sample Async Error: InputParam2',
