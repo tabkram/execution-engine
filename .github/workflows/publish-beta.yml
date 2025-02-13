@@ -1,4 +1,4 @@
-name: Publish Pre-release
+name: Publish beta
 
 on:
   push:
@@ -28,22 +28,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          registry-url: 'https://registry.npmjs.org/'
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Update version (based on release type)
+      - name: Update and publish beta version
         run: |
-          if [ "${{ github.event.inputs.release-type }}" == "major" ]; then
-            npm version major --preid=beta -m "chore: release major beta version %s"
-          elif [ "${{ github.event.inputs.release-type }}" == "minor" ]; then
-            npm version minor --preid=beta -m "chore: release minor beta version %s"
-          else
-            npm version patch --preid=beta -m "chore: release patch beta version %s"
-          fi
-
-      - name: Publish Pre-release to npm
-        run: npm publish --tag beta
+          npm version ${{ github.event.inputs.release-type }} --preid=beta -m "chore: release ${{ github.event.inputs.release-type }} beta version %s"
+          npm publish --tag beta
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
