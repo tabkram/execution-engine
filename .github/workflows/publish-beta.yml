@@ -9,7 +9,6 @@ on:
       release-type:
         description: 'Choose release type (patch, minor, or major)'
         required: true
-        default: 'patch'
         type: choice
         options:
           - patch
@@ -34,7 +33,8 @@ jobs:
 
       - name: Update and publish beta version
         run: |
-          npm version ${{ github.event.inputs.release-type }} --preid=beta -m "chore: release ${{ github.event.inputs.release-type }} beta version %s"
+          RELEASE_TYPE="${{ github.event.inputs.release-type }}"
+          npm version $RELEASE_TYPE --preid=beta -m "chore: release $RELEASE_TYPE beta version %s"
           npm publish --tag beta
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
