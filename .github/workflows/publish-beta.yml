@@ -1,0 +1,49 @@
+name: Publish Pre-release
+
+on:
+  push:
+    branches:
+      - beta
+  workflow_dispatch:
+    inputs:
+      release-type:
+        description: 'Choose release type (patch, minor, or major)'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: 'https://registry.npmjs.org/'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Update version (based on release type)
+        run: |
+          if [ "${{ github.event.inputs.release-type }}" == "major" ]; then
+            npm version major --preid=beta -m "chore: release major beta version %s"
+          elif [ "${{ github.event.inputs.release-type }}" == "minor" ]; then
+            npm version minor --preid=beta -m "chore: release minor beta version %s"
+          else
+            npm version patch --preid=beta -m "chore: release patch beta version %s"
+          fi
+
+      - name: Publish Pre-release to npm
+        run: npm publish --tag beta
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
