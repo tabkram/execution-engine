@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { Trace } from '../trace/trace.model';
-import { TraceableExecution } from '../trace/traceableExecution';
+import { Trace } from '../trace/models/engineTrace.model';
+import { TraceableEngine } from './traceableEngine';
 
 /**
  * Represents a Contextual Execution with traceability features.
@@ -12,7 +12,7 @@ export class ExecutionEngine<
   CXT extends { [key: string]: unknown } = {
     [key: string]: unknown;
   }
-> extends TraceableExecution {
+> extends TraceableEngine {
   protected context: CXT;
 
   protected executionDate: Date;

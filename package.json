@@ -12,14 +12,15 @@
     "index.js"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "npm run generate-barrels && tsc",
     "test": "jest",
     "examples": "for file in examples/*.ts; do ts-node \"$file\"; done\n",
     "lint": "eslint src --fix",
     "format": "prettier --write src/**/*.ts",
     "prepublishOnly": "npm run build",
     "prepare": "npm audit",
-    "commitlint": "commitlint --edit"
+    "commitlint": "commitlint --edit",
+    "generate-barrels": "barrelsby --directory src --recursive --delete --exclude \"common\" --exclude \"\\\\.spec\\\\.ts$\" --singleQuotes"
   },
   "repository": {
     "type": "git",
@@ -49,6 +50,7 @@
     "@types/uuid": "^9.0.7",
     "@typescript-eslint/eslint-plugin": "^6.12.0",
     "@typescript-eslint/parser": "^6.12.0",
+    "barrelsby": "^2.8.1",
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.29.0",
