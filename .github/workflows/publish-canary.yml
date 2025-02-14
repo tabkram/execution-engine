@@ -65,6 +65,9 @@ jobs:
     if: github.event.action == 'closed'
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Remove all PR Canary versions
         run: |
           BASE_VERSION=$(node -p "require('./package.json').version")
