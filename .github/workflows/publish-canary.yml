@@ -59,6 +59,18 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Comment on PR with deployed Version
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ✅ **Created Version:** `${{ env.CANARY_VERSION }}`
+            📦 **Published on NPM:** [View on NPM](https://www.npmjs.com/package/execution-engine/v/${{ env.CANARY_VERSION }})
+
+            > ⚠️ **Note:** This version is temporary and will be **unpublished** on the next PR update or merge.
+          reactions: 'rocket'
+
   cleanup:
     name: Remove Canary Version
     runs-on: ubuntu-latest
