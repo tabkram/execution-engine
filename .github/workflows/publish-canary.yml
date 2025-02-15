@@ -43,11 +43,11 @@ jobs:
           CANARY_VERSION="${BASE_VERSION}-canary.${PR_NUMBER}.${COMMIT_HASH}"
           CANARY_PREFIX="${BASE_VERSION}-canary.${PR_NUMBER}"
           
-          echo "CANARY_VERSION=${CANARY_VERSION}"
           echo "CANARY_PREFIX=${CANARY_PREFIX}"
+          echo "CANARY_VERSION=${CANARY_VERSION}"
           
-          echo "CANARY_VERSION=${CANARY_VERSION}" >> $GITHUB_ENV
           echo "CANARY_PREFIX=${CANARY_PREFIX}" >> $GITHUB_ENV
+          echo "CANARY_VERSION=${CANARY_VERSION}" >> $GITHUB_ENV
 
       - name: Remove old Canary versions
         id: unpublish_canary
@@ -99,11 +99,45 @@ jobs:
     if: github.event.action == 'closed'
 
     steps:
+      - name: Generate Canary Version
+        run: |
+          BASE_VERSION=$(node -p "require('./package.json').version")
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          COMMIT_HASH=${GITHUB_SHA::7}
+          CANARY_PREFIX="${BASE_VERSION}-canary.${PR_NUMBER}"
+          echo "CANARY_PREFIX=${CANARY_PREFIX}"
+          echo "CANARY_PREFIX=${CANARY_PREFIX}" >> $GITHUB_ENV
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Remove old Canary versions
+        id: unpublish_canary_2
         uses: ./.github/actions/unpublish-canary
         with:
           canary_prefix: ${{ env.CANARY_PREFIX }}
           npm_token: ${{ secrets.NPM_TOKEN }}
+
+      - name: prepare Cleanup Message
+        id: cleanup_message
+        shell: bash
+        run: |
+          if [[ -n "${{ steps.unpublish_canary_2.outputs.result }}" ]]; then
+            # Loop through each version and add a strikethrough (~) around each
+            RESULT_WITH_STRIKETHROUGH=""
+            for version in ${{ steps.unpublish_canary_2.outputs.result }}; do
+              RESULT_WITH_STRIKETHROUGH="~$version~ $RESULT_WITH_STRIKETHROUGH"
+            done
+            echo "cleanup_message=🚫 **Unpublished versions**: $RESULT_WITH_STRIKETHROUGH" >> "$GITHUB_ENV"
+          else
+            # If no unpublished versions, leave the message empty
+            echo "cleanup_message=Nothing to display" >> "$GITHUB_ENV"
+          fi
+      - name: Comment on PR with deployed Version
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ${{ env.cleanup_message }}
+          reactions: 'rocket'
