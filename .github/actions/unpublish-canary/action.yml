@@ -1,0 +1,56 @@
+name: Unpublish NPM Canary Versions
+
+description: Unpublish NPM Canary versions with a specific prefix
+
+inputs:
+  canary_prefix:
+    description: "Prefix for the Canary version to unpublish"
+    required: true
+  npm_token:
+    description: "NPM token for authentication"
+    required: true
+
+outputs:
+  result:
+    description: "Result of the unpublish operation"
+    value: ${{ steps.unpublish_step.outputs.result }}
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+        registry-url: "https://registry.npmjs.org/"
+
+    - name: Remove old Canary versions
+      id: unpublish_step
+      shell: bash
+      run: |
+        echo "Unpublishing versions for prefix: ${{ inputs.canary_prefix }}..."
+        VERSIONS=$(npm dist-tag ls execution-engine | grep "${{ inputs.canary_prefix }}" | awk '{print $2}')
+        RESULT=()  # Initialize an empty array
+
+        if [ -z "$VERSIONS" ]; then
+          echo "No versions found for prefix ${{ inputs.canary_prefix }}. Nothing to unpublish."
+        else
+          for v in $VERSIONS; do
+            echo "Unpublishing version: $v"            
+            if npm unpublish --force execution-engine@$v; then
+              RESULT+=("$v")  # Append each unpublished version to the array
+            else
+              echo "Failed to unpublish version: $v"
+            fi
+          done
+        fi
+
+        # Convert array to a comma-separated string
+        RESULT_STRING=$(IFS=,; echo "${RESULT[*]}")
+
+        # Set outputs
+        echo "result=$RESULT_STRING" >> $GITHUB_ENV
+        echo "result=$RESULT_STRING" >> $GITHUB_OUTPUT
+      env:
+        NODE_AUTH_TOKEN: ${{ inputs.npm_token }}
+
