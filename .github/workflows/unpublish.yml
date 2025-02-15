@@ -1,0 +1,44 @@
+name: Unpublish NPM Version
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to unpublish'
+        required: true
+
+jobs:
+  unpublish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Display Inputs
+        run: echo "Attempting to unpublish execution-engine@${{ github.event.inputs.version }}"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: 'https://registry.npmjs.org/'
+
+      - name: Validate Version
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          
+          # Check if version is not empty and contains 'canary', 'dev', or 'beta'
+          if [ -z "$VERSION" ]; then
+            echo "⛔ Error: Version is required."
+            exit 1
+          elif [[ ! "$VERSION" =~ (canary|dev|beta) ]]; then
+            echo "⛔ Error: Version must contain 'canary', 'dev', or 'beta'."
+            exit 1
+          else
+            echo "Valid version: $VERSION"
+          fi
+
+      - name: Unpublish Version from NPM
+        run: |
+          echo "Unpublishing execution-engine@${{ github.event.inputs.version }}..."
+          npm unpublish --force execution-engine@${{ github.event.inputs.version }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
