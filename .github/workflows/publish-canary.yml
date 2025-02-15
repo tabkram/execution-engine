@@ -76,7 +76,7 @@ jobs:
             echo "cleanup_message=🚫 **Unpublished versions**: $RESULT_WITH_STRIKETHROUGH" >> "$GITHUB_ENV"
           else
             # If no unpublished versions, leave the message empty
-            echo "cleanup_message=Nothing to display" >> "$GITHUB_ENV"
+            echo "cleanup_message=✅ **Unpublished versions**: nothing to unpublish" >> "$GITHUB_ENV"
           fi
 
 
