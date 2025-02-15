@@ -1,0 +1,65 @@
+name: Unpublish NPM Canary Versions
+
+description: Unpublish NPM versions with a specific prefix, using the unpublish action for each matching version.
+
+inputs:
+  canary_prefix:
+    description: 'Prefix for the Canary version to unpublish'
+    required: true
+  npm_token:
+    description: "NPM token for authentication"
+    required: true
+outputs:
+  UNPUBLISHED_VERSIONS_BY_PREFIX:
+    description: 'The unpublished versions by prefix'
+    value: ${{ steps.unpublish_versions_returned_by_prefix.outputs.UNPUBLISHED_VERSIONS_BY_PREFIX }}
+
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        registry-url: 'https://registry.npmjs.org/'
+
+    - name: Get Versions with Prefix
+      id: get_versions
+      shell: bash
+      run: |
+        # Get the versions with the specified prefix
+        echo "⏳ Finding execution-engine versions with prefix ${{ inputs.canary_prefix }}..."
+        OLD_VERSIONS=$(npm dist-tag ls execution-engine | grep "${{ inputs.canary_prefix }}" | awk '{print $2}' || true)
+        
+        if [ -z "$OLD_VERSIONS" ]; then
+          echo "⚠️ No versions found with prefix ${{ inputs.canary_prefix }}."
+        else
+          echo "✅ Versions found with prefix ${{ inputs.canary_prefix }}: $OLD_VERSIONS"
+        fi
+        
+        COMMA_SEPARATED_VERSIONS=$(echo "$OLD_VERSIONS" | tr '\n' ',')
+        echo "Comma-separated versions: $COMMA_SEPARATED_VERSIONS"
+        echo "OLD_VERSIONS=$COMMA_SEPARATED_VERSIONS" >> $GITHUB_ENV
+
+
+    - name: Unpublish Versions
+      id: unpublish_versions
+      uses: ./.github/actions/unpublish
+      with:
+        versions: ${{ env.OLD_VERSIONS }}
+        force: 'false'
+        confirm: 'I confirm to unpublish'
+        npm_token: ${{ inputs.npm_token }}
+
+    - name: Return Unpublished Versions
+      id: unpublish_versions_returned_by_prefix
+      shell: bash
+      run: |
+        # Capture the output of the unpublish action
+        UNPUBLISHED_VERSIONS="${{ steps.unpublish_versions.outputs.UNPUBLISHED_VERSIONS }}"
+        echo "Unpublished versions: $UNPUBLISHED_VERSIONS"
+        
+        # Set the unpublished versions to the output
+        echo "UNPUBLISHED_VERSIONS_BY_PREFIX=$UNPUBLISHED_VERSIONS" >> $GITHUB_ENV
+        echo "UNPUBLISHED_VERSIONS_BY_PREFIX=$UNPUBLISHED_VERSIONS" >> $GITHUB_OUTPUT
