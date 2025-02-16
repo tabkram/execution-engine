@@ -1,0 +1,34 @@
+name: Unpublish from NPM
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to unpublish'
+        required: true
+      force:
+        description: 'Force unpublish (default: false)'
+        required: false
+        default: 'false'
+      confirm:
+        description: 'Confirmation to proceed with unpublishing'
+        required: false
+        default: 'no confirmation'
+
+jobs:
+  unpublish:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Unpublish Version
+        id: unpublish_version
+        uses: ./.github/actions/unpublish
+        with:
+          versions: ${{ github.event.inputs.version }}
+          force: ${{ github.event.inputs.force }}
+          confirm: ${{ github.event.inputs.confirm }}
+          npm_token: ${{ secrets.NPM_TOKEN }}
