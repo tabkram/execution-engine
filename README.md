@@ -3,6 +3,8 @@
 [![execution-engine on npm](https://img.shields.io/npm/v/execution-engine.svg?logo=npm&label=NPM+package&color=limegreen)](https://www.npmjs.com/package/execution-engine)
 [![npm](https://img.shields.io/npm/dm/execution-engine?color=limegreen)](https://www.npmjs.com/package/execution-engine)
 [![install size](https://packagephobia.com/badge?p=execution-engine)](https://packagephobia.com/result?p=execution-engine)
+[![Bundle size](https://img.shields.io/bundlephobia/min/execution-engine)](https://bundlephobia.com/result?p=execution-engine)
+[![Dependencies](https://img.shields.io/librariesio/release/npm/execution-engine.svg)](https://www.npmjs.com/package/execution-engine)
 [![Github repo](https://img.shields.io/badge/github-grey?logo=github)](https://github.com/tabkram/execution-engine)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Documentation](https://img.shields.io/badge/documentation-grey?logo=githubpages&color=blue)](https://tabkram.github.io/execution-engine)
