@@ -1,8 +1,8 @@
-name: Build
+name: CI
 on:
   push:
     branches: [ main ]
 
 jobs:
   build:
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml

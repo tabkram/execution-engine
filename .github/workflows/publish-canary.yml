@@ -3,13 +3,16 @@ name: Publish canary
 on:
   pull_request:
     types: [ opened, synchronize, reopened, closed ]
+    branches:
+      - 'main'
+      - 'beta'
 
 jobs:
 
   ci:
     name: CI
     if: github.event.action != 'closed'
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
 
   compute-version:
     name: Version
@@ -34,8 +37,9 @@ jobs:
           BASE_VERSION=$(node -p "require('./package.json').version")
           PR_NUMBER=${{ github.event.pull_request.number }}
           COMMIT_HASH=${GITHUB_SHA::7}
-          CANARY_VERSION="${BASE_VERSION}-canary.${PR_NUMBER}.${COMMIT_HASH}"
+
           CANARY_PREFIX="${BASE_VERSION}-canary.${PR_NUMBER}"
+          CANARY_VERSION="${CANARY_PREFIX}.${COMMIT_HASH}"
           
           echo "CANARY_PREFIX=${CANARY_PREFIX}"
           echo "CANARY_VERSION=${CANARY_VERSION}"
@@ -43,9 +47,10 @@ jobs:
           echo "CANARY_PREFIX=${CANARY_PREFIX}" >> $GITHUB_ENV
           echo "CANARY_VERSION=${CANARY_VERSION}" >> $GITHUB_ENV
           
-          # Write output to GITHUB_OUTPUT
           echo "canary_prefix=${CANARY_PREFIX}" >> $GITHUB_OUTPUT
           echo "canary_version=${CANARY_VERSION}" >> $GITHUB_OUTPUT
+
+
 
 
   publish-version:
@@ -129,7 +134,7 @@ jobs:
           confirm: 'I confirm to unpublish'
           npm_token: ${{ secrets.NPM_TOKEN }}
 
-      - name: prepare Cleanup Message
+      - name: prepare PR comment message for unpublish
         id: cleanup_message
         shell: bash
         run: |
