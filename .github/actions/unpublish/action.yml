@@ -1,0 +1,119 @@
+name: Unpublish NPM Version
+
+description: Unpublish one or more NPM versions
+
+inputs:
+  versions:
+    description: 'Versions to unpublish (comma-separated)'
+    required: true
+  force:
+    description: 'Force unpublish (default: false)'
+    required: false
+    default: 'false'
+  confirm:
+    description: 'Confirmation to proceed with unpublishing'
+    required: false
+  npm_token:
+    description: "NPM token for authentication"
+    required: true
+outputs:
+  UNPUBLISHED_VERSIONS:
+    description: 'The unpublished versions'
+    value: ${{ steps.unpublish_versions.outputs.UNPUBLISHED_VERSIONS }}
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        registry-url: 'https://registry.npmjs.org/'
+
+    - name: Validate Versions
+      shell: bash
+      run: |
+        VERSIONS="${{ inputs.versions }}"
+        
+        # Check if VERSIONS is empty
+        if [ -z "$VERSIONS" ]; then
+          echo "⛔ Error: No versions provided. Please provide a comma-separated list of versions."
+          exit 1
+        fi
+
+        # Split the comma-separated string into an array
+        IFS=',' read -r -a VERSION_ARRAY <<< "$VERSIONS"
+        
+        # Validate each version
+        for VERSION in "${VERSION_ARRAY[@]}"; do
+          echo "⏳ Validating version: $VERSION"
+        
+          # Validate the version (must be canary, dev, or beta)
+          if [ -z "$VERSION" ]; then
+            echo "⛔ Error: Version is required."
+            exit 1
+          elif [[ ! "$VERSION" =~ (canary|dev|beta) ]]; then
+            echo "⛔ Error: Version '$VERSION' must contain 'canary', 'dev', or 'beta'."
+            exit 1
+          else
+            echo "⏳ showing execution-engine@$VERSION  ..."
+            npm show execution-engine@$VERSION --json | jq '{version: .version, time: .time."$VERSION"}'
+            echo "🏷️ Valid version: $VERSION"
+          fi
+        done
+
+    - name: Confirm Unpublish
+      shell: bash
+      run: |
+        VERSIONS="${{ inputs.versions }}"
+        IFS=',' read -r -a VERSION_ARRAY <<< "$VERSIONS"
+        
+        CONFIRM="${{ inputs.confirm }}"
+        EXPECTED_CONFIRMATION="I confirm to unpublish"
+        
+        if [ "$CONFIRM" != "$EXPECTED_CONFIRMATION" ]; then
+          echo "🚨 WARNING: You are about to unpublish the following versions:"
+          for VERSION in "${VERSION_ARRAY[@]}"; do
+            echo "  - execution-engine@$VERSION"
+          done
+          echo "This operation is IRREVERSIBLE"
+          echo "To proceed, restart this workflow and enter '$EXPECTED_CONFIRMATION' in the confirm field."
+          exit 1
+        else
+          echo "Confirmed: Proceeding with unpublish of versions ${VERSIONS}."
+        fi
+
+    - name: Unpublish Versions
+      id: unpublish_versions
+      shell: bash
+      run: |
+        VERSIONS="${{ inputs.versions }}"
+        IFS=',' read -r -a VERSION_ARRAY <<< "$VERSIONS"
+        
+        FORCE_ARG=""
+        if [[ "${{ inputs.force }}" == "true" ]]; then
+          FORCE_ARG="--force"
+          echo "🔴 Forced mode activated: ${FORCE_ARG}"
+        fi
+
+        RESULT=()  # Initialize an empty array for unpublished versions
+
+        for VERSION in "${VERSION_ARRAY[@]}"; do
+          echo "⏳ Unpublishing execution-engine@$VERSION..."
+          if npm unpublish $FORCE_ARG execution-engine@$VERSION; then
+            echo "✅ Successfully unpublished execution-engine@$VERSION"
+            RESULT+=("$VERSION")  # Append unpublished version to the result array
+          else
+            echo "🚫 Failed to unpublish execution-engine@$VERSION"
+          fi
+        done
+
+        # Convert array to a comma-separated string
+        RESULT_STRING=$(IFS=,; echo "${RESULT[*]}")
+        
+        # Set outputs
+        echo "UNPUBLISHED_VERSIONS=$RESULT_STRING" >> $GITHUB_ENV
+        echo "UNPUBLISHED_VERSIONS=$RESULT_STRING" >> $GITHUB_OUTPUT
+
+      env:
+        NODE_AUTH_TOKEN: ${{ inputs.npm_token }}
