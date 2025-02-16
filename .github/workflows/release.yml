@@ -1,0 +1,48 @@
+name: Release to NPM
+
+on:
+  workflow_dispatch:
+    inputs:
+      version-bump:
+        description: 'Choose version bump type'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'  # Run only on main
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Ensure we fetch tags
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Bump Version & Generate Changelog
+        run: |
+          VERSION_BUMP=${{ github.event.inputs.version-bump }}
+          npm version $VERSION_BUMP --no-git-tag-version -m "chore(release): %s"
+          npx conventional-changelog -p conventionalcommits -i CHANGELOG.md -s
+
+      - name: Commit & Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "chore(release): $(node -p "require('./package.json').version")"
+          git push --follow-tags
