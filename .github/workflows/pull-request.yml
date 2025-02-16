@@ -1,11 +1,10 @@
-name: Publish canary
+name: Pull request
 
 on:
   pull_request:
     types: [ opened, synchronize, reopened, closed ]
     branches:
       - 'main'
-      - 'beta'
 
 jobs:
 
@@ -15,8 +14,14 @@ jobs:
     uses: ./.github/workflows/_build.yml
 
   compute-version:
-    name: Version
+    name: Compute version
     runs-on: ubuntu-latest
+    if: |
+      contains(github.event.pull_request.labels.*.name, 'deploy') &&
+      (startsWith(github.head_ref, 'feature/') ||
+       startsWith(github.head_ref, 'fix/') ||
+       startsWith(github.head_ref, 'ci/'))
+
     outputs:
       canary_prefix: ${{ steps.generate_canary_version.outputs.canary_prefix }}
       canary_version: ${{ steps.generate_canary_version.outputs.canary_version }}
@@ -49,8 +54,6 @@ jobs:
           
           echo "canary_prefix=${CANARY_PREFIX}" >> $GITHUB_OUTPUT
           echo "canary_version=${CANARY_VERSION}" >> $GITHUB_OUTPUT
-
-
 
 
   publish-version:
@@ -117,7 +120,7 @@ jobs:
           reactions: 'rocket'
 
   unpublish_version:
-    name: Unpublish Version
+    name: Unpublish
     runs-on: ubuntu-latest
     needs: compute-version
     if: github.event.action == 'closed'

@@ -56,7 +56,7 @@ runs:
             echo "⛔ Error: Version '$VERSION' must contain 'canary', 'dev', or 'beta'."
             exit 1
           else
-            echo "⏳ showing execution-engine@$VERSION..."
+            echo "⏳ showing execution-engine@$VERSION  ..."
             npm show execution-engine@$VERSION --json | jq '{version: .version, time: .time."$VERSION"}'
             echo "🏷️ Valid version: $VERSION"
           fi
