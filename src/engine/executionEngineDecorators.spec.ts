@@ -1,4 +1,5 @@
-import { Node, NodeData } from '../trace/trace.model';
+import { NodeData } from '../trace/models/engineNodeTrace.model';
+import { Node } from '../trace/models/engineTrace.model';
 import { engine, EngineTask, run } from './executionEngineDecorators';
 
 describe('decorators', () => {

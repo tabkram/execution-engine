@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { TraceOptions } from '../trace/trace.model';
+import { TraceOptions } from '../trace/models/engineTraceOptions.model';
 import { ExecutionEngine } from './executionEngine';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
