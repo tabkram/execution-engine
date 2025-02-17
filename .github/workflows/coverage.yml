@@ -4,8 +4,9 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+
 jobs:
-  coverage:
+  test:
     runs-on: ubuntu-latest
     permissions:
       actions: write
@@ -14,6 +15,25 @@ jobs:
       discussions: write
       pages: write
       pull-requests: write
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: ArtiomTr/jest-coverage-report-action@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests with coverage
+        run: npm test -- --ci --json --coverage --coverageReporters=lcov --outputFile=coverage/report.json
+
+      - name: Generate Jest Coverage Report (Without Running Tests Again)
+        uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          coverage-file: coverage/report.json  # Use JSON format
+
+      - name: Upload coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: coverage/lcov.info
