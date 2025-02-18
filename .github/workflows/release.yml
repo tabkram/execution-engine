@@ -39,10 +39,31 @@ jobs:
           npm version $VERSION_BUMP --no-git-tag-version -m "chore(release): %s"
           npx conventional-changelog -p conventionalcommits -i CHANGELOG.md -s
 
-      - name: Commit & Push Changes
+      - name: Commit Changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add .
           git commit -m "chore(release): $(node -p "require('./package.json').version")"
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: "Release version $(node -p "require('./package.json').version")"
+          body: "This PR bumps the version to $(node -p "require('./package.json').version")."
+          base: main
+          branch: release/${{ github.event.inputs.version-bump }}
+          draft: false
+
+      - name: Merge Pull Request
+        run: |
+          gh pr merge "release/${{ github.event.inputs.version-bump }}" --merge --auto --admin
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push Tags
+        run: |
           git push --follow-tags
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
