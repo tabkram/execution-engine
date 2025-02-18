@@ -1,5 +1,5 @@
-import { Node, NodeData } from '../trace/trace.model';
 import { engine, EngineTask, run } from './executionEngineDecorators';
+import { Node, NodeData } from '../trace/trace.model';
 
 describe('decorators', () => {
   describe('an alternative usage of the ExecutionEngine that illustrates the integration of decorators', () => {
