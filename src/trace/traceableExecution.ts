@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AsyncLocalStorage } from 'async_hooks';
+
 import { v4 as uuidv4 } from 'uuid';
 
-import { extract } from '../common/jsonQuery';
-import { ExecutionTimer } from '../timer/executionTimer';
 import {
   DEFAULT_TRACE_CONFIG,
   Edge,
@@ -17,10 +16,12 @@ import {
   Trace,
   TraceOptions
 } from './trace.model';
+import { extract } from '../common/jsonQuery';
+import { ExecutionTimer } from '../timer/executionTimer';
 
 export type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
 
-// eslint-disable-next-line @typescript-eslint/ban-types
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
 function isAsync(func: Function): boolean {
   return func.constructor.name === 'AsyncFunction';
 }
@@ -183,7 +184,7 @@ export class TraceableExecution {
         `${blockFunction.name} could not have an instance of TraceableExecution as input, this will create circular dependency on trace`
       );
     }
-    const nodeTraceConfigFromOptions = isNodeTrace(options) ? undefined : options.config ?? DEFAULT_TRACE_CONFIG;
+    const nodeTraceConfigFromOptions = isNodeTrace(options) ? undefined : (options.config ?? DEFAULT_TRACE_CONFIG);
     const nodeTraceFromOptions = (isNodeTrace(options) ? options : options.trace) ?? {};
     nodeTraceFromOptions.parent = nodeTraceFromOptions?.parent ?? this.asyncLocalStorage.getStore();
     const executionTimer = new ExecutionTimer();
@@ -258,7 +259,7 @@ export class TraceableExecution {
             });
         }
         //logger.info({ outputs });
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
         const executionTrace: NodeExecutionTrace<Array<unknown>, O> = {
           inputs,
           outputs: outputsOrPromise,
@@ -345,15 +346,15 @@ export class TraceableExecution {
 
       const previousNodes = !parallelEdge
         ? this.nodes?.filter(
-            (node) =>
-              !node.data.abstract &&
+          (node) =>
+            !node.data.abstract &&
               node.data.parent === nodeTrace.parent &&
               (!options?.parallel || !node.data.parallel || !node.data.parent || !nodeTrace.parent) &&
               node.data.id !== nodeTrace.id &&
               node.data.parent !== nodeTrace.id &&
               node.data.id !== nodeTrace.parent &&
               !this.edges.find((e) => e.data.source === node.data.id)
-          )
+        )
         : [];
       this.edges = [
         ...(this.edges ?? []),
@@ -369,17 +370,17 @@ export class TraceableExecution {
         })) ?? []),
         ...(parallelEdge
           ? [
-              {
-                data: {
-                  id: `${parallelEdge.data.source}->${nodeTrace.id}`,
-                  source: parallelEdge.data.source,
-                  target: nodeTrace.id,
-                  parent: nodeTrace.parent,
-                  parallel: options?.parallel
-                },
-                group: 'edges' as const
-              }
-            ]
+            {
+              data: {
+                id: `${parallelEdge.data.source}->${nodeTrace.id}`,
+                source: parallelEdge.data.source,
+                target: nodeTrace.id,
+                parent: nodeTrace.parent,
+                parallel: options?.parallel
+              },
+              group: 'edges' as const
+            }
+          ]
           : [])
       ];
     }

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { TraceOptions } from '../trace/trace.model';
 import { ExecutionEngine } from './executionEngine';
+import { TraceOptions } from '../trace/trace.model';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
 function isAsync(func: Function): boolean {
   return func.constructor.name === 'AsyncFunction';
 }

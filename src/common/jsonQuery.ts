@@ -4,7 +4,7 @@ const matchingXPath = new RegExp('(\\[|\\.|\\]){1,}', 'g');
  * tests if a given string could be an xpath (with accessors)
  * @param key
  */
-export function isXPath(key: string) {
+export function isXPath(key: string): boolean {
   return matchingXPath.test(key);
 }
 
@@ -21,7 +21,10 @@ export function queryByXPath(
   if (Array.isArray(object) && options?.searchInArrayElements) {
     return options?.searchInArrayElements === 'ALL'
       ? object?.map((o) => queryByXPath(o, xPath))?.filter((x) => !!x)
-      : queryByXPath(object?.find((o) => queryByXPath(o, xPath)), xPath);
+      : queryByXPath(
+        object?.find((o) => queryByXPath(o, xPath)),
+        xPath
+      );
   }
   return xPath
     .replace('[', '.[')

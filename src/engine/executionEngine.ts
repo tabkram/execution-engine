@@ -53,7 +53,7 @@ export class ExecutionEngine<
     return { executionDate: this.executionDate, executionId: this.executionId };
   }
 
-  setContext(value: CXT) {
+  setContext(value: CXT): ExecutionEngine<CXT> {
     this.context = this.deepClone(value);
     return this;
   }
