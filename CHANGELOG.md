@@ -1,3 +1,4 @@
+## [2.2.0](https://github.com/tabkram/execution-engine/compare/v2.1.1...v2.2.0) (2025-02-19)
 ## [2.1.1](https://github.com/tabkram/execution-engine/compare/v2.1.0...v2.1.1) (2025-02-16)
 ## [2.1.0](https://github.com/tabkram/execution-engine/compare/v2.0.2...v2.1.0) (2023-12-15)
 
