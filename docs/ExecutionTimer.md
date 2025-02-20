@@ -87,3 +87,10 @@ Gets the duration of the execution timer in milliseconds.
 Gets the human-readable elapsed time of the execution timer.
 
 - `executionId (optional)`: An identifier for the execution timer. Defaults to 'default'.
+
+### `getInfo: (executionId?: string, fractionDigits?: number) => TimerDetailsModel`
+
+Gets details of a specific execution timer.
+
+- `executionId (optional)`: An identifier for the execution timer. Defaults to 'default'.
+- `fractionDigits (optional)`: Decimal places for milliseconds.

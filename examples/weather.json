@@ -1,45 +1,45 @@
 [
   {
     "data": {
-      "id": "fetchCurrentTemperature_1739227867371_27f5f4cf-e071-432f-969f-9b8c1952d328",
+      "id": "fetchCurrentTemperature_1740075296404_98b165b3-6c3e-4ad7-bc38-978bfc804bc6",
       "label": "fetchCurrentTemperature",
       "inputs": [
         "Monastir"
       ],
       "outputs": "Current Temperature in Monastir: 25°C",
-      "startTime": "2025-02-10T22:51:07.372Z",
-      "endTime": "2025-02-10T22:51:07.372Z",
-      "duration": 0.47245900332927704,
-      "elapsedTime": "0.472 ms",
+      "startTime": "2025-02-20T18:14:56.404Z",
+      "endTime": "2025-02-20T18:14:56.405Z",
+      "duration": 0.4361250400543213,
+      "elapsedTime": "0.436 ms",
       "narratives": [],
       "parallel": false,
       "abstract": false,
-      "createTime": "2025-02-10T22:51:07.372Z"
+      "createTime": "2025-02-20T18:14:56.405Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "fetchDailyForecast_1739227867372_e3cb3ffc-e284-417d-b085-96ad9b3e48e5",
+      "id": "fetchDailyForecast_1740075296405_db068903-9c27-453a-b18b-3beb21140da0",
       "label": "fetchDailyForecast",
       "inputs": [
         "Monastir"
       ],
       "outputs": "Daily Forecast in Monastir: Sunny",
-      "startTime": "2025-02-10T22:51:07.372Z",
-      "endTime": "2025-02-10T22:51:07.372Z",
-      "duration": 0.08254200220108032,
-      "elapsedTime": "0.083 ms",
+      "startTime": "2025-02-20T18:14:56.405Z",
+      "endTime": "2025-02-20T18:14:56.405Z",
+      "duration": 0.09454202651977539,
+      "elapsedTime": "0.095 ms",
       "narratives": [],
       "parallel": false,
       "abstract": false,
-      "createTime": "2025-02-10T22:51:07.372Z"
+      "createTime": "2025-02-20T18:14:56.405Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "recommendation_1739227867372_28f6c496-2e84-4e9e-a1eb-41b3b879cd5b",
+      "id": "recommendation_1740075296405_7577ffd0-8ff8-4df3-92cf-09f281795acd",
       "label": "recommendation",
       "errors": [
         {
@@ -50,7 +50,7 @@
       "narratives": [],
       "parallel": false,
       "abstract": false,
-      "createTime": "2025-02-10T22:51:07.373Z",
+      "createTime": "2025-02-20T18:14:56.405Z",
       "inputs": [
         "Monastir"
       ],
@@ -58,19 +58,19 @@
         "As daily Forecast in Monastir is Daily Forecast in Monastir: Sunny and the temperature is Current Temperature in Monastir: 25°C, vigilance is GREEN and you can go out",
         null
       ],
-      "startTime": "2025-02-10T22:51:07.372Z",
-      "endTime": "2025-02-10T22:51:07.373Z",
-      "duration": 0.5905000045895576,
-      "elapsedTime": "0.591 ms",
-      "updateTime": "2025-02-10T22:51:07.373Z"
+      "startTime": "2025-02-20T18:14:56.405Z",
+      "endTime": "2025-02-20T18:14:56.406Z",
+      "duration": 0.5901250839233398,
+      "elapsedTime": "0.590 ms",
+      "updateTime": "2025-02-20T18:14:56.406Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "decideIfIShouldGoOutNextYear_1739227867373_8cba61fe-18a3-4d22-adca-ad491b9b2adb",
+      "id": "decideIfIShouldGoOutNextYear_1740075296405_e6c6e50a-c7bd-431c-8f71-276c6ef17b77",
       "label": "3 - decideIfIShouldGoOutNextYear",
-      "parent": "recommendation_1739227867372_28f6c496-2e84-4e9e-a1eb-41b3b879cd5b",
+      "parent": "recommendation_1740075296405_7577ffd0-8ff8-4df3-92cf-09f281795acd",
       "inputs": [
         "Monastir"
       ],
@@ -80,14 +80,14 @@
           "message": "Next year too far!, could not decide for Monastir"
         }
       ],
-      "startTime": "2025-02-10T22:51:07.373Z",
-      "endTime": "2025-02-10T22:51:07.373Z",
-      "duration": 0.12041600048542023,
-      "elapsedTime": "0.120 ms",
+      "startTime": "2025-02-20T18:14:56.405Z",
+      "endTime": "2025-02-20T18:14:56.405Z",
+      "duration": 0.1651250123977661,
+      "elapsedTime": "0.165 ms",
       "narratives": [],
       "parallel": true,
       "abstract": false,
-      "createTime": "2025-02-10T22:51:07.373Z"
+      "createTime": "2025-02-20T18:14:56.405Z"
     },
     "group": "nodes"
   },
@@ -102,59 +102,59 @@
       ],
       "parallel": true,
       "abstract": false,
-      "createTime": "2025-02-10T22:51:07.373Z",
-      "parent": "recommendation_1739227867372_28f6c496-2e84-4e9e-a1eb-41b3b879cd5b",
+      "createTime": "2025-02-20T18:14:56.405Z",
+      "parent": "recommendation_1740075296405_7577ffd0-8ff8-4df3-92cf-09f281795acd",
       "inputs": [
         "Monastir"
       ],
       "outputs": "As daily Forecast in Monastir is Daily Forecast in Monastir: Sunny and the temperature is Current Temperature in Monastir: 25°C, vigilance is GREEN and you can go out",
-      "updateTime": "2025-02-10T22:51:07.373Z"
+      "updateTime": "2025-02-20T18:14:56.406Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "fetchCurrentTemperature_1739227867373_64db9761-6ab5-44fd-8b31-47a3640e916e",
+      "id": "fetchCurrentTemperature_1740075296405_4a7695db-1699-43a2-8243-85d1d1c935cd",
       "label": "fetchCurrentTemperature",
       "parent": "decideIfIShouldGoOut_custom_id",
       "inputs": [
         "Monastir"
       ],
       "outputs": "Current Temperature in Monastir: 25°C",
-      "startTime": "2025-02-10T22:51:07.373Z",
-      "endTime": "2025-02-10T22:51:07.373Z",
-      "duration": 0.22191700339317322,
-      "elapsedTime": "0.222 ms",
+      "startTime": "2025-02-20T18:14:56.405Z",
+      "endTime": "2025-02-20T18:14:56.405Z",
+      "duration": 0.23170804977416992,
+      "elapsedTime": "0.232 ms",
       "narratives": [],
       "parallel": false,
       "abstract": false,
-      "createTime": "2025-02-10T22:51:07.373Z"
+      "createTime": "2025-02-20T18:14:56.405Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "fetchDailyForecast_1739227867373_f6be06c5-3175-4e39-b784-b2f03865c8ea",
+      "id": "fetchDailyForecast_1740075296405_7bc4a0e3-b7a2-46bd-8a7a-3b376bb24b06",
       "label": "fetchDailyForecast",
       "parent": "decideIfIShouldGoOut_custom_id",
       "inputs": [
         "Monastir"
       ],
       "outputs": "Daily Forecast in Monastir: Sunny",
-      "startTime": "2025-02-10T22:51:07.373Z",
-      "endTime": "2025-02-10T22:51:07.373Z",
-      "duration": 0.01187499612569809,
-      "elapsedTime": "0.012 ms",
+      "startTime": "2025-02-20T18:14:56.405Z",
+      "endTime": "2025-02-20T18:14:56.405Z",
+      "duration": 0.015459060668945312,
+      "elapsedTime": "0.015 ms",
       "narratives": [],
       "parallel": false,
       "abstract": false,
-      "createTime": "2025-02-10T22:51:07.373Z"
+      "createTime": "2025-02-20T18:14:56.405Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "function_1739227867373_eb639c61-416c-4bbc-9aa7-23e0ebfda640",
+      "id": "function_1740075296405_7bb95500-872b-4416-be53-5f5c2c776c94",
       "label": "color",
       "parent": "decideIfIShouldGoOut_custom_id",
       "inputs": [
@@ -162,20 +162,20 @@
         "Daily Forecast in Monastir: Sunny"
       ],
       "outputs": "GREEN",
-      "startTime": "2025-02-10T22:51:07.373Z",
-      "endTime": "2025-02-10T22:51:07.373Z",
-      "duration": 0.014416001737117767,
-      "elapsedTime": "0.014 ms",
+      "startTime": "2025-02-20T18:14:56.405Z",
+      "endTime": "2025-02-20T18:14:56.405Z",
+      "duration": 0.01733410358428955,
+      "elapsedTime": "0.017 ms",
       "narratives": [],
       "parallel": true,
       "abstract": false,
-      "createTime": "2025-02-10T22:51:07.373Z"
+      "createTime": "2025-02-20T18:14:56.405Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "function_1739227867373_04a7a236-c5dc-4aad-9ee2-4d13fe314bcb",
+      "id": "function_1740075296405_d3a6a97d-932f-45da-a32a-5c4d3aead6c3",
       "label": "decide",
       "parent": "decideIfIShouldGoOut_custom_id",
       "inputs": [
@@ -183,50 +183,50 @@
         "Daily Forecast in Monastir: Sunny"
       ],
       "outputs": "go out",
-      "startTime": "2025-02-10T22:51:07.373Z",
-      "endTime": "2025-02-10T22:51:07.373Z",
-      "duration": 0.05854199826717377,
-      "elapsedTime": "0.059 ms",
+      "startTime": "2025-02-20T18:14:56.405Z",
+      "endTime": "2025-02-20T18:14:56.406Z",
+      "duration": 0.06045794486999512,
+      "elapsedTime": "0.060 ms",
       "narratives": [],
       "parallel": true,
       "abstract": false,
-      "createTime": "2025-02-10T22:51:07.373Z"
+      "createTime": "2025-02-20T18:14:56.406Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "validateDecision_1739227867373_121b57b9-1d56-401b-9358-a3107df7b930",
+      "id": "validateDecision_1740075296406_29445487-d490-4a6e-b465-eb7fdf8ff9ee",
       "label": "validateDecision",
       "inputs": [
         "As daily Forecast in Monastir is Daily Forecast in Monastir: Sunny and the temperature is Current Temperature in Monastir: 25°C, vigilance is GREEN and you can go out"
       ],
       "outputs": true,
-      "startTime": "2025-02-10T22:51:07.373Z",
-      "endTime": "2025-02-10T22:51:07.373Z",
-      "duration": 0.05604200065135956,
-      "elapsedTime": "0.056 ms",
+      "startTime": "2025-02-20T18:14:56.406Z",
+      "endTime": "2025-02-20T18:14:56.406Z",
+      "duration": 0.015417098999023438,
+      "elapsedTime": "0.015 ms",
       "narratives": [],
       "parallel": false,
       "abstract": false,
-      "createTime": "2025-02-10T22:51:07.373Z"
+      "createTime": "2025-02-20T18:14:56.406Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "fetchCurrentTemperature_1739227867371_27f5f4cf-e071-432f-969f-9b8c1952d328->fetchDailyForecast_1739227867372_e3cb3ffc-e284-417d-b085-96ad9b3e48e5",
-      "source": "fetchCurrentTemperature_1739227867371_27f5f4cf-e071-432f-969f-9b8c1952d328",
-      "target": "fetchDailyForecast_1739227867372_e3cb3ffc-e284-417d-b085-96ad9b3e48e5",
+      "id": "fetchCurrentTemperature_1740075296404_98b165b3-6c3e-4ad7-bc38-978bfc804bc6->fetchDailyForecast_1740075296405_db068903-9c27-453a-b18b-3beb21140da0",
+      "source": "fetchCurrentTemperature_1740075296404_98b165b3-6c3e-4ad7-bc38-978bfc804bc6",
+      "target": "fetchDailyForecast_1740075296405_db068903-9c27-453a-b18b-3beb21140da0",
       "parallel": false
     },
     "group": "edges"
   },
   {
     "data": {
-      "id": "fetchCurrentTemperature_1739227867373_64db9761-6ab5-44fd-8b31-47a3640e916e->fetchDailyForecast_1739227867373_f6be06c5-3175-4e39-b784-b2f03865c8ea",
-      "source": "fetchCurrentTemperature_1739227867373_64db9761-6ab5-44fd-8b31-47a3640e916e",
-      "target": "fetchDailyForecast_1739227867373_f6be06c5-3175-4e39-b784-b2f03865c8ea",
+      "id": "fetchCurrentTemperature_1740075296405_4a7695db-1699-43a2-8243-85d1d1c935cd->fetchDailyForecast_1740075296405_7bc4a0e3-b7a2-46bd-8a7a-3b376bb24b06",
+      "source": "fetchCurrentTemperature_1740075296405_4a7695db-1699-43a2-8243-85d1d1c935cd",
+      "target": "fetchDailyForecast_1740075296405_7bc4a0e3-b7a2-46bd-8a7a-3b376bb24b06",
       "parent": "decideIfIShouldGoOut_custom_id",
       "parallel": false
     },
@@ -234,9 +234,9 @@
   },
   {
     "data": {
-      "id": "fetchDailyForecast_1739227867373_f6be06c5-3175-4e39-b784-b2f03865c8ea->function_1739227867373_eb639c61-416c-4bbc-9aa7-23e0ebfda640",
-      "source": "fetchDailyForecast_1739227867373_f6be06c5-3175-4e39-b784-b2f03865c8ea",
-      "target": "function_1739227867373_eb639c61-416c-4bbc-9aa7-23e0ebfda640",
+      "id": "fetchDailyForecast_1740075296405_7bc4a0e3-b7a2-46bd-8a7a-3b376bb24b06->function_1740075296405_7bb95500-872b-4416-be53-5f5c2c776c94",
+      "source": "fetchDailyForecast_1740075296405_7bc4a0e3-b7a2-46bd-8a7a-3b376bb24b06",
+      "target": "function_1740075296405_7bb95500-872b-4416-be53-5f5c2c776c94",
       "parent": "decideIfIShouldGoOut_custom_id",
       "parallel": true
     },
@@ -244,9 +244,9 @@
   },
   {
     "data": {
-      "id": "fetchDailyForecast_1739227867373_f6be06c5-3175-4e39-b784-b2f03865c8ea->function_1739227867373_04a7a236-c5dc-4aad-9ee2-4d13fe314bcb",
-      "source": "fetchDailyForecast_1739227867373_f6be06c5-3175-4e39-b784-b2f03865c8ea",
-      "target": "function_1739227867373_04a7a236-c5dc-4aad-9ee2-4d13fe314bcb",
+      "id": "fetchDailyForecast_1740075296405_7bc4a0e3-b7a2-46bd-8a7a-3b376bb24b06->function_1740075296405_d3a6a97d-932f-45da-a32a-5c4d3aead6c3",
+      "source": "fetchDailyForecast_1740075296405_7bc4a0e3-b7a2-46bd-8a7a-3b376bb24b06",
+      "target": "function_1740075296405_d3a6a97d-932f-45da-a32a-5c4d3aead6c3",
       "parent": "decideIfIShouldGoOut_custom_id",
       "parallel": true
     },
@@ -254,38 +254,38 @@
   },
   {
     "data": {
-      "id": "fetchDailyForecast_1739227867372_e3cb3ffc-e284-417d-b085-96ad9b3e48e5->recommendation_1739227867372_28f6c496-2e84-4e9e-a1eb-41b3b879cd5b",
-      "source": "fetchDailyForecast_1739227867372_e3cb3ffc-e284-417d-b085-96ad9b3e48e5",
-      "target": "recommendation_1739227867372_28f6c496-2e84-4e9e-a1eb-41b3b879cd5b",
+      "id": "fetchDailyForecast_1740075296405_db068903-9c27-453a-b18b-3beb21140da0->recommendation_1740075296405_7577ffd0-8ff8-4df3-92cf-09f281795acd",
+      "source": "fetchDailyForecast_1740075296405_db068903-9c27-453a-b18b-3beb21140da0",
+      "target": "recommendation_1740075296405_7577ffd0-8ff8-4df3-92cf-09f281795acd",
       "parallel": false
     },
     "group": "edges"
   },
   {
     "data": {
-      "id": "recommendation_1739227867372_28f6c496-2e84-4e9e-a1eb-41b3b879cd5b->validateDecision_1739227867373_121b57b9-1d56-401b-9358-a3107df7b930",
-      "source": "recommendation_1739227867372_28f6c496-2e84-4e9e-a1eb-41b3b879cd5b",
-      "target": "validateDecision_1739227867373_121b57b9-1d56-401b-9358-a3107df7b930",
+      "id": "recommendation_1740075296405_7577ffd0-8ff8-4df3-92cf-09f281795acd->validateDecision_1740075296406_29445487-d490-4a6e-b465-eb7fdf8ff9ee",
+      "source": "recommendation_1740075296405_7577ffd0-8ff8-4df3-92cf-09f281795acd",
+      "target": "validateDecision_1740075296406_29445487-d490-4a6e-b465-eb7fdf8ff9ee",
       "parallel": false
     },
     "group": "edges"
   },
   {
     "data": {
-      "id": "validateDecision_1739227867373_6df179c5-8d97-4149-ac58-422929cbfaeb",
+      "id": "validateDecision_1740075296406_c33ae686-ca63-4644-a8de-9ee48f8628c4",
       "label": "validateDecision",
       "inputs": [
         "As daily Forecast in Monastir is Daily Forecast in Monastir: Sunny and the temperature is Current Temperature in Monastir: 25°C, vigilance is GREEN and you can go out"
       ],
       "outputs": true,
-      "startTime": "2025-02-10T22:51:07.373Z",
-      "endTime": "2025-02-10T22:51:07.373Z",
-      "duration": 0.011791996657848358,
-      "elapsedTime": "0.012 ms",
+      "startTime": "2025-02-20T18:14:56.406Z",
+      "endTime": "2025-02-20T18:14:56.406Z",
+      "duration": 0.009875059127807617,
+      "elapsedTime": "0.010 ms",
       "narratives": [],
       "parallel": false,
       "abstract": false,
-      "createTime": "2025-02-10T22:51:07.373Z"
+      "createTime": "2025-02-20T18:14:56.406Z"
     },
     "group": "nodes"
   }

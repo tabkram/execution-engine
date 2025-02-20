@@ -112,7 +112,7 @@ export class ExecutionTimer {
       parts.push('and');
     }
     if (milliseconds > 0) {
-      parts.push(`${milliseconds.toFixed(fractionDigits)} ms`);
+      parts.push(`${Number.isFinite(fractionDigits) ? milliseconds.toFixed(fractionDigits) : milliseconds} ms`);
     }
 
     return parts.join(' ');
@@ -121,16 +121,17 @@ export class ExecutionTimer {
   /**
    * Gets details of a specific execution timer.
    * @param executionId - The timer ID. Defaults to 'default'.
-   * @param fractionDigits - Decimal places for milliseconds.
+   * @param durationFractionDigits - Decimal places for milliseconds.
+   * @param elapsedTimeFractionDigits - Decimal places for milliseconds.
    * @returns An object containing timer details.
    */
-  getInfo(executionId: string = 'default', fractionDigits?: number): TimerDetailsModel {
+  getInfo(executionId: string = 'default', durationFractionDigits?: number, elapsedTimeFractionDigits?: number): TimerDetailsModel {
     return {
       executionId,
       startTime: this.getStartDate(executionId),
       endTime: this.getEndDate(executionId),
-      duration: this.getDuration(executionId, fractionDigits),
-      elapsedTime: this.getElapsedTime(executionId, fractionDigits)
+      duration: this.getDuration(executionId, durationFractionDigits),
+      elapsedTime: this.getElapsedTime(executionId, elapsedTimeFractionDigits)
     };
   }
 }
