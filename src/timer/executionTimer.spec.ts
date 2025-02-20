@@ -118,4 +118,48 @@ describe('ExecutionTimer', () => {
     const elapsedTime = timer.getElapsedTime(customId);
     expect(elapsedTime).toMatch(/5 seconds/);
   });
+
+  it('should return correct timer details', () => {
+    const customId = 'testExecution';
+
+    jest.spyOn(performance, 'now').mockReturnValueOnce(1000);
+    timer.start(customId);
+
+    jest.spyOn(performance, 'now').mockReturnValueOnce(5000);
+    timer.stop(customId);
+
+    const timeInfo = timer.getInfo(customId);
+
+    expect(timeInfo).toBeDefined();
+    expect(timeInfo.executionId).toBe(customId);
+    expect(timeInfo.startTime).toBeInstanceOf(Date);
+    expect(timeInfo.endTime).toBeInstanceOf(Date);
+    expect(timeInfo.duration).toBe(4000);
+    expect(timeInfo.elapsedTime).toMatch(/4 seconds/);
+  });
+
+  it('should return default values if timer was not started', () => {
+    const timeInfo = timer.getInfo('timerForDetails');
+
+    expect(timeInfo).toBeDefined();
+    expect(timeInfo.executionId).toBe('timerForDetails');
+    expect(timeInfo.startTime).toBeUndefined();
+    expect(timeInfo.endTime).toBeUndefined();
+    expect(timeInfo.duration).toBeUndefined();
+    expect(timeInfo.elapsedTime).toBeUndefined();
+  });
+
+  it('should handle fraction digits for duration', () => {
+    const customId = 'fractionTest';
+
+    jest.spyOn(performance, 'now').mockReturnValueOnce(1000);
+    timer.start(customId);
+
+    jest.spyOn(performance, 'now').mockReturnValueOnce(3500);
+    timer.stop(customId);
+
+    const timeInfo = timer.getInfo(customId, 2);
+
+    expect(timeInfo.duration).toBeCloseTo(2500, 2);
+  });
 });

@@ -1,3 +1,5 @@
+import { TimerDetailsModel } from './models/timer.model';
+
 /**
  * A class for measuring the execution time of code blocks.
  */
@@ -114,5 +116,21 @@ export class ExecutionTimer {
     }
 
     return parts.join(' ');
+  }
+
+  /**
+   * Gets details of a specific execution timer.
+   * @param executionId - The timer ID. Defaults to 'default'.
+   * @param fractionDigits - Decimal places for milliseconds.
+   * @returns An object containing timer details.
+   */
+  getInfo(executionId: string = 'default', fractionDigits?: number): TimerDetailsModel {
+    return {
+      executionId,
+      startTime: this.getStartDate(executionId),
+      endTime: this.getEndDate(executionId),
+      duration: this.getDuration(executionId, fractionDigits),
+      elapsedTime: this.getElapsedTime(executionId, fractionDigits)
+    };
   }
 }
