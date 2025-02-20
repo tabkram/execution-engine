@@ -1,3 +1,8 @@
+## [2.2.2](https://github.com/tabkram/execution-engine/compare/v2.2.1...v2.2.2) (2025-02-20)
+
+### Features
+
+* add direct usage for timer getInfo in the engine ([e6b2d8b](https://github.com/tabkram/execution-engine/commit/e6b2d8be8c1ba6eca80c29a03fea782e66258f0e))
 ## [2.2.1](https://github.com/tabkram/execution-engine/compare/v2.2.0...v2.2.1) (2025-02-20)
 
 ### Features
