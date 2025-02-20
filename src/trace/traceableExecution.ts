@@ -17,6 +17,7 @@ import {
   TraceOptions
 } from './trace.model';
 import { extract } from '../common/jsonQuery';
+import { safeError } from '../common/safeError';
 import { ExecutionTimer } from '../timer/executionTimer';
 
 export type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
@@ -218,7 +219,7 @@ export class TraceableExecution {
           .catch((e) => {
             const executionTrace = {
               inputs,
-              errors: [{ name: e?.name, code: e?.code, message: e?.message }],
+              errors: [safeError(e)],
               ...this.calculateTimeAndDuration(executionTimer)
             };
             this.buildTrace<O>(nodeTrace, executionTrace, nodeTraceConfigFromOptions);
@@ -247,7 +248,7 @@ export class TraceableExecution {
             .catch((e) => {
               const executionTrace = {
                 inputs,
-                errors: [{ name: e?.name, code: e?.code, message: e?.message }],
+                errors: [safeError(e)],
                 ...this.calculateTimeAndDuration(executionTimer)
               };
               this.buildTrace<O>(nodeTrace, executionTrace, nodeTraceConfigFromOptions);
@@ -270,7 +271,7 @@ export class TraceableExecution {
       } catch (e) {
         const executionTrace = {
           inputs,
-          errors: [{ name: e?.name, code: e?.code, message: e?.message }],
+          errors: [safeError(e)],
           ...this.calculateTimeAndDuration(executionTimer)
         };
         this.buildTrace<O>(nodeTrace, executionTrace, nodeTraceConfigFromOptions);
