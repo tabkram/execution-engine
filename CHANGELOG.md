@@ -1,3 +1,8 @@
+## [2.2.3](https://github.com/tabkram/execution-engine/compare/v2.2.2...v2.2.3) (2025-02-20)
+
+### Features
+
+* ensure trace errors are safe, avoid circular references and serialization issues ([3aa373f](https://github.com/tabkram/execution-engine/commit/3aa373f24560676e9d0c5e015ec5016ccd3db011))
 ## [2.2.2](https://github.com/tabkram/execution-engine/compare/v2.2.1...v2.2.2) (2025-02-20)
 
 ### Features
