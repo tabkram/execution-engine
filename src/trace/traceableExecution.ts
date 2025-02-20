@@ -346,15 +346,15 @@ export class TraceableExecution {
 
       const previousNodes = !parallelEdge
         ? this.nodes?.filter(
-          (node) =>
-            !node.data.abstract &&
+            (node) =>
+              !node.data.abstract &&
               node.data.parent === nodeTrace.parent &&
               (!options?.parallel || !node.data.parallel || !node.data.parent || !nodeTrace.parent) &&
               node.data.id !== nodeTrace.id &&
               node.data.parent !== nodeTrace.id &&
               node.data.id !== nodeTrace.parent &&
               !this.edges.find((e) => e.data.source === node.data.id)
-        )
+          )
         : [];
       this.edges = [
         ...(this.edges ?? []),
@@ -370,17 +370,17 @@ export class TraceableExecution {
         })) ?? []),
         ...(parallelEdge
           ? [
-            {
-              data: {
-                id: `${parallelEdge.data.source}->${nodeTrace.id}`,
-                source: parallelEdge.data.source,
-                target: nodeTrace.id,
-                parent: nodeTrace.parent,
-                parallel: options?.parallel
-              },
-              group: 'edges' as const
-            }
-          ]
+              {
+                data: {
+                  id: `${parallelEdge.data.source}->${nodeTrace.id}`,
+                  source: parallelEdge.data.source,
+                  target: nodeTrace.id,
+                  parent: nodeTrace.parent,
+                  parallel: options?.parallel
+                },
+                group: 'edges' as const
+              }
+            ]
           : [])
       ];
     }
@@ -420,12 +420,9 @@ export class TraceableExecution {
 
   private calculateTimeAndDuration(executionTimer: ExecutionTimer) {
     executionTimer.stop();
-    return {
-      startTime: executionTimer.getStartDate(),
-      endTime: executionTimer.getEndDate(),
-      duration: executionTimer.getDuration(),
-      elapsedTime: executionTimer.getElapsedTime(undefined, 3)
-    };
+    const timerDetails = executionTimer.getInfo(undefined, undefined, 3);
+    delete timerDetails.executionId;
+    return timerDetails;
   }
 
   private filterNodeTrace(nodeData?: NodeData): NodeTrace {

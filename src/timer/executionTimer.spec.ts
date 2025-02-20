@@ -92,10 +92,14 @@ describe('ExecutionTimer', () => {
   it('should get human-readable elapsed time with milliseconds', () => {
     jest.spyOn(performance, 'now').mockReturnValueOnce(1000);
     timer.start();
-    jest.spyOn(performance, 'now').mockReturnValueOnce(1123);
+    jest.spyOn(performance, 'now').mockReturnValueOnce(1123.123456);
     timer.stop();
-    const elapsedTime = timer.getElapsedTime();
-    expect(elapsedTime).toMatch(/123 ms/);
+    const elapsedTimeExact = timer.getElapsedTime();
+    expect(elapsedTimeExact).toMatch(/123.123456(\d+)? ms/);
+    const elapsedTimeFraction6 = timer.getElapsedTime(undefined, 6);
+    expect(elapsedTimeFraction6).toMatch(/123.123456 ms/);
+    const elapsedTimeFraction0 = timer.getElapsedTime(undefined, 0);
+    expect(elapsedTimeFraction0).toMatch(/123 ms/);
   });
 
   it('should return undefined for getElapsedTime when timer is not started', () => {

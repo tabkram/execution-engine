@@ -1,47 +1,47 @@
 [
   {
     "data": {
-      "id": "function_1739227865688_c85d85f2-e8b5-4a40-b6f1-cc621854085e",
+      "id": "function_1740075294130_ea6edf05-2fc9-4c8a-bf56-c3eca282fd14",
       "label": "function",
       "inputs": [
         "param1"
       ],
       "outputs": "result1 for param1",
-      "startTime": "2025-02-10T22:51:05.688Z",
-      "endTime": "2025-02-10T22:51:05.688Z",
-      "duration": 0.27912499755620956,
-      "elapsedTime": "0.279 ms",
+      "startTime": "2025-02-20T18:14:54.130Z",
+      "endTime": "2025-02-20T18:14:54.131Z",
+      "duration": 0.37679195404052734,
+      "elapsedTime": "0.377 ms",
       "narratives": [],
       "parallel": false,
       "abstract": false,
-      "createTime": "2025-02-10T22:51:05.688Z"
+      "createTime": "2025-02-20T18:14:54.131Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "function_1739227865688_e5d3171f-abdc-4b31-a9ab-20ed060c4318",
+      "id": "function_1740075294131_a7122250-5441-4cd1-8a74-acedc880a7aa",
       "label": "function",
       "inputs": [
         "result1 for param1"
       ],
       "outputs": "result2 for result1 for param1",
-      "startTime": "2025-02-10T22:51:05.688Z",
-      "endTime": "2025-02-10T22:51:05.689Z",
-      "duration": 0.2168329954147339,
-      "elapsedTime": "0.217 ms",
+      "startTime": "2025-02-20T18:14:54.131Z",
+      "endTime": "2025-02-20T18:14:54.131Z",
+      "duration": 0.2054579257965088,
+      "elapsedTime": "0.205 ms",
       "narratives": [],
       "parallel": false,
       "abstract": false,
-      "createTime": "2025-02-10T22:51:05.689Z"
+      "createTime": "2025-02-20T18:14:54.131Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "function_1739227865688_c85d85f2-e8b5-4a40-b6f1-cc621854085e->function_1739227865688_e5d3171f-abdc-4b31-a9ab-20ed060c4318",
-      "source": "function_1739227865688_c85d85f2-e8b5-4a40-b6f1-cc621854085e",
-      "target": "function_1739227865688_e5d3171f-abdc-4b31-a9ab-20ed060c4318",
+      "id": "function_1740075294130_ea6edf05-2fc9-4c8a-bf56-c3eca282fd14->function_1740075294131_a7122250-5441-4cd1-8a74-acedc880a7aa",
+      "source": "function_1740075294130_ea6edf05-2fc9-4c8a-bf56-c3eca282fd14",
+      "target": "function_1740075294131_a7122250-5441-4cd1-8a74-acedc880a7aa",
       "parallel": false
     },
     "group": "edges"
