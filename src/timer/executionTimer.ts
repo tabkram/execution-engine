@@ -1,4 +1,4 @@
-import { TimerDetailsModel } from './models/timer.model';
+import { TimerDetailsModel } from '../common/models/timer.model';
 
 /**
  * A class for measuring the execution time of code blocks.

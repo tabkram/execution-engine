@@ -1,47 +1,47 @@
 [
   {
     "data": {
-      "id": "myMethod1_1740075294874_5642bf51-11b3-4730-9b77-2d4985a09339",
+      "id": "myMethod1_1740228164079_250f28af-b56b-42f5-812e-98cd8f17802f",
       "label": "myMethod1",
       "inputs": [
         "param1"
       ],
       "outputs": "result1 for param1",
-      "startTime": "2025-02-20T18:14:54.874Z",
-      "endTime": "2025-02-20T18:14:54.875Z",
-      "duration": 0.5127090215682983,
-      "elapsedTime": "0.513 ms",
+      "startTime": "2025-02-22T12:42:44.079Z",
+      "endTime": "2025-02-22T12:42:44.079Z",
+      "duration": 0.28808391094207764,
+      "elapsedTime": "0.288 ms",
       "narratives": [],
       "parallel": false,
       "abstract": false,
-      "createTime": "2025-02-20T18:14:54.875Z"
+      "createTime": "2025-02-22T12:42:44.080Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "myMethod2_1740075294875_3817f3b2-e036-4d7d-b645-847f768ce9ee",
+      "id": "myMethod2_1740228164080_7b61bfb2-4e64-40bd-bdd7-da091242bcf2",
       "label": "myMethod2",
       "inputs": [
         "param2"
       ],
       "outputs": "result2 for param2",
-      "startTime": "2025-02-20T18:14:54.875Z",
-      "endTime": "2025-02-20T18:14:54.875Z",
-      "duration": 0.18020904064178467,
-      "elapsedTime": "0.180 ms",
+      "startTime": "2025-02-22T12:42:44.080Z",
+      "endTime": "2025-02-22T12:42:44.080Z",
+      "duration": 0.14399993419647217,
+      "elapsedTime": "0.144 ms",
       "narratives": [],
       "parallel": false,
       "abstract": false,
-      "createTime": "2025-02-20T18:14:54.875Z"
+      "createTime": "2025-02-22T12:42:44.080Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "myMethod1_1740075294874_5642bf51-11b3-4730-9b77-2d4985a09339->myMethod2_1740075294875_3817f3b2-e036-4d7d-b645-847f768ce9ee",
-      "source": "myMethod1_1740075294874_5642bf51-11b3-4730-9b77-2d4985a09339",
-      "target": "myMethod2_1740075294875_3817f3b2-e036-4d7d-b645-847f768ce9ee",
+      "id": "myMethod1_1740228164079_250f28af-b56b-42f5-812e-98cd8f17802f->myMethod2_1740228164080_7b61bfb2-4e64-40bd-bdd7-da091242bcf2",
+      "source": "myMethod1_1740228164079_250f28af-b56b-42f5-812e-98cd8f17802f",
+      "target": "myMethod2_1740228164080_7b61bfb2-4e64-40bd-bdd7-da091242bcf2",
       "parallel": false
     },
     "group": "edges"

@@ -1,12 +1,13 @@
-import { Node, NodeData } from './trace.model';
-import { TraceableExecution } from './traceableExecution';
+import { TraceableEngine } from './traceableEngine';
+import { NodeData } from '../common/models/engineNodeTrace.model';
+import { Node } from '../common/models/engineTrace.model';
 
-describe('TraceableExecution', () => {
-  describe('TraceableExecution without initialTrace', () => {
-    let traceableExecution: TraceableExecution;
+describe('TraceableEngine', () => {
+  describe('TraceableEngine without initialTrace', () => {
+    let traceableExecution: TraceableEngine;
 
     beforeEach(() => {
-      traceableExecution = new TraceableExecution();
+      traceableExecution = new TraceableEngine();
     });
 
     it('should create a trace of consecutive user-related actions', async () => {
@@ -485,7 +486,7 @@ describe('TraceableExecution', () => {
     });
   });
 
-  describe('TraceableExecution with initialTrace', () => {
+  describe('TraceableEngine with initialTrace', () => {
     it('should run with initial trace and then get the trace', async () => {
       // Create a sample initial trace
       const initialTrace = [
@@ -498,11 +499,11 @@ describe('TraceableExecution', () => {
         } as Node
       ];
 
-      // Create an instance of TraceableExecution with the initial trace
-      const traceableExecution = new TraceableExecution(initialTrace);
+      // Create an instance of TraceableEngine with the initial trace
+      const traceableExecution = new TraceableEngine(initialTrace);
 
       // Define a function to be used in the run method
-      const sampleFunction = (param: string) => {
+      const sampleFunction = (param: string): string => {
         return `Result: ${param}`;
       };
 

@@ -20,7 +20,7 @@
     "prepublishOnly": "npm run build",
     "prepare": "npm audit",
     "commitlint": "commitlint --edit",
-    "generate-barrels": "barrelsby --directory src --recursive --delete --exclude \"common\" --exclude \"\\\\.spec\\\\.ts$\" --singleQuotes"
+    "generate-barrels": "barrelsby --directory src --recursive --delete --exclude \"common/utils\" --exclude \"\\\\.spec\\\\.ts$\" --singleQuotes"
   },
   "repository": {
     "type": "git",
