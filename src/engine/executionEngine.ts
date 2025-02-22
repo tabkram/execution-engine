@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { Trace } from '../trace/trace.model';
+import { Trace } from '../trace/models/engineTrace.model';
 import { TraceableExecution } from '../trace/traceableExecution';
 
 /**

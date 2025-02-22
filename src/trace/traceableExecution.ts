@@ -3,22 +3,13 @@ import { AsyncLocalStorage } from 'async_hooks';
 
 import { v4 as uuidv4 } from 'uuid';
 
-import {
-  DEFAULT_TRACE_CONFIG,
-  Edge,
-  isNodeExecutionTrace,
-  isNodeTrace,
-  Node,
-  NodeData,
-  NodeExecutionTrace,
-  NodeExecutionTraceExtractor,
-  NodeTrace,
-  Trace,
-  TraceOptions
-} from './trace.model';
 import { extract } from '../common/jsonQuery';
 import { safeError } from '../common/safeError';
 import { ExecutionTimer } from '../timer/executionTimer';
+import { isNodeTrace, NodeData, NodeTrace } from './models/engineNodeTrace.model';
+import { Edge, Node, Trace } from './models/engineTrace.model';
+import { DEFAULT_TRACE_CONFIG, TraceOptions } from './models/engineTraceOptions.model';
+import { isNodeExecutionTrace, NodeExecutionTrace, NodeExecutionTraceExtractor } from './models/executionTrace.model';
 
 export type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
 
@@ -347,15 +338,15 @@ export class TraceableExecution {
 
       const previousNodes = !parallelEdge
         ? this.nodes?.filter(
-            (node) =>
-              !node.data.abstract &&
+          (node) =>
+            !node.data.abstract &&
               node.data.parent === nodeTrace.parent &&
               (!options?.parallel || !node.data.parallel || !node.data.parent || !nodeTrace.parent) &&
               node.data.id !== nodeTrace.id &&
               node.data.parent !== nodeTrace.id &&
               node.data.id !== nodeTrace.parent &&
               !this.edges.find((e) => e.data.source === node.data.id)
-          )
+        )
         : [];
       this.edges = [
         ...(this.edges ?? []),
@@ -371,17 +362,17 @@ export class TraceableExecution {
         })) ?? []),
         ...(parallelEdge
           ? [
-              {
-                data: {
-                  id: `${parallelEdge.data.source}->${nodeTrace.id}`,
-                  source: parallelEdge.data.source,
-                  target: nodeTrace.id,
-                  parent: nodeTrace.parent,
-                  parallel: options?.parallel
-                },
-                group: 'edges' as const
-              }
-            ]
+            {
+              data: {
+                id: `${parallelEdge.data.source}->${nodeTrace.id}`,
+                source: parallelEdge.data.source,
+                target: nodeTrace.id,
+                parent: nodeTrace.parent,
+                parallel: options?.parallel
+              },
+              group: 'edges' as const
+            }
+          ]
           : [])
       ];
     }

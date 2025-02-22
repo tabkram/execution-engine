@@ -1,4 +1,5 @@
-import { Node, NodeData } from './trace.model';
+import { NodeData } from './models/engineNodeTrace.model';
+import { Node } from './models/engineTrace.model';
 import { TraceableExecution } from './traceableExecution';
 
 describe('TraceableExecution', () => {
