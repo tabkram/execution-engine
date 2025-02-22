@@ -1,6 +1,6 @@
 import { TraceableEngine } from './traceableEngine';
-import { NodeData } from '../trace/models/engineNodeTrace.model';
-import { Node } from '../trace/models/engineTrace.model';
+import { NodeData } from '../common/models/engineNodeTrace.model';
+import { Node } from '../common/models/engineTrace.model';
 
 describe('TraceableEngine', () => {
   describe('TraceableEngine without initialTrace', () => {

@@ -1,10 +1,10 @@
-import { Awaited } from '../common/awaited';
+import { TraceOptions } from '../common/models/engineTraceOptions.model';
+import { ExecutionTrace } from '../common/models/executionTrace.model';
+import { TimerDetailsModel } from '../common/models/timer.model';
+import { Awaited } from '../common/utils/awaited';
+import { safeError } from '../common/utils/safeError';
+import { execute } from '../execution/execute';
 import { ExecutionTimer } from '../timer/executionTimer';
-import { TraceOptions } from './models/engineTraceOptions.model';
-import { ExecutionTrace } from './models/executionTrace.model';
-import { safeError } from '../common/safeError';
-import { execute } from '../execute/execute';
-import { TimerDetailsModel } from '../timer/models/timer.model';
 
 function calculateTimeAndDuration(executionTimer: ExecutionTimer): TimerDetailsModel {
   executionTimer.stop();
@@ -14,9 +14,9 @@ function calculateTimeAndDuration(executionTimer: ExecutionTimer): TimerDetailsM
 }
 
 
-export function trace<O>(
+export function executionTrace<O>(
   blockFunction: (...params) => Promise<O>,
-  inputs: Array<unknown>,
+  inputs?: Array<unknown>,
   traceHandler?: (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     traceContext: Record<string, any>,
@@ -28,9 +28,9 @@ export function trace<O>(
   errorStrategy?: 'catch' | 'throw'
 ): Promise<ExecutionTrace<Array<unknown>, Awaited<O>>>;
 
-export function trace<O>(
+export function executionTrace<O>(
   blockFunction: (...params) => O,
-  inputs: Array<unknown>,
+  inputs?: Array<unknown>,
   traceHandler?: (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     traceContext: Record<string, any>,
@@ -43,7 +43,7 @@ export function trace<O>(
 ): ExecutionTrace<Array<unknown>, O>;
 
 
-export function trace<O>(
+export function executionTrace<O>(
   blockFunction: (...params) => O | Promise<O>,
   inputs: Array<unknown> = [],
   traceHandler?: (
@@ -59,7 +59,7 @@ export function trace<O>(
   const executionTimer = new ExecutionTimer();
   executionTimer?.start();
 
-  const eee = execute(
+  return execute(
     blockFunction,
     inputs,
     [traceContext],
@@ -90,6 +90,4 @@ export function trace<O>(
       }
     }
   );
-
-  return eee;
 }

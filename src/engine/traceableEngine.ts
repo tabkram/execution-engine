@@ -3,14 +3,14 @@ import { AsyncLocalStorage } from 'async_hooks';
 
 import { v4 as uuidv4 } from 'uuid';
 
-import { Awaited } from '../common/awaited';
-import { extract } from '../common/jsonQuery';
+import { isNodeTrace, NodeData, NodeTrace } from '../common/models/engineNodeTrace.model';
+import { Edge, Node, Trace } from '../common/models/engineTrace.model';
+import { DEFAULT_TRACE_CONFIG, TraceOptions } from '../common/models/engineTraceOptions.model';
+import { ExecutionTrace, ExecutionTraceExtractor, isExecutionTrace } from '../common/models/executionTrace.model';
+import { Awaited } from '../common/utils/awaited';
+import { extract } from '../common/utils/jsonQuery';
 import { ExecutionTimer } from '../timer/executionTimer';
-import { isNodeTrace, NodeData, NodeTrace } from '../trace/models/engineNodeTrace.model';
-import { Edge, Node, Trace } from '../trace/models/engineTrace.model';
-import { DEFAULT_TRACE_CONFIG, TraceOptions } from '../trace/models/engineTraceOptions.model';
-import { ExecutionTrace, ExecutionTraceExtractor, isExecutionTrace } from '../trace/models/executionTrace.model';
-import { trace } from '../trace/trace';
+import { executionTrace } from '../trace/trace';
 
 /**
  * Represents a class for traceable execution of functions.
@@ -166,7 +166,7 @@ export class TraceableEngine {
         `${blockFunction.name} could not have an instance of TraceableExecution as input, this will create circular dependency on trace`
       );
     }
-    const nodeTraceConfigFromOptions = isNodeTrace(options) ? undefined : (options.config ?? DEFAULT_TRACE_CONFIG);
+    const nodeTraceConfigFromOptions = isNodeTrace(options) ? undefined : options.config ?? DEFAULT_TRACE_CONFIG;
     const nodeTraceFromOptions = (isNodeTrace(options) ? options : options.trace) ?? {};
     nodeTraceFromOptions.parent = nodeTraceFromOptions?.parent ?? this.asyncLocalStorage.getStore();
 
@@ -185,7 +185,7 @@ export class TraceableEngine {
       ...nodeTraceFromOptions
     };
 
-    return trace<O>(
+    return executionTrace<O>(
       () => this.asyncLocalStorage.run(nodeTrace.id, () => blockFunction.bind(this)(...inputs, nodeTrace)),
       inputs,
       (nodeTrace, executionTrace) => this.buildTrace.bind(this)(nodeTrace, executionTrace, nodeTraceConfigFromOptions),

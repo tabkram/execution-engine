@@ -1,5 +1,5 @@
-import { NodeData } from './models/engineNodeTrace.model';
-import { trace } from './trace';
+import { executionTrace } from './trace';
+import { NodeData } from '../common/models/engineNodeTrace.model';
 
 describe('ExecutionTrace', () => {
   const executionTraceExpectation = {
@@ -24,7 +24,7 @@ describe('ExecutionTrace', () => {
         return 'Hello World response No Params!';
       }
 
-      const response = trace(helloWorld);
+      const response = executionTrace(helloWorld);
       expect(response).toMatchObject(successfullExecutionTraceExpectation);
     });
 
@@ -34,7 +34,7 @@ describe('ExecutionTrace', () => {
         return 'Hello World response with Trace!';
       }
 
-      const response = trace(helloWorldWithTrace);
+      const response = executionTrace(helloWorldWithTrace);
       expect(response).toMatchObject(successfullExecutionTraceExpectation);
     });
   });
@@ -45,7 +45,7 @@ describe('ExecutionTrace', () => {
         return 'Hello World async response!';
       }
 
-      const response = await trace(helloWorldAsync);
+      const response = await executionTrace(helloWorldAsync);
       expect(response).toMatchObject(successfullExecutionTraceExpectation);
     });
 
@@ -55,7 +55,7 @@ describe('ExecutionTrace', () => {
         return 'Hello World async response with Trace!';
       }
 
-      const response = await trace(helloWorldAsyncWithTrace);
+      const response = await executionTrace(helloWorldAsyncWithTrace);
       expect(response).toMatchObject(successfullExecutionTraceExpectation);
     });
   });
@@ -70,7 +70,7 @@ describe('ExecutionTrace', () => {
     }
 
     it('should trace a synchronous function throwing an error', () => {
-      const response = trace(throwErrorFunction, ['ErrorParam'], undefined, undefined, 'catch');
+      const response = executionTrace(throwErrorFunction, ['ErrorParam'], undefined, undefined, 'catch');
       expect(response).toMatchObject({
         ...failedExecutionTraceExpectation,
         inputs: ['ErrorParam'],
@@ -85,7 +85,7 @@ describe('ExecutionTrace', () => {
     });
 
     it('should trace an async function throwing an error', async () => {
-      const response = await trace(asyncThrowErrorFunction, ['ErrorParam'], undefined, undefined, 'catch');
+      const response = await executionTrace(asyncThrowErrorFunction, ['ErrorParam'], undefined, undefined, 'catch');
       expect(response).toMatchObject({
         ...failedExecutionTraceExpectation,
         inputs: ['ErrorParam'],
@@ -122,7 +122,7 @@ describe('ExecutionTrace', () => {
     it('should sync trace successfully and pass correct traceHandlerMock and traceContext', () => {
       const traceHandlerMock = jest.fn();
       const traceContextMock = { metadata: { requestId: '12345' } };
-      const response = trace(divisionFunction, [1, 2], traceHandlerMock, traceContextMock);
+      const response = executionTrace(divisionFunction, [1, 2], traceHandlerMock, traceContextMock);
       expect(traceHandlerMock).toHaveBeenCalledWith(
         { ...traceContextMock, narratives: ['Calculating the division of 1 by 2'] },
         expect.objectContaining(successfullExecutionTraceExpectation)
@@ -133,7 +133,7 @@ describe('ExecutionTrace', () => {
     it('should sync trace errors and pass correct traceHandlerMock and traceContext', () => {
       const traceHandlerMock = jest.fn();
       const traceContextMock = { metadata: { requestId: '12345' } };
-      const response = trace(divisionFunction, [1, 0], traceHandlerMock, traceContextMock, 'catch');
+      const response = executionTrace(divisionFunction, [1, 0], traceHandlerMock, traceContextMock, 'catch');
       expect(traceHandlerMock).toHaveBeenCalledWith(
         { ...traceContextMock, narratives: ['Throwing because division of 1 by 0'] },
         expect.objectContaining(failedExecutionTraceExpectation)
@@ -144,7 +144,7 @@ describe('ExecutionTrace', () => {
     it('should async trace successfully and pass correct traceHandlerMock and traceContext', async () => {
       const traceHandlerMock = jest.fn();
       const traceContextMock = { metadata: { requestId: '12345' } };
-      const response = await trace(fetchDataFunction, ['https://api.example.com/data'], traceHandlerMock, traceContextMock);
+      const response = await executionTrace(fetchDataFunction, ['https://api.example.com/data'], traceHandlerMock, traceContextMock);
       expect(traceHandlerMock).toHaveBeenCalledWith(
         { ...traceContextMock, narratives: ['Fetching data from https://api.example.com/data'] },
         expect.objectContaining(successfullExecutionTraceExpectation)
@@ -155,7 +155,7 @@ describe('ExecutionTrace', () => {
     it('should async trace errors and pass correct traceHandlerMock and traceContext', async () => {
       const traceHandlerMock = jest.fn();
       const traceContextMock = { metadata: { requestId: '12345' } };
-      const response = await trace(fetchDataFunction, ['invalid-url'], traceHandlerMock, traceContextMock, 'catch');
+      const response = await executionTrace(fetchDataFunction, ['invalid-url'], traceHandlerMock, traceContextMock, 'catch');
       expect(traceHandlerMock).toHaveBeenCalledWith(
         { ...traceContextMock, narratives: ['Throwing because the URL invalid-url is invalid'] },
         expect.objectContaining(failedExecutionTraceExpectation)
@@ -168,7 +168,7 @@ describe('ExecutionTrace', () => {
       const traceContextMock = { metadata: { requestId: '12345' } };
 
       // Expect the trace function to throw an error for an invalid URL
-      await expect(trace(fetchDataFunction, ['invalid-url'], traceHandlerMock, traceContextMock)).rejects.toThrow('Invalid URL provided.'); // Check the error message
+      await expect(executionTrace(fetchDataFunction, ['invalid-url'], traceHandlerMock, traceContextMock)).rejects.toThrow('Invalid URL provided.'); // Check the error message
 
       expect(traceHandlerMock).toHaveBeenCalledWith(
         { ...traceContextMock, narratives: ['Throwing because the URL invalid-url is invalid'] },

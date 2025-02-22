@@ -1,4 +1,4 @@
-import { isAsync } from '../common/isAsync';
+import { isAsync } from '../common/utils/isAsync';
 
 // Overload for synchronous blockFunction returning OUTPUT
 export function execute<INPUT extends unknown[], OUTPUT, RESPONSE = OUTPUT, ERROR = RESPONSE>(

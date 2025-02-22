@@ -1,15 +1,17 @@
-import { TraceOptions } from './models/engineTraceOptions.model';
-import { ExecutionTrace } from './models/executionTrace.model';
-import { trace as traceExecution } from './trace';
-import { isAsync } from '../common/isAsync';
+import { executionTrace as traceExecution } from './trace';
+import { TraceOptions } from '../common/models/engineTraceOptions.model';
+import { ExecutionTrace } from '../common/models/executionTrace.model';
+import { isAsync } from '../common/utils/isAsync';
 
 
 export function trace<O>(
   traceHandler?: (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     traceContext: Record<string, any>,
     executionTrace: ExecutionTrace<Array<unknown>, O>,
     options?: TraceOptions<Array<unknown>, O>['config']
   ) => void,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   traceContext: Record<string, any> = {},
   errorStrategy: 'catch' | 'throw' = 'throw'
 ): MethodDecorator {

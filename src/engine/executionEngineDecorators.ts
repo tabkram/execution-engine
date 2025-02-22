@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ExecutionEngine } from './executionEngine';
-import { TraceOptions } from '../trace/models/engineTraceOptions.model';
+import { TraceOptions } from '../common/models/engineTraceOptions.model';
 
 /* eslint-disable @typescript-eslint/no-unsafe-function-type */
 function isAsync(func: Function): boolean {

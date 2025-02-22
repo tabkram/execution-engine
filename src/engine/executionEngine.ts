@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import { TraceableEngine } from './traceableEngine';
-import { Trace } from '../trace/models/engineTrace.model';
+import { Trace } from '../common/models/engineTrace.model';
 
 /**
  * Represents a Contextual Execution with traceability features.
