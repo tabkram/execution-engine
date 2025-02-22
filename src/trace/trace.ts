@@ -13,6 +13,36 @@ function calculateTimeAndDuration(executionTimer: ExecutionTimer): TimerDetailsM
   return timerDetails;
 }
 
+
+export function trace<O>(
+  blockFunction: (...params) => Promise<O>,
+  inputs: Array<unknown>,
+  traceHandler?: (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    traceContext: Record<string, any>,
+    executionTrace?: ExecutionTrace<Array<unknown>, O>,
+    options?: TraceOptions<Array<unknown>, O>['config']
+  ) => void,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  traceContext?: Record<string, any>,
+  errorStrategy?: 'catch' | 'throw'
+): Promise<ExecutionTrace<Array<unknown>, Awaited<O>>>;
+
+export function trace<O>(
+  blockFunction: (...params) => O,
+  inputs: Array<unknown>,
+  traceHandler?: (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    traceContext: Record<string, any>,
+    executionTrace?: ExecutionTrace<Array<unknown>, O>,
+    options?: TraceOptions<Array<unknown>, O>['config']
+  ) => void,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  traceContext?: Record<string, any>,
+  errorStrategy?: 'catch' | 'throw'
+): ExecutionTrace<Array<unknown>, O>;
+
+
 export function trace<O>(
   blockFunction: (...params) => O | Promise<O>,
   inputs: Array<unknown> = [],
