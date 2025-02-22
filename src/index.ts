@@ -4,6 +4,7 @@
 
 export * from './engine/executionEngine';
 export * from './engine/executionEngineDecorators';
+export * from './engine/traceableEngine';
 export * from './execute/execute';
 export * from './timer/executionTimer';
 export * from './timer/models/timer.model';
