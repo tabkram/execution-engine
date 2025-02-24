@@ -1,4 +1,4 @@
-import { engine, EngineTask, NodeData, run } from '../src';
+import { engine, EngineNodeData, EngineTask, run } from '../src';
 import { writeTrace } from './common/writeTrace';
 
 @engine({ id: 'greetingId' })
@@ -15,7 +15,7 @@ class GreetingTask extends EngineTask {
       }
     }
   })
-  generateGreeting(person: { [key: string]: any }, greeter: { [key: string]: string }, nodeData?: NodeData) {
+  generateGreeting(person: { [key: string]: any }, greeter: { [key: string]: string }, nodeData?: EngineNodeData) {
     this.engine.pushNarratives(nodeData.id, [`here is tracing narrative for greeting ${person.name}`]);
     return {
       greeting: {

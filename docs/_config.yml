@@ -9,7 +9,7 @@ navbar-links:
   Getting started: "README"
   Components:
     - Execution Timer: "ExecutionTimer"
-    - Traceable Execution: "TraceableExecution"
+    - Traceable Engine: "TraceableEngine"
     - Execution Engine: "ExecutionEngine"
 
 version: 1.1.0

@@ -1,12 +1,13 @@
-import { Node, NodeData } from './trace.model';
-import { TraceableExecution } from './traceableExecution';
+import { TraceableEngine } from './traceableEngine';
+import { EngineNodeData } from '../common/models/engineNodeData.model';
+import { EngineNode } from '../common/models/engineTrace.model';
 
-describe('TraceableExecution', () => {
-  describe('TraceableExecution without initialTrace', () => {
-    let traceableExecution: TraceableExecution;
+describe('TraceableEngine', () => {
+  describe('TraceableEngine without initialTrace', () => {
+    let traceableExecution: TraceableEngine;
 
     beforeEach(() => {
-      traceableExecution = new TraceableExecution();
+      traceableExecution = new TraceableEngine();
     });
 
     it('should create a trace of consecutive user-related actions', async () => {
@@ -62,7 +63,7 @@ describe('TraceableExecution', () => {
         return Promise.resolve(`Daily Forecast in ${city}: Sunny`);
       }
 
-      async function getWeatherInformation(city: string, trace?: NodeData) {
+      async function getWeatherInformation(city: string, trace?: EngineNodeData) {
         const [temperature, forecast] = await Promise.all([
           (
             await traceableExecution.run(fetchCurrentTemperature, [city], {
@@ -485,7 +486,7 @@ describe('TraceableExecution', () => {
     });
   });
 
-  describe('TraceableExecution with initialTrace', () => {
+  describe('TraceableEngine with initialTrace', () => {
     it('should run with initial trace and then get the trace', async () => {
       // Create a sample initial trace
       const initialTrace = [
@@ -495,14 +496,14 @@ describe('TraceableExecution', () => {
             id: 'node_1',
             label: 'Node 1'
           }
-        } as Node
+        } as EngineNode
       ];
 
-      // Create an instance of TraceableExecution with the initial trace
-      const traceableExecution = new TraceableExecution(initialTrace);
+      // Create an instance of TraceableEngine with the initial trace
+      const traceableExecution = new TraceableEngine(initialTrace);
 
       // Define a function to be used in the run method
-      const sampleFunction = (param: string) => {
+      const sampleFunction = (param: string): string => {
         return `Result: ${param}`;
       };
 

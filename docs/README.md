@@ -10,7 +10,7 @@ A TypeScript library for tracing and visualizing code execution workflows
 - [Installation](#installation-)
 - [Components](#components-)
     - [ExecutionTimer](#executiontimer)
-    - [TraceableExecution](#traceableexecution)
+    - [TraceableEngine](#traceableengine)
     - [ExecutionEngine](#executionengine)
     - [EngineTask with @engine and @run Decorators](#enginetask-with-engine-and-run-decorators)
 
@@ -97,15 +97,20 @@ You can:
 
 The __[ExecutionTimer](./ExecutionTimer.md)__ is a simple class for measuring the execution time of code blocks.
 
-### TraceableExecution
+### TraceableEngine
 
-The __[TraceableExecution](./TraceableExecution.md)__ class provides a framework for traceable execution of functions.
+> **⚠️ Deprecation Notice:**
+> - `TraceableEngine` is deprecated and will be removed in a future release. Use `TraceableEngine` instead.
+
+### TraceableEngine
+
+The __[TraceableEngine](./TraceableEngine.md)__ class provides a framework for providing traceable engine and trace the execution of functions.
 
 ### ExecutionEngine
 
 The __[ExecutionEngine](./ExecutionEngine.md)__ enhances traceable execution by introducing a context object (`CXT`) for
 capturing additional relevant information.
-It builds upon the functionality of [TraceableExecution](./TraceableExecution.md).
+It builds upon the functionality of [TraceableEngine](./TraceableEngine.md).
 
 ### EngineTask with @engine and @run Decorators
 

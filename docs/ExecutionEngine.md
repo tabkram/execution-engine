@@ -1,6 +1,6 @@
 # ExecutionEngine
 
-The `ExecutionEngine` class extends the [`TraceableExecution`](./TraceableExecution.md) class, inheriting traceability
+The `ExecutionEngine` class extends the [`TraceableEngine`](./TraceableEngine.md) class, inheriting traceability
 features and adding contextual execution capabilities.
 
 ## Usage
@@ -99,9 +99,9 @@ Returns the updated instance of `ExecutionEngine`.
 
 ## Additional Information
 
-### [TraceableExecution](./TraceableExecution.md) Integration
+### [TraceableEngine](./TraceableEngine.md) Integration
 
-The `ExecutionEngine` class extends the [`TraceableExecution`](./TraceableExecution.md) class, inheriting methods for
+The `ExecutionEngine` class extends the [`TraceableEngine`](./TraceableEngine.md) class, inheriting methods for
 managing the execution trace.
 This integration provides a complete picture of the execution flow, including contextual information.
 
