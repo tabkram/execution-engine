@@ -14,11 +14,8 @@ describe('execute function', () => {
   });
 
   test('should execute an async function and return resolved result or fallback value', async () => {
-    const asyncFunction = (x: number, y: number) => (
-      x + y > 0
-        ? Promise.resolve({ result: x + y, message: `positive string: ${x + y}` })
-        : false
-    );
+    const asyncFunction = (x: number, y: number) =>
+      x + y > 0 ? Promise.resolve({ result: x + y, message: `positive string: ${x + y}` }) : false;
 
     const resultOfPositive = (await execute(asyncFunction, [2, 3])) as string;
     expect(resultOfPositive).toMatchObject({ result: 5, message: 'positive string: 5' });
@@ -38,7 +35,7 @@ describe('execute function', () => {
   test('should call successCallback with the async result', async () => {
     const asyncFunction = async (x: number) => x * 2;
     const successCallback = jest.fn((output) => output + 1);
-    const result = await execute(asyncFunction, [3], [], successCallback) satisfies number;
+    const result = (await execute(asyncFunction, [3], [], successCallback)) satisfies number;
     expect(successCallback).toHaveBeenCalledWith(6);
     expect(result).toBe(7);
   });

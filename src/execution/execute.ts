@@ -1,3 +1,4 @@
+import { extractFunctionMetadata } from '../common/utils/functionMetadata';
 import { isAsync } from '../common/utils/isAsync';
 
 // Overload for synchronous blockFunction returning OUTPUT
@@ -6,7 +7,8 @@ export function execute<INPUT extends unknown[], OUTPUT, RESPONSE = OUTPUT, ERRO
   inputs: INPUT,
   extraInputs?: Record<string, unknown>[],
   successCallback?: (output: OUTPUT) => RESPONSE,
-  errorCallback?: (error: unknown) => ERROR
+  errorCallback?: (error: unknown) => ERROR,
+  options?: { contextKey: string }
 ): RESPONSE;
 
 // Overload for asynchronous blockFunction returning Promise<OUTPUT>
@@ -15,23 +17,28 @@ export function execute<INPUT extends unknown[], OUTPUT, RESPONSE = OUTPUT, ERRO
   inputs?: INPUT,
   extraInputs?: Record<string, unknown>[],
   successCallback?: (output: OUTPUT) => RESPONSE,
-  errorCallback?: (error: unknown) => ERROR
+  errorCallback?: (error: unknown) => ERROR,
+  options?: { contextKey: string }
 ): Promise<RESPONSE>;
 
 /**
  * Executes a given function (`blockFunction`) with the provided inputs and optional extra inputs.
  * Supports both synchronous and asynchronous functions, with optional success and error callbacks.
  *
- * @template INPUT - The tuple type representing the parameters expected by `blockFunction`.
+ * @template INPUT - A tuple type representing the expected parameters of `blockFunction`.
  * @template OUTPUT - The return type of `blockFunction`, which can be either synchronous (`OUTPUT`) or a `Promise<OUTPUT>`.
- * @template RESPONSE - The transformed output type returned from `successCallback`, if provided.
- * @template ERROR - The transformed error type returned from `errorCallback`, if provided.
+ * @template RESPONSE - The type returned by `successCallback` (if provided), otherwise defaults to `OUTPUT`.
+ * @template ERROR - The type returned by `errorCallback` (if provided), otherwise defaults to `RESPONSE`.
  *
- * @param blockFunction - The function to execute, which can be synchronous or asynchronous.
- * @param inputs - The primary set of inputs to pass to `blockFunction`. Defaults to an empty tuple.
- * @param extraInputs - Additional inputs to append when calling `blockFunction`. Defaults to an empty array.
- * @param successCallback - An optional callback that transforms the output of `blockFunction` before returning it.
- * @param errorCallback - An optional callback that handles errors and transforms them before returning.
+ * @param blockFunction - The function to execute, which may be synchronous or asynchronous.
+ * @param inputs - The primary set of inputs passed to `blockFunction`. Defaults to an empty tuple.
+ * @param extraInputs - Additional arguments appended to `inputs` when calling `blockFunction`. Defaults to an empty array.
+ * @param successCallback - An optional function that transforms the successful output of `blockFunction`.
+ * @param errorCallback - An optional function that transforms or handles errors from `blockFunction`.
+ * @param options - Configuration object:
+ *   - `contextKey` (string) - The key under which execution metadata is stored in the `this` context.
+ *
+ * @throws {Error} If insufficient parameters are provided to `blockFunction`, making proper tracing impossible.
  *
  * @returns Either:
  * - `RESPONSE` if `blockFunction` is synchronous.
@@ -43,28 +50,27 @@ export function execute<INPUT extends unknown[], OUTPUT, RESPONSE = OUTPUT, ERRO
   inputs: INPUT = [] as INPUT,
   extraInputs: unknown[] = [],
   successCallback?: (output: OUTPUT) => RESPONSE,
-  errorCallback?: (error: unknown) => ERROR
+  errorCallback?: (error: unknown) => ERROR,
+  options?: { contextKey: string }
 ): RESPONSE | Promise<RESPONSE> | ERROR | Promise<ERROR> {
+  const functionMetadata = extractFunctionMetadata(blockFunction);
   if (blockFunction.length > inputs.length + extraInputs.length) {
-    const paramNames = blockFunction
-      .toString()
-      .match(/\(([^)]*)\)/)[1]
-      .split(',')
-      .map((param) => param.trim())
-      .filter((param) => param);
-    const paramNames2 = extraInputs.length ? paramNames.slice(0, -extraInputs.length) : paramNames;
-    throw new Error(`Could not trace your function properly if you don't provide parameters: (${paramNames2})`);
+    const paramNames = extraInputs.length ? functionMetadata.parameters.slice(0, -extraInputs.length) : functionMetadata.parameters;
+    throw new Error(`Could not trace your function properly if you don't provide parameters: (${paramNames})`);
   }
 
-  const executeFunction = () => blockFunction.bind(this)(...inputs, ...extraInputs);
+  if (this && options?.contextKey) {
+    this[options.contextKey] = { metadata: functionMetadata, ...this[options.contextKey] };
+  }
 
   if (isAsync(blockFunction)) {
-    return executeFunction()
+    return blockFunction
+      .bind(this)(...inputs, ...extraInputs)
       .then((output: OUTPUT) => (successCallback ? successCallback(output) : (output as unknown as RESPONSE)))
       .catch((error) => (errorCallback ? errorCallback(error) : error));
   } else {
     try {
-      const result = executeFunction();
+      const result = blockFunction.bind(this)(...inputs, ...extraInputs);
       if (result instanceof Promise) {
         return result
           .then((output: OUTPUT) => (successCallback ? successCallback(output) : (output as unknown as RESPONSE)))

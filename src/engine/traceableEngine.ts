@@ -166,7 +166,7 @@ export class TraceableEngine {
         `${blockFunction.name} could not have an instance of TraceableExecution as input, this will create circular dependency on trace`
       );
     }
-    const nodeTraceConfigFromOptions = isNodeTrace(options) ? undefined : options.config ?? DEFAULT_TRACE_CONFIG;
+    const nodeTraceConfigFromOptions = isNodeTrace(options) ? undefined : (options.config ?? DEFAULT_TRACE_CONFIG);
     const nodeTraceFromOptions = (isNodeTrace(options) ? options : options.trace) ?? {};
     nodeTraceFromOptions.parent = nodeTraceFromOptions?.parent ?? this.asyncLocalStorage.getStore();
 
@@ -188,9 +188,12 @@ export class TraceableEngine {
     return executionTrace<O>(
       () => this.asyncLocalStorage.run(nodeTrace.id, () => blockFunction.bind(this)(...inputs, nodeTrace)),
       inputs,
-      (nodeTrace, executionTrace) => this.buildTrace.bind(this)(nodeTrace, executionTrace, nodeTraceConfigFromOptions),
-      nodeTrace,
-      nodeTraceConfigFromOptions.errors
+      (traceContext) => {
+        // TODO: metadata are not handled in the engine ExecutionTrace for now, to add it later.
+        delete traceContext.metadata;
+        return this.buildTrace.bind(this)(nodeTrace, traceContext, nodeTraceConfigFromOptions);
+      },
+      { errorStrategy: nodeTraceConfigFromOptions.errors }
     );
   }
 
@@ -241,7 +244,7 @@ export class TraceableEngine {
           id: nodeTrace.parent,
           label: nodeTrace.parent
         },
-        { errors: executionTrace.errors },
+        { id: nodeTrace.id, errors: executionTrace.errors },
         DEFAULT_TRACE_CONFIG,
         true
       );
@@ -257,15 +260,15 @@ export class TraceableEngine {
 
       const previousNodes = !parallelEdge
         ? this.nodes?.filter(
-          (node) =>
-            !node.data.abstract &&
+            (node) =>
+              !node.data.abstract &&
               node.data.parent === nodeTrace.parent &&
               (!options?.parallel || !node.data.parallel || !node.data.parent || !nodeTrace.parent) &&
               node.data.id !== nodeTrace.id &&
               node.data.parent !== nodeTrace.id &&
               node.data.id !== nodeTrace.parent &&
               !this.edges.find((e) => e.data.source === node.data.id)
-        )
+          )
         : [];
       this.edges = [
         ...(this.edges ?? []),
@@ -281,22 +284,22 @@ export class TraceableEngine {
         })) ?? []),
         ...(parallelEdge
           ? [
-            {
-              data: {
-                id: `${parallelEdge.data.source}->${nodeTrace.id}`,
-                source: parallelEdge.data.source,
-                target: nodeTrace.id,
-                parent: nodeTrace.parent,
-                parallel: options?.parallel
-              },
-              group: 'edges' as const
-            }
-          ]
+              {
+                data: {
+                  id: `${parallelEdge.data.source}->${nodeTrace.id}`,
+                  source: parallelEdge.data.source,
+                  target: nodeTrace.id,
+                  parent: nodeTrace.parent,
+                  parallel: options?.parallel
+                },
+                group: 'edges' as const
+              }
+            ]
           : [])
       ];
     }
 
-    const filteredNodeData = {
+    const filteredNodeData: NodeData = {
       ...this.filterNodeTrace(nodeTrace),
       ...this.filterNodeExecutionTrace({ ...executionTrace, ...nodeTrace }, options?.traceExecution)
     };
@@ -350,7 +353,7 @@ export class TraceableEngine {
       return nodeData;
     }
     if (Array.isArray(doTraceExecution)) {
-      const execTrace: ExecutionTrace<unknown, unknown> = {};
+      const execTrace: ExecutionTrace<unknown, unknown> = { id: nodeData.id };
       Object.keys(nodeData).forEach((k) => {
         if (doTraceExecution.includes(k as keyof ExecutionTrace<I, O>)) {
           execTrace[k] = nodeData[k];
@@ -359,7 +362,7 @@ export class TraceableEngine {
       return execTrace;
     }
     if (isExecutionTrace(doTraceExecution)) {
-      const execTrace: ExecutionTrace<unknown, unknown> = {};
+      const execTrace: ExecutionTrace<unknown, unknown> = { id: nodeData.id };
       execTrace.inputs = TraceableEngine.extractIOExecutionTraceWithConfig<I, O>(nodeData.inputs, doTraceExecution.inputs);
       execTrace.outputs = TraceableEngine.extractIOExecutionTraceWithConfig<I, O>(nodeData.outputs, doTraceExecution.outputs);
       execTrace.errors = TraceableEngine.extractIOExecutionTraceWithConfig<I, O>(nodeData.errors, doTraceExecution.errors);

@@ -5,6 +5,7 @@
 export * from './common/models/engineNodeTrace.model';
 export * from './common/models/engineTrace.model';
 export * from './common/models/engineTraceOptions.model';
+export * from './common/models/executionFunction.model';
 export * from './common/models/executionTrace.model';
 export * from './common/models/timer.model';
 export * from './engine/executionEngine';

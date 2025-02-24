@@ -1,32 +1,59 @@
-import { executionTrace as traceExecution } from './trace';
-import { TraceOptions } from '../common/models/engineTraceOptions.model';
-import { ExecutionTrace } from '../common/models/executionTrace.model';
+import { TraceContext, executionTrace as traceExecution } from './trace';
+import { extractFunctionMetadata } from '../common/utils/functionMetadata';
 import { isAsync } from '../common/utils/isAsync';
 
-
+/**
+ * Method decorator to trace function execution, capturing metadata, inputs, outputs, and errors.
+ *
+ * @param traceHandler - handle function of the trace context.
+ * @param additionalContext - Additional metadata to attach to the trace context.
+ * @param options - Configuration options:
+ *   - `contextKey`: Key to store trace context on the instance.
+ *   - `errorStrategy`: Determines whether errors should be caught (`'catch'`) or thrown (`'throw'`).
+ *
+ * @returns A method decorator that wraps the original function with execution tracing.
+ */
 export function trace<O>(
-  traceHandler?: (
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    traceContext: Record<string, any>,
-    executionTrace: ExecutionTrace<Array<unknown>, O>,
-    options?: TraceOptions<Array<unknown>, O>['config']
-  ) => void,
+  traceHandler: (traceContext: TraceContext<O>) => void,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  traceContext: Record<string, any> = {},
-  errorStrategy: 'catch' | 'throw' = 'throw'
+  additionalContext: Record<string, any> = {},
+  options: { contextKey?: string; errorStrategy?: 'catch' | 'throw' } = {
+    contextKey: undefined,
+    errorStrategy: 'throw'
+  }
 ): MethodDecorator {
-  return function (
-    target: object,
-    propertyKey: string | symbol,
-    descriptor: PropertyDescriptor
-  ): void {
+  return function (target: object, propertyKey: string | symbol, descriptor: PropertyDescriptor): void {
     const originalMethod = descriptor.value;
-
     descriptor.value = function (...args: unknown[]) {
+      const thisTraceContext = {
+        metadata: {
+          class: target.constructor.name,
+          method: propertyKey,
+          ...extractFunctionMetadata(originalMethod)
+        },
+        ...additionalContext
+      };
+      if (options.contextKey) {
+        this[options.contextKey] = thisTraceContext;
+      }
       if (isAsync(originalMethod)) {
-        return traceExecution<O>(originalMethod.bind(this), args, traceHandler, traceContext, errorStrategy)?.then((r) => r.outputs);
+        return (traceExecution.bind(this) as typeof traceExecution<O>)(
+          originalMethod.bind(this),
+          args,
+          (traceContext) => {
+            return traceHandler({ ...traceContext, ...thisTraceContext });
+          },
+          options
+        )?.then((r) => r.outputs);
       } else {
-        return traceExecution<O>(originalMethod.bind(this) as () => O, args, traceHandler, traceContext, errorStrategy)?.outputs;
+        return (traceExecution.bind(this) as typeof traceExecution<O>)(
+          originalMethod.bind(this) as () => O,
+          args,
+          (traceContext) => {
+            return traceHandler({ ...traceContext, ...thisTraceContext });
+          },
+          options
+        )?.outputs;
       }
     };
   };

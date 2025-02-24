@@ -1,4 +1,5 @@
 export interface ExecutionTrace<I, O> {
+  id: string;
   inputs?: I;
   outputs?: O;
   errors?: unknown;

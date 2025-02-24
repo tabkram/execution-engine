@@ -1,6 +1,6 @@
-# TraceableExecution
+# TraceableEngine
 
-The `TraceableExecution` class is a TypeScript utility that facilitates tracing and logging of function executions. It
+The `TraceableEngine` class is a TypeScript utility that facilitates tracing and logging of function executions. It
 captures detailed information about the inputs, outputs, errors, and execution time for each function call, allowing for
 the creation of a trace graph.
 
@@ -10,7 +10,7 @@ scenarios.
 
 ## Overview
 
-The `TraceableExecution` class allows users to run functions in a traceable manner, capturing detailed information about
+The `TraceableEngine` class allows users to run functions in a traceable manner, capturing detailed information about
 each execution step. The key features include:
 
 - **Execution Trace:**
@@ -26,16 +26,16 @@ each execution step. The key features include:
 
 ## Usage
 
-1. Import the `TraceableExecution` class:
+1. Import the `TraceableEngine` class:
 
     ```typescript
-    import { TraceableExecution } from "execution-engine";
+    import { TraceableEngine } from "execution-engine";
     ```
 
-2. Create an instance of `TraceableExecution`:
+2. Create an instance of `TraceableEngine`:
 
     ```typescript
-    const traceableExecution = new TraceableExecution();
+    const traceableExecution = new TraceableEngine();
     ```
 
 
@@ -101,7 +101,7 @@ each execution step. The key features include:
 
 ## Advanced Configuration
 
-The `TraceableExecution` class provides flexibility for advanced configurations, including custom trace options and
+The `TraceableEngine` class provides flexibility for advanced configurations, including custom trace options and
 narratives. Explore the class methods and options for a more tailored usage.
 
 ## Examples
@@ -109,7 +109,7 @@ narratives. Explore the class methods and options for a more tailored usage.
 ### 1. Here's a basic example:
 
 ```typescript
-const traceableExecution = new TraceableExecution();
+const traceableExecution = new TraceableEngine();
 
 const result = await traceableExecution.run(
   async (param1, param2) => {
@@ -125,7 +125,7 @@ const trace = traceableExecution.getTrace();
 console.log('Trace:', trace);
 ```
 
-### 2. How to use `TraceableExecution` consecutive calls
+### 2. How to use `TraceableEngine` consecutive calls
 
 In this example, we showcase the trace functionality by sequentially executing `registerUser`, `loginUser`,
 and `getUserInformation` functions within the context of `traceableExecution`.
@@ -170,16 +170,16 @@ const finalTrace = traceableExecution.getTrace();
 console.log(JSON.stringify(finalTrace, null, 2));
 ``` 
 
-### 3. How to use `TraceableExecution` with asynchronous functions and parallel execution
+### 3. How to use `TraceableEngine` with asynchronous functions and parallel execution
 
 In this example, `fetchCurrentTemperature` and `fetchDailyForecast` simulate asynchronous operations,
 while `getWeatherInformation` showcases running them in parallel with `Promise.all`
-within the context of `TraceableExecution`. The resulting trace will capture the parallel execution relationships.
+within the context of `TraceableEngine`. The resulting trace will capture the parallel execution relationships.
 
 ```typescript
-import { NodeData, TraceableExecution } from "./TraceableExecution";
+import { NodeData, TraceableEngine } from "./TraceableEngine";
 
-const traceableExecution = new TraceableExecution();
+const traceableExecution = new TraceableEngine();
 
 async function fetchCurrentTemperature(city: string) {
   return Promise.resolve(`Current Temperature in ${city}: 25°C`);
@@ -223,7 +223,7 @@ console.log(JSON.stringify(finalTrace, null, 2));
 
 ### `constructor(initialTrace?: Trace)`
 
-Initializes a new instance of the `TraceableExecution` class.
+Initializes a new instance of the `TraceableEngine` class.
 
 - `initialTrace` (optional): The initial trace to be used.
 
@@ -247,7 +247,7 @@ Gets the nodes of the execution trace.
 
 Returns an array containing nodes of the execution trace.
 
-### `run<O>(blockFunction: (...params) => O | Promise<O>, inputs?: Array<unknown>, options?: TraceOptions<Array<any>, O>): Promise<NodeExecutionTrace<Array<unknown>, Awaited<O>>> | NodeExecutionTrace<Array<unknown>, O>`
+### `run<O>(blockFunction: (...params) => O | Promise<O>, inputs?: Array<unknown>, options?: TraceOptions<Array<any>, O>): Promise<ExecutionTrace<Array<unknown>, Awaited<O>>> | ExecutionTrace<Array<unknown>, O>`
 
 Executes a function and captures the trace.
 
@@ -257,14 +257,14 @@ Executes a function and captures the trace.
 
 Returns a promise that resolves to the execution trace.
 
-### `pushNarratives(nodeId: NodeTrace['id'], narratives: string | string[]): TraceableExecution`
+### `pushNarratives(nodeId: NodeTrace['id'], narratives: string | string[]): TraceableEngine`
 
 Pushes or appends narratives to a trace node.
 
 - `nodeId`: The ID of the node.
 - `narratives`: The narrative or array of narratives to be processed.
 
-Returns the updated instance of `TraceableExecution`.
+Returns the updated instance of `TraceableEngine`.
 
 ### `getNarratives(): Array<string>`
 

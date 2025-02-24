@@ -3,6 +3,7 @@ import { NodeData } from '../common/models/engineNodeTrace.model';
 
 describe('ExecutionTrace', () => {
   const executionTraceExpectation = {
+    id: expect.any(String),
     inputs: expect.any(Array),
     startTime: expect.any(Date),
     endTime: expect.any(Date),
@@ -70,7 +71,7 @@ describe('ExecutionTrace', () => {
     }
 
     it('should trace a synchronous function throwing an error', () => {
-      const response = executionTrace(throwErrorFunction, ['ErrorParam'], undefined, undefined, 'catch');
+      const response = executionTrace(throwErrorFunction, ['ErrorParam'], undefined, { errorStrategy: 'catch' });
       expect(response).toMatchObject({
         ...failedExecutionTraceExpectation,
         inputs: ['ErrorParam'],
@@ -85,7 +86,7 @@ describe('ExecutionTrace', () => {
     });
 
     it('should trace an async function throwing an error', async () => {
-      const response = await executionTrace(asyncThrowErrorFunction, ['ErrorParam'], undefined, undefined, 'catch');
+      const response = await executionTrace(asyncThrowErrorFunction, ['ErrorParam'], undefined, { errorStrategy: 'catch' });
       expect(response).toMatchObject({
         ...failedExecutionTraceExpectation,
         inputs: ['ErrorParam'],
@@ -121,58 +122,94 @@ describe('ExecutionTrace', () => {
 
     it('should sync trace successfully and pass correct traceHandlerMock and traceContext', () => {
       const traceHandlerMock = jest.fn();
-      const traceContextMock = { metadata: { requestId: '12345' } };
-      const response = executionTrace(divisionFunction, [1, 2], traceHandlerMock, traceContextMock);
+      const response = executionTrace.bind({ __execution: { context: { metadata: { requestId: '12345' } } } })(
+        divisionFunction,
+        [1, 2],
+        traceHandlerMock
+      );
       expect(traceHandlerMock).toHaveBeenCalledWith(
-        { ...traceContextMock, narratives: ['Calculating the division of 1 by 2'] },
-        expect.objectContaining(successfullExecutionTraceExpectation)
+        expect.objectContaining({
+          metadata: expect.any(Object),
+          ...successfullExecutionTraceExpectation,
+          narratives: ['Calculating the division of 1 by 2']
+        })
       );
       expect(response).toMatchObject(successfullExecutionTraceExpectation);
     });
 
     it('should sync trace errors and pass correct traceHandlerMock and traceContext', () => {
       const traceHandlerMock = jest.fn();
-      const traceContextMock = { metadata: { requestId: '12345' } };
-      const response = executionTrace(divisionFunction, [1, 0], traceHandlerMock, traceContextMock, 'catch');
+      const traceContextMock = { context: { metadata: { requestId: '12345' } } };
+      const response = executionTrace.bind({ __execution: traceContextMock })(divisionFunction, [1, 0], traceHandlerMock, {
+        errorStrategy: 'catch',
+        contextKey: '__execution'
+      });
       expect(traceHandlerMock).toHaveBeenCalledWith(
-        { ...traceContextMock, narratives: ['Throwing because division of 1 by 0'] },
-        expect.objectContaining(failedExecutionTraceExpectation)
+        expect.objectContaining({
+          ...failedExecutionTraceExpectation,
+          ...traceContextMock,
+          narratives: ['Throwing because division of 1 by 0']
+        })
       );
       expect(response).toMatchObject(failedExecutionTraceExpectation);
     });
 
     it('should async trace successfully and pass correct traceHandlerMock and traceContext', async () => {
       const traceHandlerMock = jest.fn();
-      const traceContextMock = { metadata: { requestId: '12345' } };
-      const response = await executionTrace(fetchDataFunction, ['https://api.example.com/data'], traceHandlerMock, traceContextMock);
+      const traceContextMock = { context: { metadata: { requestId: '12345' } } };
+      const response = await (executionTrace.bind({ __execution: traceContextMock }) as typeof executionTrace)(
+        fetchDataFunction,
+        ['https://api.example.com/data'],
+        traceHandlerMock,
+        { contextKey: '__execution' }
+      );
       expect(traceHandlerMock).toHaveBeenCalledWith(
-        { ...traceContextMock, narratives: ['Fetching data from https://api.example.com/data'] },
-        expect.objectContaining(successfullExecutionTraceExpectation)
+        expect.objectContaining({
+          ...successfullExecutionTraceExpectation,
+          ...traceContextMock,
+          narratives: ['Fetching data from https://api.example.com/data']
+        })
       );
       expect(response).toMatchObject(successfullExecutionTraceExpectation);
     });
 
     it('should async trace errors and pass correct traceHandlerMock and traceContext', async () => {
       const traceHandlerMock = jest.fn();
-      const traceContextMock = { metadata: { requestId: '12345' } };
-      const response = await executionTrace(fetchDataFunction, ['invalid-url'], traceHandlerMock, traceContextMock, 'catch');
+      const traceContextMock = { context: { metadata: { requestId: '12345' } } };
+      const response = await executionTrace.bind({ __execution: traceContextMock })(fetchDataFunction, ['invalid-url'], traceHandlerMock, {
+        errorStrategy: 'catch',
+        contextKey: '__execution'
+      });
       expect(traceHandlerMock).toHaveBeenCalledWith(
-        { ...traceContextMock, narratives: ['Throwing because the URL invalid-url is invalid'] },
-        expect.objectContaining(failedExecutionTraceExpectation)
+        expect.objectContaining({
+          ...failedExecutionTraceExpectation,
+          ...traceContextMock,
+          narratives: ['Throwing because the URL invalid-url is invalid']
+        })
       );
       expect(response).toMatchObject(failedExecutionTraceExpectation);
     });
 
     it('should throw an error and trace context when provided with an invalid URL', async () => {
       const traceHandlerMock = jest.fn();
-      const traceContextMock = { metadata: { requestId: '12345' } };
+      const traceContextMock = { context: { metadata: { requestId: '12345' } } };
 
       // Expect the trace function to throw an error for an invalid URL
-      await expect(executionTrace(fetchDataFunction, ['invalid-url'], traceHandlerMock, traceContextMock)).rejects.toThrow('Invalid URL provided.'); // Check the error message
+      await expect(
+        (executionTrace.bind({ __execution: traceContextMock }) as typeof executionTrace)(
+          fetchDataFunction,
+          ['invalid-url'],
+          traceHandlerMock,
+          { contextKey: '__execution' }
+        )
+      ).rejects.toThrow('Invalid URL provided.'); // Check the error message
 
       expect(traceHandlerMock).toHaveBeenCalledWith(
-        { ...traceContextMock, narratives: ['Throwing because the URL invalid-url is invalid'] },
-        expect.objectContaining(failedExecutionTraceExpectation)
+        expect.objectContaining({
+          ...failedExecutionTraceExpectation,
+          ...traceContextMock,
+          narratives: ['Throwing because the URL invalid-url is invalid']
+        })
       );
     });
   });
