@@ -100,9 +100,7 @@ The __[ExecutionTimer](./ExecutionTimer.md)__ is a simple class for measuring th
 ### TraceableEngine
 
 > **⚠️ Deprecation Notice:**
-> - `TraceableEngine` is deprecated and will be removed in a future release. Use `TraceableEngine` instead.
-
-### TraceableEngine
+> - ~~`TraceableExecution`~~  is deprecated and will be removed in a future release. Use `TraceableEngine` instead.
 
 The __[TraceableEngine](./TraceableEngine.md)__ class provides a framework for providing traceable engine and trace the execution of functions.
 
