@@ -1,6 +1,6 @@
 import { engine, EngineTask, run } from './executionEngineDecorators';
-import { NodeData } from '../common/models/engineNodeTrace.model';
-import { Node } from '../common/models/engineTrace.model';
+import { EngineNodeData } from '../common/models/engineNodeData.model';
+import { EngineNode } from '../common/models/engineTrace.model';
 
 describe('decorators', () => {
   describe('an alternative usage of the ExecutionEngine that illustrates the integration of decorators', () => {
@@ -46,7 +46,7 @@ describe('decorators', () => {
             }
           }
         })
-        generateGreeting(person: { [key: string]: unknown }, greeter: { [key: string]: string }, nodeData?: NodeData) {
+        generateGreeting(person: { [key: string]: unknown }, greeter: { [key: string]: string }, nodeData?: EngineNodeData) {
           this.engine.pushNarratives(nodeData.id, [`here is tracing narrative for greeting ${person.name}`]);
           return {
             greeting: {
@@ -252,11 +252,11 @@ describe('decorators', () => {
       const myDeepEngineTask = new MyDeepEngineTask(10, 5);
       myDeepEngineTask.runInDepth(['starting']);
       const trace = myDeepEngineTask.engine.getTrace();
-      const nodesFromTrace: Array<Node> = trace?.filter((tracePart) => tracePart.group === 'nodes') as Array<Node>;
+      const nodesFromTrace: Array<EngineNode> = trace?.filter((tracePart) => tracePart.group === 'nodes') as Array<EngineNode>;
       expect(trace?.length).toEqual(131);
       expect(nodesFromTrace)?.toEqual(myDeepEngineTask.engine.getTraceNodes());
-      nodesFromTrace?.forEach((n) => expect((n as Node).data.inputs).toBeDefined());
-      nodesFromTrace?.forEach((n) => expect((n as Node).data.outputs).toBeDefined());
+      nodesFromTrace?.forEach((n) => expect((n as EngineNode).data.inputs).toBeDefined());
+      nodesFromTrace?.forEach((n) => expect((n as EngineNode).data.outputs).toBeDefined());
     });
   });
 });

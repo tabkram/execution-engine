@@ -1,5 +1,5 @@
 import { executionTrace } from './trace';
-import { NodeData } from '../common/models/engineNodeTrace.model';
+import { EngineNodeData } from '../common/models/engineNodeData.model';
 
 describe('ExecutionTrace', () => {
   const executionTraceExpectation = {
@@ -30,7 +30,7 @@ describe('ExecutionTrace', () => {
     });
 
     it('should trace a synchronous function with trace parameter', () => {
-      function helloWorldWithTrace(trace: NodeData): string {
+      function helloWorldWithTrace(trace: EngineNodeData): string {
         trace.narratives = ['HELLO WORLD AS NARRATIVE!'];
         return 'Hello World response with Trace!';
       }
@@ -51,7 +51,7 @@ describe('ExecutionTrace', () => {
     });
 
     it('should trace an async function with trace parameter', async () => {
-      async function helloWorldAsyncWithTrace(trace: NodeData): Promise<string> {
+      async function helloWorldAsyncWithTrace(trace: EngineNodeData): Promise<string> {
         trace.narratives = ['HELLO WORLD AS NARRATIVE!'];
         return 'Hello World async response with Trace!';
       }

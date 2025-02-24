@@ -1,6 +1,6 @@
 import { TraceableEngine } from './traceableEngine';
-import { NodeData } from '../common/models/engineNodeTrace.model';
-import { Node } from '../common/models/engineTrace.model';
+import { EngineNodeData } from '../common/models/engineNodeData.model';
+import { EngineNode } from '../common/models/engineTrace.model';
 
 describe('TraceableEngine', () => {
   describe('TraceableEngine without initialTrace', () => {
@@ -63,7 +63,7 @@ describe('TraceableEngine', () => {
         return Promise.resolve(`Daily Forecast in ${city}: Sunny`);
       }
 
-      async function getWeatherInformation(city: string, trace?: NodeData) {
+      async function getWeatherInformation(city: string, trace?: EngineNodeData) {
         const [temperature, forecast] = await Promise.all([
           (
             await traceableExecution.run(fetchCurrentTemperature, [city], {
@@ -496,7 +496,7 @@ describe('TraceableEngine', () => {
             id: 'node_1',
             label: 'Node 1'
           }
-        } as Node
+        } as EngineNode
       ];
 
       // Create an instance of TraceableEngine with the initial trace

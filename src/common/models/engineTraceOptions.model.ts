@@ -1,9 +1,9 @@
-import { NodeData } from './engineNodeTrace.model';
+import { EngineNodeData } from './engineNodeData.model';
 import { ExecutionTrace, ExecutionTraceExtractor } from './executionTrace.model';
 
 
 export interface TraceOptions<I, O> {
-  trace?: Partial<NodeData>;
+  trace?: Partial<EngineNodeData>;
   config?: {
     traceExecution?: boolean | Array<keyof ExecutionTrace<I, O>> | ExecutionTraceExtractor<I, O>;
     parallel?: boolean | string;

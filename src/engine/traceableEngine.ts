@@ -3,8 +3,8 @@ import { AsyncLocalStorage } from 'async_hooks';
 
 import { v4 as uuidv4 } from 'uuid';
 
-import { isNodeTrace, NodeData, NodeTrace } from '../common/models/engineNodeTrace.model';
-import { Edge, Node, Trace } from '../common/models/engineTrace.model';
+import { EngineNodeData, EngineNodeTrace, isEngineNodeTrace } from '../common/models/engineNodeData.model';
+import { EngineEdge, EngineNode, EngineTrace } from '../common/models/engineTrace.model';
 import { DEFAULT_TRACE_CONFIG, TraceOptions } from '../common/models/engineTraceOptions.model';
 import { ExecutionTrace, ExecutionTraceExtractor, isExecutionTrace } from '../common/models/executionTrace.model';
 import { Awaited } from '../common/utils/awaited';
@@ -16,8 +16,8 @@ import { executionTrace } from '../trace/trace';
  * Represents a class for traceable execution of functions.
  */
 export class TraceableEngine {
-  private nodes: Array<Node>;
-  private edges: Array<Edge>;
+  private nodes: Array<EngineNode>;
+  private edges: Array<EngineEdge>;
   private asyncLocalStorage = new AsyncLocalStorage<string>();
 
   /**
@@ -33,7 +33,7 @@ export class TraceableEngine {
    * Initializes a new instance of the TraceableExecution class.
    * @param initialTrace - The initial trace to be used.
    */
-  constructor(initialTrace?: Trace) {
+  constructor(initialTrace?: EngineTrace) {
     this.initTrace(initialTrace);
   }
 
@@ -55,7 +55,7 @@ export class TraceableEngine {
   }
 
   private extractNarrativeWithConfig<I, O>(
-    nodeData: NodeData<I, O>,
+    nodeData: EngineNodeData<I, O>,
     narrativeConfig: ExecutionTraceExtractor<I, O>['narratives']
   ): Array<string> {
     try {
@@ -76,12 +76,12 @@ export class TraceableEngine {
   /**
    * Initializes the trace with given initialTrace.
    *
-   * @param {Trace} initialTrace - The initial trace to initialize: the nodes and edges.
+   * @param {EngineTrace} initialTrace - The initial trace to initialize: the nodes and edges.
    * @return {TraceableExecution} - The traceable execution object after initialization.
    */
-  initTrace(initialTrace: Trace): TraceableEngine {
-    this.nodes = (initialTrace?.filter((b) => b.group === 'nodes') as Array<Node>) ?? [];
-    this.edges = (initialTrace?.filter((b) => b.group === 'edges') as Array<Edge>) ?? [];
+  initTrace(initialTrace: EngineTrace): TraceableEngine {
+    this.nodes = (initialTrace?.filter((b) => b.group === 'nodes') as Array<EngineNode>) ?? [];
+    this.edges = (initialTrace?.filter((b) => b.group === 'edges') as Array<EngineEdge>) ?? [];
     this.narrativesForNonFoundNodes = {};
     return this;
   }
@@ -90,7 +90,7 @@ export class TraceableEngine {
    * Gets the execution trace.
    * @returns An array containing nodes and edges of the execution trace.
    */
-  getTrace(): Trace {
+  getTrace(): EngineTrace {
     return [...this.nodes, ...this.edges];
   }
 
@@ -166,13 +166,13 @@ export class TraceableEngine {
         `${blockFunction.name} could not have an instance of TraceableExecution as input, this will create circular dependency on trace`
       );
     }
-    const nodeTraceConfigFromOptions = isNodeTrace(options) ? undefined : (options.config ?? DEFAULT_TRACE_CONFIG);
-    const nodeTraceFromOptions = (isNodeTrace(options) ? options : options.trace) ?? {};
+    const nodeTraceConfigFromOptions = isEngineNodeTrace(options) ? undefined : (options.config ?? DEFAULT_TRACE_CONFIG);
+    const nodeTraceFromOptions = (isEngineNodeTrace(options) ? options : options.trace) ?? {};
     nodeTraceFromOptions.parent = nodeTraceFromOptions?.parent ?? this.asyncLocalStorage.getStore();
 
     const executionTimer = new ExecutionTimer();
     executionTimer?.start();
-    const nodeTrace: NodeData = {
+    const nodeTrace: EngineNodeData = {
       id: [
         blockFunction.name ? blockFunction.name.replace('bound ', '') : 'function',
         executionTimer?.getStartDate()?.getTime(),
@@ -203,7 +203,7 @@ export class TraceableEngine {
    * @param narratives - The narrative or array of narratives to be processed.
    * @returns The updated instance of TraceableExecution.
    */
-  pushNarratives(nodeId: NodeTrace['id'], narratives: string | string[]) {
+  pushNarratives(nodeId: EngineNodeTrace['id'], narratives: string | string[]) {
     const existingNodeIndex = this.nodes?.findIndex((n) => n.data.id === nodeId);
 
     if (existingNodeIndex >= 0) {
@@ -233,7 +233,7 @@ export class TraceableEngine {
   }
 
   private buildTrace<O>(
-    nodeTrace: NodeData,
+    nodeTrace: EngineNodeData,
     executionTrace?: ExecutionTrace<Array<unknown>, O>,
     options: TraceOptions<Array<unknown>, O>['config'] = DEFAULT_TRACE_CONFIG,
     isAutoCreated = false
@@ -299,7 +299,7 @@ export class TraceableEngine {
       ];
     }
 
-    const filteredNodeData: NodeData = {
+    const filteredNodeData: EngineNodeData = {
       ...this.filterNodeTrace(nodeTrace),
       ...this.filterNodeExecutionTrace({ ...executionTrace, ...nodeTrace }, options?.traceExecution)
     };
@@ -332,7 +332,7 @@ export class TraceableEngine {
     }
   }
 
-  private filterNodeTrace(nodeData?: NodeData): NodeTrace {
+  private filterNodeTrace(nodeData?: EngineNodeData): EngineNodeTrace {
     return {
       id: nodeData?.id,
       label: nodeData?.label,
@@ -344,7 +344,10 @@ export class TraceableEngine {
     };
   }
 
-  private filterNodeExecutionTrace<I, O>(nodeData?: NodeData<I, O>, doTraceExecution?: TraceOptions<I, O>['config']['traceExecution']) {
+  private filterNodeExecutionTrace<I, O>(
+    nodeData?: EngineNodeData<I, O>,
+    doTraceExecution?: TraceOptions<I, O>['config']['traceExecution']
+  ) {
     if (!doTraceExecution) {
       return {};
     }

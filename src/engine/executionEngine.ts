@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import { TraceableEngine } from './traceableEngine';
-import { Trace } from '../common/models/engineTrace.model';
+import { EngineTrace } from '../common/models/engineTrace.model';
 
 /**
  * Represents a Contextual Execution with traceability features.
@@ -26,7 +26,7 @@ export class ExecutionEngine<
    * @param {string} [options.executionId] - Unique identifier for the execution.
    * @param {string} [options.initialTrace] - The initial trace for the execution.
    */
-  constructor(options?: { executionDate?: Date; executionId?: string; initialTrace?: Trace }) {
+  constructor(options?: { executionDate?: Date; executionId?: string; initialTrace?: EngineTrace }) {
     super(options?.initialTrace);
     this.executionDate = options?.executionDate ?? new Date();
     this.executionId =
