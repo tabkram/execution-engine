@@ -1,3 +1,14 @@
+## [3.0.0](https://github.com/tabkram/execution-engine/compare/v2.2.3...v3.0.0) (2025-02-24)
+
+### Features
+
+* add `[@trace](https://github.com/trace)()`decorator in order to be able to pass a handler for execution tracing ([fd38e11](https://github.com/tabkram/execution-engine/commit/fd38e11fb198d48ba92128900aed4c05dda68009))
+* create  standalone `execute()` and `trace()` functions ([a557d06](https://github.com/tabkram/execution-engine/commit/a557d063e2693a9d2ab8a743e93e7d61c98259af))
+* update `[@trace](https://github.com/trace)()`decorator executionTrace with function metadata ([5461699](https://github.com/tabkram/execution-engine/commit/54616999bfefe65087eb001d201fe143d03a7261))
+
+### Bug Fixes
+
+* make `narratives` parameter in `ExecutionTraceExtractor` a `Partial` transformer to maintain compatibility after adding mandatory `id: string` in `ExecutionTrace` model. ([2e4d89d](https://github.com/tabkram/execution-engine/commit/2e4d89dd3977da00e143b4febcc66404ba7c1ded))
 ## [2.2.3](https://github.com/tabkram/execution-engine/compare/v2.2.2...v2.2.3) (2025-02-20)
 
 ### Features
