@@ -2,23 +2,24 @@ import { isAsync } from './isAsync';
 import { FunctionMetadata } from '../models/executionFunction.model';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-export function extractFunctionMetadata(fn: Function): FunctionMetadata {
+export function extractFunctionParamNames(fn: Function): string[]{
   const source = fn.toString();
-
-  const isBound = fn.name.startsWith('bound ');
-  const name = fn.name || 'anonymous';
   const paramMatch = source.match(/\(([^)]*)\)/);
   const rawParams = paramMatch ? paramMatch[1] : '';
-  const parameters = rawParams
+  return rawParams
     .split(',')
     .map((param) => param.trim())
     .filter((param) => param);
+}
 
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+export function extractFunctionMetadata(fn: Function): FunctionMetadata {
   return {
-    name,
-    parameters,
+    name: fn.name || 'anonymous',
+    parameters: extractFunctionParamNames(fn),
     isAsync: isAsync(fn),
-    isBound
+    isBound: fn.name.startsWith('bound ')
     // source,
   };
 }

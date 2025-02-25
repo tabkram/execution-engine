@@ -2,6 +2,7 @@ export interface ExecutionTrace<I, O> {
   id: string;
   inputs?: I;
   outputs?: O;
+  isPromise?: boolean;
   errors?: unknown;
   narratives?: Array<string>;
   startTime?: Date;
