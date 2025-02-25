@@ -1,3 +1,8 @@
+## [3.1.0](https://github.com/tabkram/execution-engine/compare/v3.0.0...v3.1.0) (2025-02-25)
+
+### Bug Fixes
+
+* **execution:** multi-decorator support with `[@trace](https://github.com/trace)()` and handle hidden returned promises ([d356c30](https://github.com/tabkram/execution-engine/commit/d356c300f86602aa697324ef195c6fadfd8dbc73))
 ## [3.0.0](https://github.com/tabkram/execution-engine/compare/v2.2.3...v3.0.0) (2025-02-24)
 
 ### Features
