@@ -191,6 +191,7 @@ export class TraceableEngine {
       (traceContext) => {
         // TODO: metadata are not handled in the engine ExecutionTrace for now, to add it later.
         delete traceContext.metadata;
+        delete traceContext.isPromise;
         return this.buildTrace.bind(this)(nodeTrace, traceContext, nodeTraceConfigFromOptions);
       },
       { errorStrategy: nodeTraceConfigFromOptions.errors }
@@ -260,15 +261,15 @@ export class TraceableEngine {
 
       const previousNodes = !parallelEdge
         ? this.nodes?.filter(
-            (node) =>
-              !node.data.abstract &&
+          (node) =>
+            !node.data.abstract &&
               node.data.parent === nodeTrace.parent &&
               (!options?.parallel || !node.data.parallel || !node.data.parent || !nodeTrace.parent) &&
               node.data.id !== nodeTrace.id &&
               node.data.parent !== nodeTrace.id &&
               node.data.id !== nodeTrace.parent &&
               !this.edges.find((e) => e.data.source === node.data.id)
-          )
+        )
         : [];
       this.edges = [
         ...(this.edges ?? []),
@@ -284,17 +285,17 @@ export class TraceableEngine {
         })) ?? []),
         ...(parallelEdge
           ? [
-              {
-                data: {
-                  id: `${parallelEdge.data.source}->${nodeTrace.id}`,
-                  source: parallelEdge.data.source,
-                  target: nodeTrace.id,
-                  parent: nodeTrace.parent,
-                  parallel: options?.parallel
-                },
-                group: 'edges' as const
-              }
-            ]
+            {
+              data: {
+                id: `${parallelEdge.data.source}->${nodeTrace.id}`,
+                source: parallelEdge.data.source,
+                target: nodeTrace.id,
+                parent: nodeTrace.parent,
+                parallel: options?.parallel
+              },
+              group: 'edges' as const
+            }
+          ]
           : [])
       ];
     }

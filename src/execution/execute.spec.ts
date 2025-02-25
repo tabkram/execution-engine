@@ -28,7 +28,7 @@ describe('execute function', () => {
     const syncFunction = (x: number) => x * 2;
     const successCallback = jest.fn((output) => output + 1);
     const result = execute(syncFunction, [3], [], successCallback);
-    expect(successCallback).toHaveBeenCalledWith(6);
+    expect(successCallback).toHaveBeenCalledWith(6, false);
     expect(result).toBe(7);
   });
 
@@ -36,7 +36,7 @@ describe('execute function', () => {
     const asyncFunction = async (x: number) => x * 2;
     const successCallback = jest.fn((output) => output + 1);
     const result = (await execute(asyncFunction, [3], [], successCallback)) satisfies number;
-    expect(successCallback).toHaveBeenCalledWith(6);
+    expect(successCallback).toHaveBeenCalledWith(6, true);
     expect(result).toBe(7);
   });
 
@@ -46,7 +46,7 @@ describe('execute function', () => {
     };
     const errorCallback = jest.fn((error) => `Handled: ${error.message}`);
     const result = execute(syncFunction, [], [], undefined, errorCallback);
-    expect(errorCallback).toHaveBeenCalledWith(new Error('Test Error'));
+    expect(errorCallback).toHaveBeenCalledWith(new Error('Test Error'), false);
     expect(result).toBe('Handled: Test Error');
   });
 

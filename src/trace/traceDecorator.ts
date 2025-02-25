@@ -1,4 +1,4 @@
-import { TraceContext, executionTrace as traceExecution } from './trace';
+import { executionTrace, TraceContext } from './trace';
 import { extractFunctionMetadata } from '../common/utils/functionMetadata';
 import { isAsync } from '../common/utils/isAsync';
 
@@ -37,23 +37,28 @@ export function trace<O>(
         this[options.contextKey] = thisTraceContext;
       }
       if (isAsync(originalMethod)) {
-        return (traceExecution.bind(this) as typeof traceExecution<O>)(
+        return (executionTrace.bind(this) as typeof executionTrace<O>)(
           originalMethod.bind(this),
           args,
           (traceContext) => {
             return traceHandler({ ...traceContext, ...thisTraceContext });
           },
           options
-        )?.then((r) => r.outputs);
+        )?.then((r) => options?.errorStrategy === 'catch' ? r.errors : r.outputs);
       } else {
-        return (traceExecution.bind(this) as typeof traceExecution<O>)(
+        const result = (executionTrace.bind(this) as typeof executionTrace<O>)(
           originalMethod.bind(this) as () => O,
           args,
           (traceContext) => {
             return traceHandler({ ...traceContext, ...thisTraceContext });
           },
           options
-        )?.outputs;
+        );
+        if (result instanceof Promise) {
+          return result.then((r) => options?.errorStrategy === 'catch' ? r.errors : r.outputs);
+        }
+        return result?.outputs;
+
       }
     };
   };

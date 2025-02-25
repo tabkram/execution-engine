@@ -1,47 +1,47 @@
 [
   {
     "data": {
-      "id": "function_1740422006134_a2624e9f-1b3b-4119-8b99-87c7c66b30ec",
+      "id": "function_1740522039783_2499ed18-4699-43da-9998-9463b1a58be1",
       "label": "function",
       "inputs": [
         "param1"
       ],
       "outputs": "result1 for param1",
-      "startTime": "2025-02-24T18:33:26.134Z",
-      "endTime": "2025-02-24T18:33:26.135Z",
-      "duration": 0.3706669807434082,
-      "elapsedTime": "0.371 ms",
+      "startTime": "2025-02-25T22:20:39.784Z",
+      "endTime": "2025-02-25T22:20:39.786Z",
+      "duration": 2.227874994277954,
+      "elapsedTime": "2.228 ms",
       "narratives": [],
       "parallel": false,
       "abstract": false,
-      "createTime": "2025-02-24T18:33:26.135Z"
+      "createTime": "2025-02-25T22:20:39.788Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "function_1740422006135_3f131e4e-1f7f-4f61-a18f-c547c6b751f4",
+      "id": "function_1740522039788_be3ea361-e7e6-4099-84a1-45dc18691e8e",
       "label": "function",
       "inputs": [
         "result1 for param1"
       ],
       "outputs": "result2 for result1 for param1",
-      "startTime": "2025-02-24T18:33:26.135Z",
-      "endTime": "2025-02-24T18:33:26.135Z",
-      "duration": 0.21554183959960938,
-      "elapsedTime": "0.216 ms",
+      "startTime": "2025-02-25T22:20:39.788Z",
+      "endTime": "2025-02-25T22:20:39.788Z",
+      "duration": 0.46095895767211914,
+      "elapsedTime": "0.461 ms",
       "narratives": [],
       "parallel": false,
       "abstract": false,
-      "createTime": "2025-02-24T18:33:26.135Z"
+      "createTime": "2025-02-25T22:20:39.788Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "function_1740422006134_a2624e9f-1b3b-4119-8b99-87c7c66b30ec->function_1740422006135_3f131e4e-1f7f-4f61-a18f-c547c6b751f4",
-      "source": "function_1740422006134_a2624e9f-1b3b-4119-8b99-87c7c66b30ec",
-      "target": "function_1740422006135_3f131e4e-1f7f-4f61-a18f-c547c6b751f4",
+      "id": "function_1740522039783_2499ed18-4699-43da-9998-9463b1a58be1->function_1740522039788_be3ea361-e7e6-4099-84a1-45dc18691e8e",
+      "source": "function_1740522039783_2499ed18-4699-43da-9998-9463b1a58be1",
+      "target": "function_1740522039788_be3ea361-e7e6-4099-84a1-45dc18691e8e",
       "parallel": false
     },
     "group": "edges"

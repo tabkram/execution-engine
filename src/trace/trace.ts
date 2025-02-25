@@ -78,11 +78,12 @@ export function executionTrace<O>(
     blockFunction.bind(this),
     inputs,
     [traceContext],
-    (outputs: O): Promise<ExecutionTrace<Array<unknown>, Awaited<O>>> | ExecutionTrace<Array<unknown>, O> => {
+    (outputs: O, isPromise: boolean): Promise<ExecutionTrace<Array<unknown>, Awaited<O>>> | ExecutionTrace<Array<unknown>, O> => {
       const { startTime, ...traceContextWithoutStartTime } = traceContext;
       traceContext = {
         ...traceContextWithoutStartTime,
         outputs,
+        isPromise,
         startTime,
         ...calculateTimeAndDuration(executionTimer)
       };
@@ -91,11 +92,12 @@ export function executionTrace<O>(
       }
       return traceContext;
     },
-    (e): Promise<ExecutionTrace<Array<unknown>, Awaited<O>>> | ExecutionTrace<Array<unknown>, O> => {
+    (e, isPromise: boolean): Promise<ExecutionTrace<Array<unknown>, Awaited<O>>> | ExecutionTrace<Array<unknown>, O> => {
       const { startTime, ...traceContextWithoutStartTime } = traceContext;
       traceContext = {
         ...traceContextWithoutStartTime,
         errors: [safeError(e)],
+        isPromise,
         startTime,
         ...calculateTimeAndDuration(executionTimer)
       };
@@ -107,7 +109,6 @@ export function executionTrace<O>(
       } else {
         throw e;
       }
-    },
-    { contextKey: options.contextKey }
+    }
   );
 }

@@ -29,7 +29,7 @@ export function run() {
     },
     ['projectX'],
     { trace: { label: 'Design and Planning', id: 'designAndPlanning' } }
-  );
+  ).outputs;
 
   const res2 = executionEngine.run(
     () => {
@@ -55,7 +55,7 @@ export function run() {
     },
     [res],
     { trace: { label: 'Component Manufacturing', id: 'ComponentManufacturing' } }
-  );
+  ).outputs;
 
   executionEngine.run(
     () => {

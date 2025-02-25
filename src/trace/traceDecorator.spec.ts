@@ -22,6 +22,7 @@ describe('trace decorator', () => {
 
   describe('Synchronous functions', () => {
     const helloWorldTraceHandlerMock = jest.fn();
+
     class SyncClass {
       @trace(helloWorldTraceHandlerMock)
       helloWorld(): string {
@@ -52,6 +53,7 @@ describe('trace decorator', () => {
 
   describe('Asynchronous functions', () => {
     const helloWorldAsyncTraceHandlerMock = jest.fn();
+
     class AsyncClass {
       @trace(helloWorldAsyncTraceHandlerMock)
       async helloWorldAsync(): Promise<string> {
@@ -86,6 +88,15 @@ describe('trace decorator', () => {
     const traceHandlerDivisionMock = jest.fn();
     const traceHandlerFetchDataMock = jest.fn();
 
+    function empty(): MethodDecorator {
+      return function (target: unknown, propertyKey: string, descriptor: PropertyDescriptor) {
+        const originalMethod = descriptor.value;
+        descriptor.value = function (...args: unknown[]) {
+          return originalMethod.apply(this, args);
+        };
+      };
+    }
+
     class MyClass {
       @trace(traceHandlerDivisionMock, traceContextDivision, { contextKey: '__execution' })
       divisionFunction(x: number, y: number, traceContext: Record<string, unknown> = {}): number {
@@ -106,7 +117,30 @@ describe('trace decorator', () => {
         }
         return { data: 'Success' };
       }
+
+      @trace(traceHandlerDivisionMock, traceContextDivision)
+      @empty()
+      divisionFunctionOnAnotherDecorator(x: number, y: number, traceContext: Record<string, unknown> = {}): number {
+        return this.divisionFunction(x, y, traceContext);
+      }
+
+      @trace(traceHandlerFetchDataMock, traceContextFetchData)
+      @empty()
+      async fetchDataFunctionOnAnotherDecorator(url: string, traceContext: Record<string, unknown> = {}): Promise<{ data: string }> {
+        return this.fetchDataFunction(url, traceContext);
+      }
+
+      @trace(traceHandlerFetchDataMock, traceContextFetchData, { errorStrategy: 'catch' })
+      @empty()
+      async fetchDataFunctionOnAnotherDecoratorCoughtError(url: string, traceContext: Record<string, unknown> = {}): Promise<{ data: string }> {
+        return this.fetchDataFunction(url, traceContext);
+      }
     }
+
+    beforeEach(() => {
+      traceHandlerFetchDataMock.mockClear();
+      traceHandlerDivisionMock.mockClear();
+    });
 
     it('should sync trace successfully and pass correct traceHandlerMock and traceContext', () => {
       const classInstance = new MyClass();
@@ -129,7 +163,7 @@ describe('trace decorator', () => {
       expect(response).toEqual(0.5);
     });
 
-    it('should sync trace errors and pass correct traceHandlerMock and traceContext', async () => {
+    it('should sync trace errors and pass correct traceHandlerMock and traceContext', () => {
       expect(() => new MyClass().divisionFunction(1, 0)).toThrow('Throwing because division by zero is not allowed.');
 
       expect(traceHandlerDivisionMock).toHaveBeenCalledWith(
@@ -186,6 +220,117 @@ describe('trace decorator', () => {
           narratives: ['Throwing because the URL invalid-url is invalid']
         })
       );
+    });
+
+    it('should async trace successfully divisionFunctionOnAnotherDecorator', async () => {
+      const classInstance = new MyClass();
+      const response = classInstance.divisionFunctionOnAnotherDecorator(1, 2);
+      expect(traceHandlerDivisionMock).toHaveBeenNthCalledWith(
+        2,
+        expect.objectContaining({
+          metadata: expect.objectContaining({
+            class: 'MyClass',
+            method: 'divisionFunctionOnAnotherDecorator',
+            name: 'anonymous',
+            parameters: ['...args'],
+            isAsync: false,
+            isBound: false
+          }),
+          ...successfulExecutionTraceExpectation,
+          ...traceContextDivision,
+          isPromise: false,
+          narratives: ['Calculating the division of 1 by 2']
+        })
+      );
+      expect(response).toEqual(0.5);
+    });
+
+
+    it('should async trace error divisionFunctionOnAnotherDecorator', async () => {
+      expect(() => new MyClass().divisionFunctionOnAnotherDecorator(1, 0)).toThrow('Throwing because division by zero is not allowed.');
+      expect(traceHandlerDivisionMock).toHaveBeenNthCalledWith(2,
+        expect.objectContaining({
+          metadata: expect.objectContaining({
+            class: 'MyClass',
+            method: 'divisionFunctionOnAnotherDecorator',
+            name: 'anonymous',
+            parameters: ['...args'],
+            isAsync: false,
+            isBound: false
+          }),
+          ...failedExecutionTraceExpectation,
+          ...traceContextDivision,
+          isPromise: false,
+          narratives: ['Throwing because division of 1 by 0']
+        })
+      );
+    });
+
+    it('should async trace successfully fetchDataFunctionOnAnotherDecorator', async () => {
+      const response = await new MyClass().fetchDataFunctionOnAnotherDecorator('https://api.example.com/data');
+      expect(traceHandlerFetchDataMock).toHaveBeenNthCalledWith(
+        2,
+        expect.objectContaining({
+          metadata: expect.objectContaining({
+            class: 'MyClass',
+            method: 'fetchDataFunctionOnAnotherDecorator',
+            name: 'anonymous',
+            parameters: ['...args'],
+            isAsync: false,
+            isBound: false
+          }),
+          ...successfulExecutionTraceExpectation,
+          ...traceContextFetchData,
+          isPromise: true,
+          narratives: ['Fetching data from https://api.example.com/data']
+        })
+      );
+      expect(response).toMatchObject({ data: 'Success' });
+    });
+
+
+    it('should async trace error fetchDataFunctionOnAnotherDecorator', async () => {
+      await expect(new MyClass().fetchDataFunctionOnAnotherDecorator('invalid-url')).rejects.toThrow('Invalid URL provided.');
+      expect(traceHandlerFetchDataMock).toHaveBeenNthCalledWith(
+        2,
+        expect.objectContaining({
+          metadata: expect.objectContaining({
+            class: 'MyClass',
+            method: 'fetchDataFunctionOnAnotherDecorator',
+            name: 'anonymous',
+            parameters: ['...args'],
+            isAsync: false,
+            isBound: false
+          }),
+          ...failedExecutionTraceExpectation,
+          ...traceContextFetchData,
+          isPromise: true,
+          narratives: ['Throwing because the URL invalid-url is invalid']
+        })
+      );
+    });
+
+    it('should async trace error fetchDataFunctionOnAnotherDecorator cought', async () => {
+      const response= await new MyClass().fetchDataFunctionOnAnotherDecoratorCoughtError('invalid-url');
+      expect(traceHandlerFetchDataMock).toHaveBeenNthCalledWith(
+        2,
+        expect.objectContaining({
+          metadata: expect.objectContaining({
+            class: 'MyClass',
+            method: 'fetchDataFunctionOnAnotherDecoratorCoughtError',
+            name: 'anonymous',
+            parameters: ['...args'],
+            isAsync: false,
+            isBound: false
+          }),
+          ...failedExecutionTraceExpectation,
+          ...traceContextFetchData,
+          isPromise: true,
+          narratives: ['Throwing because the URL invalid-url is invalid']
+        })
+      );
+
+      expect(response).toMatchObject([{ 'code': undefined, 'message': 'Invalid URL provided.', 'name': 'Error' }]);
     });
   });
 });
