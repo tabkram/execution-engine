@@ -6,6 +6,7 @@ Use this section to inform users about the currently supported versions of Execu
 
 | Version | Supported          |
 |---------|--------------------|
+| 3.x.x   | :white_check_mark: |
 | 2.1.x   | :white_check_mark: |
 | 2.0.x   | :white_check_mark: |
 | < 2.0   | :x:                |
