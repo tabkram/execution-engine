@@ -57,19 +57,23 @@ export function execute<INPUT extends unknown[], OUTPUT, RESPONSE = OUTPUT, ERRO
   if (isAsync(blockFunction)) {
     return blockFunction
       .bind(this)(...inputs, ...extraInputs)
-      .then((output: OUTPUT) => (successCallback ? successCallback(output, true) : (output as unknown as RESPONSE)))
-      .catch((error) => (errorCallback ? errorCallback(error, true) : error));
+      .then((output: OUTPUT) =>
+        successCallback ? (successCallback.bind(this) as typeof successCallback)(output, true) : (output as unknown as RESPONSE)
+      )
+      .catch((error) => (errorCallback ? (errorCallback.bind(this) as typeof errorCallback)(error, true) : error));
   } else {
     try {
       const result = blockFunction.bind(this)(...inputs, ...extraInputs);
       if (result instanceof Promise) {
         return result
-          .then((output: OUTPUT) => (successCallback ? successCallback(output, true) : (output as unknown as RESPONSE)))
-          .catch((error) => (errorCallback ? errorCallback(error, true) : error));
+          .then((output: OUTPUT) =>
+            successCallback ? (successCallback.bind(this) as typeof successCallback)(output, true) : (output as unknown as RESPONSE)
+          )
+          .catch((error) => (errorCallback ? (errorCallback.bind(this) as typeof errorCallback)(error, true) : error));
       }
-      return successCallback ? successCallback(result, false) : (result as unknown as RESPONSE);
+      return successCallback ? (successCallback.bind(this) as typeof successCallback)(result, false) : (result as unknown as RESPONSE);
     } catch (error) {
-      return errorCallback ? errorCallback(error, false) : error;
+      return errorCallback ? (errorCallback.bind(this) as typeof errorCallback)(error, false) : error;
     }
   }
 }

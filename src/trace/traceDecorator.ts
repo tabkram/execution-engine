@@ -41,24 +41,23 @@ export function trace<O>(
           originalMethod.bind(this),
           args,
           (traceContext) => {
-            return traceHandler({ ...traceContext, ...thisTraceContext });
+            return (traceHandler.bind(this) as typeof traceHandler)({ ...traceContext, ...thisTraceContext });
           },
           options
-        )?.then((r) => options?.errorStrategy === 'catch' ? r.errors : r.outputs);
+        )?.then((r) => (options?.errorStrategy === 'catch' ? r.errors : r.outputs));
       } else {
         const result = (executionTrace.bind(this) as typeof executionTrace<O>)(
           originalMethod.bind(this) as () => O,
           args,
           (traceContext) => {
-            return traceHandler({ ...traceContext, ...thisTraceContext });
+            return (traceHandler.bind(this) as typeof traceHandler)({ ...traceContext, ...thisTraceContext });
           },
           options
         );
         if (result instanceof Promise) {
-          return result.then((r) => options?.errorStrategy === 'catch' ? r.errors : r.outputs);
+          return result.then((r) => (options?.errorStrategy === 'catch' ? r.errors : r.outputs));
         }
         return result?.outputs;
-
       }
     };
   };

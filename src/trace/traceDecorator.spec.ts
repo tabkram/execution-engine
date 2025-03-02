@@ -20,22 +20,27 @@ describe('trace decorator', () => {
     errors: expect.anything()
   };
 
-  describe('Synchronous functions', () => {
-    const helloWorldTraceHandlerMock = jest.fn();
+  describe('Tracing synchronous functions', () => {
+    const traceHandlerMock = jest.fn();
 
     class SyncClass {
-      @trace(helloWorldTraceHandlerMock)
+      greetingFrom = ['hello from class'];
+
+      @trace(function (...args) {
+        this.greetingFrom.push('hello from trace handler');
+        traceHandlerMock(...args);
+        expect(this.greetingFrom).toEqual(['hello from class', 'hello from method', 'hello from trace handler']);
+      })
       helloWorld(): string {
+        this.greetingFrom.push('hello from method');
         return 'Hello World';
       }
     }
 
-    it('should trace a synchronous function', () => {
+    it('should trace a synchronous function and verify context', () => {
       const instance = new SyncClass();
-      const response = instance.helloWorld();
-
-      expect(response).toEqual('Hello World');
-      expect(helloWorldTraceHandlerMock).toHaveBeenCalledWith(
+      expect(instance.helloWorld()).toBe('Hello World');
+      expect(traceHandlerMock).toHaveBeenCalledWith(
         expect.objectContaining({
           metadata: expect.objectContaining({
             class: 'SyncClass',
@@ -52,11 +57,18 @@ describe('trace decorator', () => {
   });
 
   describe('Asynchronous functions', () => {
-    const helloWorldAsyncTraceHandlerMock = jest.fn();
+    const asyncTraceHandlerMock = jest.fn();
 
     class AsyncClass {
-      @trace(helloWorldAsyncTraceHandlerMock)
+      greetingFrom = ['hello from class'];
+
+      @trace(function (...args) {
+        this.greetingFrom.push('hello from async trace handler');
+        asyncTraceHandlerMock(...args);
+        expect(this.greetingFrom).toEqual(['hello from class', 'hello from async method', 'hello from async trace handler']);
+      })
       async helloWorldAsync(): Promise<string> {
+        this.greetingFrom.push('hello from async method');
         return 'Hello World async';
       }
     }
@@ -66,7 +78,7 @@ describe('trace decorator', () => {
       const response = await instance.helloWorldAsync();
 
       expect(response).toEqual('Hello World async');
-      expect(helloWorldAsyncTraceHandlerMock).toHaveBeenCalledWith(
+      expect(asyncTraceHandlerMock).toHaveBeenCalledWith(
         expect.objectContaining({
           metadata: expect.objectContaining({
             class: 'AsyncClass',
@@ -126,13 +138,21 @@ describe('trace decorator', () => {
 
       @trace(traceHandlerFetchDataMock, traceContextFetchData)
       @empty()
-      async fetchDataFunctionOnAnotherDecorator(url: string, traceContext: Record<string, unknown> = {}): Promise<{ data: string }> {
+      async fetchDataFunctionOnAnotherDecorator(
+        url: string,
+        traceContext: Record<string, unknown> = {}
+      ): Promise<{
+        data: string;
+      }> {
         return this.fetchDataFunction(url, traceContext);
       }
 
       @trace(traceHandlerFetchDataMock, traceContextFetchData, { errorStrategy: 'catch' })
       @empty()
-      async fetchDataFunctionOnAnotherDecoratorCoughtError(url: string, traceContext: Record<string, unknown> = {}): Promise<{ data: string }> {
+      async fetchDataFunctionOnAnotherDecoratorCoughtError(
+        url: string,
+        traceContext: Record<string, unknown> = {}
+      ): Promise<{ data: string }> {
         return this.fetchDataFunction(url, traceContext);
       }
     }
@@ -245,10 +265,10 @@ describe('trace decorator', () => {
       expect(response).toEqual(0.5);
     });
 
-
     it('should async trace error divisionFunctionOnAnotherDecorator', async () => {
       expect(() => new MyClass().divisionFunctionOnAnotherDecorator(1, 0)).toThrow('Throwing because division by zero is not allowed.');
-      expect(traceHandlerDivisionMock).toHaveBeenNthCalledWith(2,
+      expect(traceHandlerDivisionMock).toHaveBeenNthCalledWith(
+        2,
         expect.objectContaining({
           metadata: expect.objectContaining({
             class: 'MyClass',
@@ -288,7 +308,6 @@ describe('trace decorator', () => {
       expect(response).toMatchObject({ data: 'Success' });
     });
 
-
     it('should async trace error fetchDataFunctionOnAnotherDecorator', async () => {
       await expect(new MyClass().fetchDataFunctionOnAnotherDecorator('invalid-url')).rejects.toThrow('Invalid URL provided.');
       expect(traceHandlerFetchDataMock).toHaveBeenNthCalledWith(
@@ -311,7 +330,7 @@ describe('trace decorator', () => {
     });
 
     it('should async trace error fetchDataFunctionOnAnotherDecorator cought', async () => {
-      const response= await new MyClass().fetchDataFunctionOnAnotherDecoratorCoughtError('invalid-url');
+      const response = await new MyClass().fetchDataFunctionOnAnotherDecoratorCoughtError('invalid-url');
       expect(traceHandlerFetchDataMock).toHaveBeenNthCalledWith(
         2,
         expect.objectContaining({
@@ -330,7 +349,7 @@ describe('trace decorator', () => {
         })
       );
 
-      expect(response).toMatchObject([{ 'code': undefined, 'message': 'Invalid URL provided.', 'name': 'Error' }]);
+      expect(response).toMatchObject([{ code: undefined, message: 'Invalid URL provided.', name: 'Error' }]);
     });
   });
 });
