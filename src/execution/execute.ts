@@ -62,18 +62,19 @@ export function execute<INPUT extends unknown[], OUTPUT, RESPONSE = OUTPUT, ERRO
       )
       .catch((error) => (errorCallback ? (errorCallback.bind(this) as typeof errorCallback)(error, true) : error));
   } else {
+    let result;
     try {
-      const result = blockFunction.bind(this)(...inputs, ...extraInputs);
-      if (result instanceof Promise) {
-        return result
-          .then((output: OUTPUT) =>
-            successCallback ? (successCallback.bind(this) as typeof successCallback)(output, true) : (output as unknown as RESPONSE)
-          )
-          .catch((error) => (errorCallback ? (errorCallback.bind(this) as typeof errorCallback)(error, true) : error));
-      }
-      return successCallback ? (successCallback.bind(this) as typeof successCallback)(result, false) : (result as unknown as RESPONSE);
+      result = blockFunction.bind(this)(...inputs, ...extraInputs);
     } catch (error) {
       return errorCallback ? (errorCallback.bind(this) as typeof errorCallback)(error, false) : error;
     }
+    if (result instanceof Promise) {
+      return result
+        .then((output: OUTPUT) =>
+          successCallback ? (successCallback.bind(this) as typeof successCallback)(output, true) : (output as unknown as RESPONSE)
+        )
+        .catch((error) => (errorCallback ? (errorCallback.bind(this) as typeof errorCallback)(error, true) : error));
+    }
+    return successCallback ? (successCallback.bind(this) as typeof successCallback)(result, false) : (result as unknown as RESPONSE);
   }
 }
