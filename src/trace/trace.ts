@@ -11,6 +11,7 @@ import { ExecutionTimer } from '../timer/executionTimer';
 
 export interface TraceContext<O> extends ExecutionTrace<Array<unknown>, O> {
   metadata: FunctionMetadata;
+
   [key: string]: unknown;
 }
 
@@ -78,7 +79,7 @@ export function executionTrace<O>(
     blockFunction.bind(this),
     inputs,
     [traceContext],
-    (outputs: O, isPromise: boolean): Promise<ExecutionTrace<Array<unknown>, Awaited<O>>> | ExecutionTrace<Array<unknown>, O> => {
+    function (outputs: O, isPromise: boolean): Promise<ExecutionTrace<Array<unknown>, Awaited<O>>> | ExecutionTrace<Array<unknown>, O> {
       const { startTime, ...traceContextWithoutStartTime } = traceContext;
       traceContext = {
         ...traceContextWithoutStartTime,
@@ -92,7 +93,7 @@ export function executionTrace<O>(
       }
       return traceContext;
     },
-    (e, isPromise: boolean): Promise<ExecutionTrace<Array<unknown>, Awaited<O>>> | ExecutionTrace<Array<unknown>, O> => {
+    function (e, isPromise: boolean): Promise<ExecutionTrace<Array<unknown>, Awaited<O>>> | ExecutionTrace<Array<unknown>, O> {
       const { startTime, ...traceContextWithoutStartTime } = traceContext;
       traceContext = {
         ...traceContextWithoutStartTime,
