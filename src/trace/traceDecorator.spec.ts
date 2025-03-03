@@ -22,6 +22,7 @@ describe('trace decorator', () => {
 
   describe('Tracing synchronous functions', () => {
     const traceHandlerMock = jest.fn();
+    const traceHandlerMockThrows = jest.fn();
 
     class SyncClass {
       greetingFrom = ['hello from class'];
@@ -35,17 +36,46 @@ describe('trace decorator', () => {
         this.greetingFrom.push('hello from method');
         return 'Hello World';
       }
+
+      @trace((...args) => {
+        traceHandlerMockThrows(...args);
+        throw new Error('hello but I throw!');
+      })
+      helloWorldHandlerThrows(): string {
+        this.greetingFrom.push('hello from method');
+        return 'Hello World';
+      }
     }
 
     it('should trace a synchronous function and verify context', () => {
       const instance = new SyncClass();
       expect(instance.helloWorld()).toBe('Hello World');
+      expect(traceHandlerMock).toHaveBeenCalledTimes(1);
       expect(traceHandlerMock).toHaveBeenCalledWith(
         expect.objectContaining({
           metadata: expect.objectContaining({
             class: 'SyncClass',
             method: 'helloWorld',
             name: 'helloWorld',
+            parameters: [],
+            isAsync: false,
+            isBound: false
+          }),
+          ...successfulExecutionTraceExpectation
+        })
+      );
+    });
+
+    it('should trace a synchronous function and verify helloWorldHandlerThrows', () => {
+      const instance = new SyncClass();
+      expect(() => instance.helloWorldHandlerThrows()).toThrowError('hello but I throw!');
+      expect(traceHandlerMockThrows).toHaveBeenCalledTimes(1);
+      expect(traceHandlerMockThrows).toHaveBeenCalledWith(
+        expect.objectContaining({
+          metadata: expect.objectContaining({
+            class: 'SyncClass',
+            method: 'helloWorldHandlerThrows',
+            name: 'helloWorldHandlerThrows',
             parameters: [],
             isAsync: false,
             isBound: false
@@ -142,8 +172,8 @@ describe('trace decorator', () => {
         url: string,
         traceContext: Record<string, unknown> = {}
       ): Promise<{
-        data: string;
-      }> {
+          data: string;
+        }> {
         return this.fetchDataFunction(url, traceContext);
       }
 
