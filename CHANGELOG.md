@@ -1,3 +1,9 @@
+## [3.1.1](https://github.com/tabkram/execution-engine/compare/v3.1.0...v3.1.1) (2025-03-03)
+
+### Bug Fixes
+
+* improve [@trace](https://github.com/trace) execution to correctly auto bind the class context to the  handler ([835c86b](https://github.com/tabkram/execution-engine/commit/835c86bd02ea657b9e29c03c81995aca030b8814))
+* prevent duplicate `[@trace](https://github.com/trace)()` handler calls on handler throw ([8e9a86e](https://github.com/tabkram/execution-engine/commit/8e9a86e0650ee4e8bb3dd1b1a9a47c748ac68d8c))
 ## [3.1.0](https://github.com/tabkram/execution-engine/compare/v3.0.0...v3.1.0) (2025-02-25)
 
 ### Bug Fixes
