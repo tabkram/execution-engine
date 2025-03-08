@@ -48,7 +48,6 @@
     "@commitlint/config-conventional": "^19.7.1",
     "@stylistic/eslint-plugin": "^3.1.0",
     "@types/jest": "^29.5.14",
-    "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^8.24.0",
     "@typescript-eslint/parser": "^8.24.0",
     "barrelsby": "^2.8.1",
@@ -66,8 +65,5 @@
     "ts-jest": "^29.2.5",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.24.1"
-  },
-  "dependencies": {
-    "uuid": "^11.0.5"
   }
 }

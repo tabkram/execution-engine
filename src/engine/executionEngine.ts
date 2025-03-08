@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 
 import { TraceableEngine } from './traceableEngine';
 import { EngineTrace } from '../common/models/engineTrace.model';
@@ -37,7 +36,7 @@ export class ExecutionEngine<
           .toISOString()
           .replace(/[-:.Z]/g, '')
           .replace('T', '_'),
-        uuidv4()
+        crypto.randomUUID()
       ].join('_');
 
     return this;

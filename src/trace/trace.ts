@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 
 import { FunctionMetadata } from '../common/models/executionFunction.model';
 import { ExecutionTrace } from '../common/models/executionTrace.model';
@@ -64,7 +63,7 @@ export function executionTrace<O>(
     errorStrategy: 'throw'
   }
 ): Promise<ExecutionTrace<Array<unknown>, Awaited<O>>> | ExecutionTrace<Array<unknown>, O> {
-  const id = uuidv4();
+  const id = crypto.randomUUID();
   const executionTimer = new ExecutionTimer(id);
   executionTimer?.start();
   const executionTrace: ExecutionTrace<Array<unknown>, O> = { id, inputs, startTime: executionTimer.getStartDate() };
