@@ -1,3 +1,9 @@
+## [3.2.0](https://github.com/tabkram/execution-engine/compare/v3.1.1...v3.2.0) (2025-03-08)
+
+### Features
+
+* replace uuidv4 with crypto.randomUUID ([1726494](https://github.com/tabkram/execution-engine/commit/1726494882d1b06fdd98378c56d34b0bd40857c7))
+* update and complete ts-doc for models ([0436290](https://github.com/tabkram/execution-engine/commit/0436290903e1eda4aba633648db1203069af72a1))
 ## [3.1.1](https://github.com/tabkram/execution-engine/compare/v3.1.0...v3.1.1) (2025-03-03)
 
 ### Bug Fixes
