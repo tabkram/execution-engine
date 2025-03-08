@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AsyncLocalStorage } from 'async_hooks';
 
-import { v4 as uuidv4 } from 'uuid';
-
 import { EngineNodeData, EngineNodeTrace, isEngineNodeTrace } from '../common/models/engineNodeData.model';
 import { EngineEdge, EngineNode, EngineTrace } from '../common/models/engineTrace.model';
 import { DEFAULT_TRACE_CONFIG, TraceOptions } from '../common/models/engineTraceOptions.model';
@@ -154,7 +152,7 @@ export class TraceableEngine {
     inputs: Array<unknown> = [],
     options: TraceOptions<Array<any>, O> | TraceOptions<Array<any>, O>['trace'] = {
       trace: {
-        id: [blockFunction.name ? blockFunction.name.replace('bound ', '') : 'function', new Date()?.getTime(), uuidv4()]?.join('_'),
+        id: [blockFunction.name ? blockFunction.name.replace('bound ', '') : 'function', new Date()?.getTime(), crypto.randomUUID()]?.join('_'),
         label: blockFunction.name ? blockFunction.name.replace('bound ', '') : 'function'
       },
       config: DEFAULT_TRACE_CONFIG
@@ -176,7 +174,7 @@ export class TraceableEngine {
       id: [
         blockFunction.name ? blockFunction.name.replace('bound ', '') : 'function',
         executionTimer?.getStartDate()?.getTime(),
-        uuidv4()
+        crypto.randomUUID()
       ]?.join('_'),
       label: [
         (this.nodes?.length ?? 0) + 1,
