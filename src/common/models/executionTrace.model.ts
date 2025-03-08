@@ -1,3 +1,6 @@
+/**
+ * Represents an execution trace with information about inputs, outputs, errors, and timing.
+ */
 export interface ExecutionTrace<I, O> {
   id: string;
   inputs?: I;
@@ -11,6 +14,14 @@ export interface ExecutionTrace<I, O> {
   elapsedTime?: string;
 }
 
+/**
+ * Defines how to extract specific data from an `ExecutionTrace`.
+ *
+ * Each property can either be a:
+ * - `boolean`: If `true`, include all data for the property.
+ * - `Array<string>`: A list of specific keys to extract from the property.
+ * - `Function`: A function that processes the data of the property and returns a value.
+ */
 export interface ExecutionTraceExtractor<I, O> {
   inputs?: boolean | Array<string> | ((i: I) => unknown);
   outputs?: boolean | Array<string> | ((o: O) => unknown);
