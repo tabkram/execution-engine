@@ -11,6 +11,9 @@ export interface FunctionMetadata {
   /** If the function is a class method, this represents the method name. */
   method?: string | symbol;
 
+  /**  The full method signature, including parameters, if available. */
+  methodSignature?: string;
+
   /** The function name, or "anonymous" if unnamed. */
   name: string;
 
