@@ -1,5 +1,5 @@
 import { executionTrace, TraceContext } from './trace';
-import { extractFunctionMetadata } from '../common/utils/functionMetadata';
+import { extractClassMethodMetadata } from '../common/utils/functionMetadata';
 import { isAsync } from '../common/utils/isAsync';
 
 /**
@@ -26,11 +26,7 @@ export function trace<O>(
     const originalMethod = descriptor.value;
     descriptor.value = function (...args: unknown[]) {
       const thisTraceContext = {
-        metadata: {
-          class: target.constructor.name,
-          method: propertyKey,
-          ...extractFunctionMetadata(originalMethod)
-        },
+        metadata: extractClassMethodMetadata(target.constructor.name, propertyKey, originalMethod),
         ...additionalContext
       };
       if (options.contextKey) {

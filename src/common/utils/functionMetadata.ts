@@ -23,3 +23,14 @@ export function extractFunctionMetadata(fn: Function): FunctionMetadata {
     // source,
   };
 }
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+export function extractClassMethodMetadata(className: string, methodName: string | symbol, fn: Function): FunctionMetadata {
+  const functionMetadata = extractFunctionMetadata(fn);
+  return {
+    class: className,
+    method: methodName,
+    methodSignature: `${className}.${methodName?.toString()}(${functionMetadata.parameters.join(',')})`,
+    ...functionMetadata
+  };
+}
