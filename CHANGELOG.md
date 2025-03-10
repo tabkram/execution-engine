@@ -1,3 +1,8 @@
+## [3.3.0](https://github.com/tabkram/execution-engine/compare/v3.2.0...v3.3.0) (2025-03-10)
+
+### Features
+
+* add [@memoize](https://github.com/memoize) decorator with expiration and handler options ([662c1fa](https://github.com/tabkram/execution-engine/commit/662c1fac74602728277a2a0ef5bcc51c7ba8072f))
 ## [3.2.0](https://github.com/tabkram/execution-engine/compare/v3.1.1...v3.2.0) (2025-03-08)
 
 ### Features
