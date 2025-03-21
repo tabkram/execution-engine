@@ -59,15 +59,23 @@ export function executeMemoize<O>(
   if (memoizedValue) {
     return memoizedValue;
   } else {
-    const callResponseOrPromise = (execute.bind(this) as typeof execute)(blockFunction.bind(this) as typeof blockFunction, inputs);
+    const callResponseOrPromise = (execute.bind(this) as typeof execute)(
+      blockFunction.bind(this) as typeof blockFunction,
+      inputs,
+      [],
+      (res) => res,
+      (error) => {
+        throw error;
+      }
+    );
     memoizationStore.set(inputsHash, callResponseOrPromise);
     this[memoizationKey].set(options.functionId, memoizationStore);
 
     if (callResponseOrPromise instanceof Promise) {
-      callResponseOrPromise.finally(() => setTimeout(() => memoizationStore.delete(inputsHash), expirationMs));
+      return callResponseOrPromise.finally(() => setTimeout(() => memoizationStore.delete(inputsHash), expirationMs));
     } else {
       setTimeout(() => memoizationStore.delete(inputsHash), expirationMs);
+      return callResponseOrPromise;
     }
-    return callResponseOrPromise;
   }
 }
