@@ -1,3 +1,8 @@
+## [3.3.1](https://github.com/tabkram/execution-engine/compare/v3.3.0...v3.3.1) (2025-03-21)
+
+### Bug Fixes
+
+* **memoize:** correctly throw error on memoize when the original method throws ([9df34a5](https://github.com/tabkram/execution-engine/commit/9df34a5b80bd26f42fa9b5921885c3bbbe24a55e))
 ## [3.3.0](https://github.com/tabkram/execution-engine/compare/v3.2.0...v3.3.0) (2025-03-10)
 
 ### Features
