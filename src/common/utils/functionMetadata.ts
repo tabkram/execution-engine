@@ -34,3 +34,22 @@ export function extractClassMethodMetadata(className: string, methodName: string
     ...functionMetadata
   };
 }
+
+
+/**
+ * Wraps a function and attaches method metadata, or returns the value as-is.
+ * This is useful in method decorators, where the function needs to be aware of method-specific metadata
+ * that would otherwise be inaccessible in a plain function.
+ *
+ * @returns The original value or a function with attached metadata.
+ */
+export function attachFunctionMetadata<O = unknown>(paramOrFunction: O | undefined, thisMethodMetadata: FunctionMetadata): O | undefined {
+  return typeof paramOrFunction === 'function'
+    ? (
+      // eslint-disable-next-line unused-imports/no-unused-vars
+      ({ metadata, ...rest }: { metadata: FunctionMetadata }): O => {
+        return paramOrFunction.bind(this)({ ...rest, metadata: thisMethodMetadata });
+      }
+    ) as O
+    : paramOrFunction;
+}
