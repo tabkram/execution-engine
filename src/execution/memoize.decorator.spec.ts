@@ -1,4 +1,4 @@
-import { memoize } from './memoizeDecorator';
+import { memoize } from './memoize.decorator';
 import { MemoizationContext } from '../common/models/executionMemoization.model';
 
 describe('memoize decorator', () => {
