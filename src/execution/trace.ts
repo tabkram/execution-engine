@@ -1,11 +1,10 @@
-
+import { execute } from './execute';
 import { FunctionMetadata } from '../common/models/executionFunction.model';
 import { ExecutionTrace } from '../common/models/executionTrace.model';
 import { TimerDetailsModel } from '../common/models/timer.model';
 import { Awaited } from '../common/utils/awaited';
 import { extractFunctionMetadata } from '../common/utils/functionMetadata';
 import { safeError } from '../common/utils/safeError';
-import { execute } from '../execution/execute';
 import { ExecutionTimer } from '../timer/executionTimer';
 
 export interface TraceContext<O> extends ExecutionTrace<Array<unknown>, O> {
@@ -24,14 +23,14 @@ function calculateTimeAndDuration(executionTimer: ExecutionTimer): TimerDetailsM
 export function executionTrace<O>(
   blockFunction: (...params) => Promise<O>,
   inputs?: Array<unknown>,
-  traceHandler?: (traceContext: TraceContext<O>) => void,
+  onTraceEvent?: (traceContext: TraceContext<O>) => void,
   options?: { contextKey?: string; errorStrategy?: 'catch' | 'throw' }
 ): Promise<ExecutionTrace<Array<unknown>, Awaited<O>>>;
 
 export function executionTrace<O>(
   blockFunction: (...params) => O,
   inputs?: Array<unknown>,
-  traceHandler?: (traceContext: TraceContext<O>) => void,
+  onTraceEvent?: (traceContext: TraceContext<O>) => void,
   options?: { contextKey?: string; errorStrategy?: 'catch' | 'throw' }
 ): ExecutionTrace<Array<unknown>, O>;
 
@@ -43,7 +42,7 @@ export function executionTrace<O>(
  *
  * @param blockFunction - The function to execute and trace.
  * @param inputs - An array of input parameters to pass to `blockFunction`. Defaults to an empty array.
- * @param traceHandler - An optional callback function that processes the trace context after execution.
+ * @param onTraceEvent - An optional callback function that processes the trace context after execution.
  * @param options - Optional configuration:
  *   - `contextKey`: A key to store and retrieve execution context.
  *   - `errorStrategy`: Determines how errors are handled:
@@ -57,7 +56,7 @@ export function executionTrace<O>(
 export function executionTrace<O>(
   blockFunction: (...params) => O | Promise<O>,
   inputs: Array<unknown> = [],
-  traceHandler?: (traceContext: TraceContext<O>) => void,
+  onTraceEvent?: (traceContext: TraceContext<O>) => void,
   options: { contextKey?: string; errorStrategy?: 'catch' | 'throw' } = {
     contextKey: undefined,
     errorStrategy: 'throw'
@@ -87,8 +86,8 @@ export function executionTrace<O>(
         startTime,
         ...calculateTimeAndDuration(executionTimer)
       };
-      if (typeof traceHandler === 'function') {
-        traceHandler(traceContext);
+      if (typeof onTraceEvent === 'function') {
+        onTraceEvent(traceContext);
       }
       return traceContext;
     },
@@ -101,8 +100,8 @@ export function executionTrace<O>(
         startTime,
         ...calculateTimeAndDuration(executionTimer)
       };
-      if (typeof traceHandler === 'function') {
-        traceHandler(traceContext);
+      if (typeof onTraceEvent === 'function') {
+        onTraceEvent(traceContext);
       }
       if (options?.errorStrategy === 'catch') {
         return traceContext;

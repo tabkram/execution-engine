@@ -101,7 +101,7 @@ describe('ExecutionTrace', () => {
     });
   });
 
-  describe('Tracing function traceHandlerMock and traceContext', () => {
+  describe('Tracing function onTraceEventMock and traceContext', () => {
     const divisionFunction = (x: number, y: number, traceContext: Record<string, unknown>) => {
       if (y === 0) {
         traceContext['narratives'] = [`Throwing because division of ${x} by ${y}`];
@@ -120,14 +120,14 @@ describe('ExecutionTrace', () => {
       return { data: 'Success' };
     };
 
-    it('should sync trace successfully and pass correct traceHandlerMock and traceContext', () => {
-      const traceHandlerMock = jest.fn();
+    it('should sync trace successfully and pass correct onTraceEventMock and traceContext', () => {
+      const onTraceEventMock = jest.fn();
       const response = executionTrace.bind({ __execution: { context: { metadata: { requestId: '12345' } } } })(
         divisionFunction,
         [1, 2],
-        traceHandlerMock
+        onTraceEventMock
       );
-      expect(traceHandlerMock).toHaveBeenCalledWith(
+      expect(onTraceEventMock).toHaveBeenCalledWith(
         expect.objectContaining({
           metadata: expect.any(Object),
           ...successfullExecutionTraceExpectation,
@@ -137,14 +137,14 @@ describe('ExecutionTrace', () => {
       expect(response).toMatchObject(successfullExecutionTraceExpectation);
     });
 
-    it('should sync trace errors and pass correct traceHandlerMock and traceContext', () => {
-      const traceHandlerMock = jest.fn();
+    it('should sync trace errors and pass correct onTraceEventMock and traceContext', () => {
+      const onTraceEventMock = jest.fn();
       const traceContextMock = { context: { metadata: { requestId: '12345' } } };
-      const response = executionTrace.bind({ __execution: traceContextMock })(divisionFunction, [1, 0], traceHandlerMock, {
+      const response = executionTrace.bind({ __execution: traceContextMock })(divisionFunction, [1, 0], onTraceEventMock, {
         errorStrategy: 'catch',
         contextKey: '__execution'
       });
-      expect(traceHandlerMock).toHaveBeenCalledWith(
+      expect(onTraceEventMock).toHaveBeenCalledWith(
         expect.objectContaining({
           ...failedExecutionTraceExpectation,
           ...traceContextMock,
@@ -154,16 +154,16 @@ describe('ExecutionTrace', () => {
       expect(response).toMatchObject(failedExecutionTraceExpectation);
     });
 
-    it('should async trace successfully and pass correct traceHandlerMock and traceContext', async () => {
-      const traceHandlerMock = jest.fn();
+    it('should async trace successfully and pass correct onTraceEventMock and traceContext', async () => {
+      const onTraceEventMock = jest.fn();
       const traceContextMock = { context: { metadata: { requestId: '12345' } } };
       const response = await (executionTrace.bind({ __execution: traceContextMock }) as typeof executionTrace)(
         fetchDataFunction,
         ['https://api.example.com/data'],
-        traceHandlerMock,
+        onTraceEventMock,
         { contextKey: '__execution' }
       );
-      expect(traceHandlerMock).toHaveBeenCalledWith(
+      expect(onTraceEventMock).toHaveBeenCalledWith(
         expect.objectContaining({
           ...successfullExecutionTraceExpectation,
           ...traceContextMock,
@@ -173,14 +173,14 @@ describe('ExecutionTrace', () => {
       expect(response).toMatchObject(successfullExecutionTraceExpectation);
     });
 
-    it('should async trace errors and pass correct traceHandlerMock and traceContext', async () => {
-      const traceHandlerMock = jest.fn();
+    it('should async trace errors and pass correct onTraceEventMock and traceContext', async () => {
+      const onTraceEventMock = jest.fn();
       const traceContextMock = { context: { metadata: { requestId: '12345' } } };
-      const response = await executionTrace.bind({ __execution: traceContextMock })(fetchDataFunction, ['invalid-url'], traceHandlerMock, {
+      const response = await executionTrace.bind({ __execution: traceContextMock })(fetchDataFunction, ['invalid-url'], onTraceEventMock, {
         errorStrategy: 'catch',
         contextKey: '__execution'
       });
-      expect(traceHandlerMock).toHaveBeenCalledWith(
+      expect(onTraceEventMock).toHaveBeenCalledWith(
         expect.objectContaining({
           ...failedExecutionTraceExpectation,
           ...traceContextMock,
@@ -191,7 +191,7 @@ describe('ExecutionTrace', () => {
     });
 
     it('should throw an error and trace context when provided with an invalid URL', async () => {
-      const traceHandlerMock = jest.fn();
+      const onTraceEventMock = jest.fn();
       const traceContextMock = { context: { metadata: { requestId: '12345' } } };
 
       // Expect the trace function to throw an error for an invalid URL
@@ -199,12 +199,12 @@ describe('ExecutionTrace', () => {
         (executionTrace.bind({ __execution: traceContextMock }) as typeof executionTrace)(
           fetchDataFunction,
           ['invalid-url'],
-          traceHandlerMock,
+          onTraceEventMock,
           { contextKey: '__execution' }
         )
       ).rejects.toThrow('Invalid URL provided.'); // Check the error message
 
-      expect(traceHandlerMock).toHaveBeenCalledWith(
+      expect(onTraceEventMock).toHaveBeenCalledWith(
         expect.objectContaining({
           ...failedExecutionTraceExpectation,
           ...traceContextMock,

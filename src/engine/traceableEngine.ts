@@ -7,8 +7,8 @@ import { DEFAULT_TRACE_CONFIG, TraceOptions } from '../common/models/engineTrace
 import { ExecutionTrace, ExecutionTraceExtractor, isExecutionTrace } from '../common/models/executionTrace.model';
 import { Awaited } from '../common/utils/awaited';
 import { extract } from '../common/utils/jsonQuery';
+import { executionTrace } from '../execution/trace';
 import { ExecutionTimer } from '../timer/executionTimer';
-import { executionTrace } from '../trace/trace';
 
 /**
  * Represents a class for traceable execution of functions.

@@ -95,7 +95,8 @@ describe('memoize decorator', () => {
         if (memoContext.isMemoized) {
           memoizedCalls++;
         }
-      }) async throwData(name: string): Promise<string> {
+      })
+      async throwData(name: string): Promise<string> {
         totalFunctionCalls++;
         throw new Error(`hello ${name} but I throw!`);
       }

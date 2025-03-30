@@ -1,10 +1,5 @@
 import { execute } from './execute';
-import {
-  memoizationDefaultTTL,
-  memoizationKey,
-  memoizationMaxTTL,
-  MemoizeOptions
-} from '../common/models/executionMemoization.model';
+import { memoizationDefaultTTL, memoizationKey, memoizationMaxTTL, MemoizeOptions } from '../common/models/executionMemoization.model';
 import { generateHashId } from '../common/utils/crypto';
 import { extractFunctionMetadata } from '../common/utils/functionMetadata';
 
