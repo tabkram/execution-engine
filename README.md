@@ -12,11 +12,21 @@
 [![Documentation](https://img.shields.io/badge/documentation-grey?logo=githubpages&color=blue)](https://tabkram.github.io/execution-engine)
 [![jsDocs.io](https://img.shields.io/badge/jsDocs.io-reference-blue)](https://www.jsdocs.io/package/execution-engine)
 
-Execution Engine is a TypeScript library that enables tracing and visualization of code execution workflows in your
-project. Gain insights into the dynamic sequence of code execution by
-capturing detailed traces in JSON format, easily parseable into graphs.
+Execution Engine is a TypeScript library that enables tracing, visualization, and optimization of code execution
+workflows. It provides tools to trace execution flow, manage caching, and optimize repeated computations, offering
+insights through structured execution traces in JSON format.
 
 ## Features ✨
+
+Features are divided into two main parts:
+
+### 1. Execution:
+
+- **Trace:** Capture detailed execution flow for debugging and analysis.
+- **Cache:** Prevent redundant function executions by storing results temporarily.
+- **Memoize:** Optimize repeated computations within the same execution call.
+
+### 2. Engine:
 
 - **Tracing:** Trace the execution flow of code within your project.
 - **Timing:** Capture the timing of each executed function.
@@ -39,7 +49,73 @@ yarn add execution-engine
 
 ## Usage 📚
 
-### Example 1: Basic Usage
+---
+### 1. Execution:
+
+#### Example 1: Memoization with `@memoize`
+
+```typescript
+import { memoize } from "execution-engine";
+
+class Calculator {
+  @memoize() // Store the result of Fibonacci calculations
+  fibonacci(n: number): number {
+    if (n <= 1) return n;
+    return this.fibonacci(n - 1) + this.fibonacci(n - 2);
+  }
+}
+
+const calc = new Calculator();
+console.log(calc.fibonacci(10));  // Calculates and stores result
+console.log(calc.fibonacci(10));  // Reuses pending result, no recalculation
+```
+
+In this example, the `fibonacci` method is decorated with `@memoize`, meaning repeated calls with the same `n` will reuse the stored result instead of recalculating it.
+
+
+#### Example 2: Caching Results with `@cache`
+
+```typescript
+import { cache } from "execution-engine";
+
+class ExampleService {
+  @cache({ ttl: 5000 })  // Store result for 5 seconds
+  async fetchData(id: number): Promise<string> {
+    console.log('Fetching data...');
+    return `Data for ${id}`;
+  }
+}
+
+const service = new ExampleService();
+console.log(await service.fetchData(1));  // Fetches data and stores it
+console.log(await service.fetchData(1));  // Reuses stored result (within ttl)
+```
+
+The `fetchData` method is decorated with `@cache`, storing the result for 5 seconds. Subsequent calls within that time reuse the stored result.
+
+#### Example 3: Tracing with `@trace`
+
+```typescript
+import { trace } from "execution-engine";
+
+class MathOperations {
+  @trace(console.log)  // Trace the execution and log using console.log
+  add(a: number, b: number): number {
+    return a + b;
+  }
+}
+
+const mathOps = new MathOperations();
+console.log(mathOps.add(2, 3));  // Traces the 'add' method execution and logs it
+```
+
+In this example, `@trace`logs the method execution, including input parameters, output, timing, duration, start time, end time, and elapsed time.
+
+
+---
+### 2. Engine:
+
+#### Example 1: Basic Usage
 
 ```typescript
 import { ExecutionEngine } from "execution-engine";
@@ -61,9 +137,10 @@ You can:
 
 - view the **complete code** in [examples/usage.ts](examples/usage.ts)
 - inspect the **trace output** in [examples/usage.json](examples/usage.json).
-- visualize the **trace graph** using the json-to-graph online tool. [→ See the result ←](https://tabkram.github.io/json-to-graph/?data=https://raw.githubusercontent.com/tabkram/execution-engine/main/examples/usage.json)
+- visualize the **trace graph** using the json-to-graph online
+  tool. [→ See the result ←](https://tabkram.github.io/json-to-graph/?data=https://raw.githubusercontent.com/tabkram/execution-engine/main/examples/usage.json)
 
-### Example 2: Usage with Decorators
+#### Example 2: Usage with Decorators
 
 ```typescript
 import { engine, run } from "execution-engine";
@@ -94,9 +171,10 @@ You can:
 
 - view the **complete code** in [examples/usage2.ts](examples/usage2.ts)
 - inspect the **trace output** in [examples/usage2.json](examples/usage2.json)
-- visualize the **trace graph** using the json-to-graph online tool. [→ See the result ←](https://tabkram.github.io/json-to-graph/?data=https://raw.githubusercontent.com/tabkram/execution-engine/main/examples/usage2.json)
+- visualize the **trace graph** using the json-to-graph online
+  tool. [→ See the result ←](https://tabkram.github.io/json-to-graph/?data=https://raw.githubusercontent.com/tabkram/execution-engine/main/examples/usage2.json)
 
-### Understanding the Trace 🧭
+#### Understanding the Trace 🧭
 
 The `trace` object is an array containing **nodes** and **edges**. It has the following structure:
 
@@ -130,7 +208,7 @@ trace = [
 ];
 ```
 
-## Examples 📘
+#### Examples 📘
 
 For additional usage examples, please explore the __[/examples](examples)__ directory in this repository.
 
