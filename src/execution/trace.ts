@@ -21,14 +21,14 @@ function calculateTimeAndDuration(executionTimer: ExecutionTimer): TimerDetailsM
 }
 
 export function executionTrace<O>(
-  blockFunction: (...params) => Promise<O>,
+  blockFunction: (...params: unknown[])=> Promise<O>,
   inputs?: Array<unknown>,
   onTraceEvent?: (traceContext: TraceContext<O>) => void,
   options?: { contextKey?: string; errorStrategy?: 'catch' | 'throw' }
 ): Promise<ExecutionTrace<Array<unknown>, Awaited<O>>>;
 
 export function executionTrace<O>(
-  blockFunction: (...params) => O,
+  blockFunction: (...params: unknown[]) => O,
   inputs?: Array<unknown>,
   onTraceEvent?: (traceContext: TraceContext<O>) => void,
   options?: { contextKey?: string; errorStrategy?: 'catch' | 'throw' }
@@ -54,7 +54,7 @@ export function executionTrace<O>(
  *   -  If `blockFunction` is asynchronous, returns a `Promise<ExecutionTrace>`.
  */
 export function executionTrace<O>(
-  blockFunction: (...params) => O | Promise<O>,
+  blockFunction: (...params: unknown[]) => O | Promise<O>,
   inputs: Array<unknown> = [],
   onTraceEvent?: (traceContext: TraceContext<O>) => void,
   options: { contextKey?: string; errorStrategy?: 'catch' | 'throw' } = {
