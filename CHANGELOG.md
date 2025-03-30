@@ -1,3 +1,9 @@
+## [3.4.0](https://github.com/tabkram/execution-engine/compare/v3.3.1...v3.4.0) (2025-03-30)
+
+### Features
+
+* add `[@cache](https://github.com/cache)` decorator with configurable options (`cacheManager`, `cacheKey`, etc.) ([e766f2f](https://github.com/tabkram/execution-engine/commit/e766f2f8e6364d8cf52556da8a7c946f42d4b6ec))
+* add type to trace ([ac54c69](https://github.com/tabkram/execution-engine/commit/ac54c69649e7eac42386ef5d577aba609ef3de2b))
 ## [3.3.1](https://github.com/tabkram/execution-engine/compare/v3.3.0...v3.3.1) (2025-03-21)
 
 ### Bug Fixes

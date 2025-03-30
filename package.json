@@ -1,6 +1,6 @@
 {
   "name": "execution-engine",
-  "version": "3.3.1",
+  "version": "3.4.0",
   "description": "A TypeScript library for tracing and visualizing code execution workflows.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
