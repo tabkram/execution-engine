@@ -5,7 +5,7 @@ import { isAsync } from '../common/utils/isAsync';
 /**
  * Method decorator to trace function execution, capturing metadata, inputs, outputs, and errors.
  *
- * @param traceHandler - handle function of the trace context.
+ * @param onTraceEvent - handle function of the trace context.
  * @param additionalContext - Additional metadata to attach to the trace context.
  * @param options - Configuration options:
  *   - `contextKey`: Key to store trace context on the instance.
@@ -14,7 +14,7 @@ import { isAsync } from '../common/utils/isAsync';
  * @returns A method decorator that wraps the original function with execution tracing.
  */
 export function trace<O>(
-  traceHandler: (traceContext: TraceContext<O>) => void,
+  onTraceEvent: (traceContext: TraceContext<O>) => void,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   additionalContext: Record<string, any> = {},
   options: { contextKey?: string; errorStrategy?: 'catch' | 'throw' } = {
@@ -37,7 +37,7 @@ export function trace<O>(
           originalMethod.bind(this),
           args,
           (traceContext) => {
-            return (traceHandler.bind(this) as typeof traceHandler)({ ...traceContext, ...thisTraceContext });
+            return (onTraceEvent.bind(this) as typeof onTraceEvent)({ ...traceContext, ...thisTraceContext });
           },
           options
         )?.then((r) => (options?.errorStrategy === 'catch' ? r.errors : r.outputs));
@@ -46,7 +46,7 @@ export function trace<O>(
           originalMethod.bind(this) as () => O,
           args,
           (traceContext) => {
-            return (traceHandler.bind(this) as typeof traceHandler)({ ...traceContext, ...thisTraceContext });
+            return (onTraceEvent.bind(this) as typeof onTraceEvent)({ ...traceContext, ...thisTraceContext });
           },
           options
         );

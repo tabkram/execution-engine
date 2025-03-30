@@ -1,4 +1,4 @@
-import { trace } from './traceDecorator';
+import { trace } from './trace.decorator';
 
 describe('trace decorator', () => {
   const executionTraceExpectation = {
@@ -21,15 +21,15 @@ describe('trace decorator', () => {
   };
 
   describe('Tracing synchronous functions', () => {
-    const traceHandlerMock = jest.fn();
-    const traceHandlerMockThrows = jest.fn();
+    const onTraceEventMock = jest.fn();
+    const onTraceEventMockThrows = jest.fn();
 
     class SyncClass {
       greetingFrom = ['hello from class'];
 
       @trace(function (...args) {
         this.greetingFrom.push('hello from trace handler');
-        traceHandlerMock(...args);
+        onTraceEventMock(...args);
         expect(this.greetingFrom).toEqual(['hello from class', 'hello from method', 'hello from trace handler']);
       })
       helloWorld(): string {
@@ -38,7 +38,7 @@ describe('trace decorator', () => {
       }
 
       @trace((...args) => {
-        traceHandlerMockThrows(...args);
+        onTraceEventMockThrows(...args);
         throw new Error('hello but I throw!');
       })
       helloWorldHandlerThrows(): string {
@@ -50,8 +50,8 @@ describe('trace decorator', () => {
     it('should trace a synchronous function and verify context', () => {
       const instance = new SyncClass();
       expect(instance.helloWorld()).toBe('Hello World');
-      expect(traceHandlerMock).toHaveBeenCalledTimes(1);
-      expect(traceHandlerMock).toHaveBeenCalledWith(
+      expect(onTraceEventMock).toHaveBeenCalledTimes(1);
+      expect(onTraceEventMock).toHaveBeenCalledWith(
         expect.objectContaining({
           metadata: expect.objectContaining({
             class: 'SyncClass',
@@ -69,8 +69,8 @@ describe('trace decorator', () => {
     it('should trace a synchronous function and verify helloWorldHandlerThrows', () => {
       const instance = new SyncClass();
       expect(() => instance.helloWorldHandlerThrows()).toThrowError('hello but I throw!');
-      expect(traceHandlerMockThrows).toHaveBeenCalledTimes(1);
-      expect(traceHandlerMockThrows).toHaveBeenCalledWith(
+      expect(onTraceEventMockThrows).toHaveBeenCalledTimes(1);
+      expect(onTraceEventMockThrows).toHaveBeenCalledWith(
         expect.objectContaining({
           metadata: expect.objectContaining({
             class: 'SyncClass',
@@ -124,11 +124,11 @@ describe('trace decorator', () => {
     });
   });
 
-  describe('Tracing function traceHandlerMock and traceContext', () => {
+  describe('Tracing function onTraceEventMock and traceContext', () => {
     const traceContextDivision = { context: { metadata: { requestId: '12345' } } };
     const traceContextFetchData = { context: { metadata: { requestId: '6789' } } };
-    const traceHandlerDivisionMock = jest.fn();
-    const traceHandlerFetchDataMock = jest.fn();
+    const onTraceEventDivisionMock = jest.fn();
+    const onTraceEventFetchDataMock = jest.fn();
 
     function empty(): MethodDecorator {
       return function (target: unknown, propertyKey: string, descriptor: PropertyDescriptor) {
@@ -140,7 +140,7 @@ describe('trace decorator', () => {
     }
 
     class MyClass {
-      @trace(traceHandlerDivisionMock, traceContextDivision, { contextKey: '__execution' })
+      @trace(onTraceEventDivisionMock, traceContextDivision, { contextKey: '__execution' })
       divisionFunction(x: number, y: number, traceContext: Record<string, unknown> = {}): number {
         if (y === 0) {
           traceContext['narratives'] = [`Throwing because division of ${x} by ${y}`];
@@ -150,7 +150,7 @@ describe('trace decorator', () => {
         return x / y;
       }
 
-      @trace(traceHandlerFetchDataMock, traceContextFetchData, { contextKey: '__execution' })
+      @trace(onTraceEventFetchDataMock, traceContextFetchData, { contextKey: '__execution' })
       async fetchDataFunction(url: string, traceContext: Record<string, unknown> = {}): Promise<{ data: string }> {
         traceContext['narratives'] = [`Fetching data from ${url}`];
         if (!url.startsWith('http')) {
@@ -160,24 +160,24 @@ describe('trace decorator', () => {
         return { data: 'Success' };
       }
 
-      @trace(traceHandlerDivisionMock, traceContextDivision)
+      @trace(onTraceEventDivisionMock, traceContextDivision)
       @empty()
       divisionFunctionOnAnotherDecorator(x: number, y: number, traceContext: Record<string, unknown> = {}): number {
         return this.divisionFunction(x, y, traceContext);
       }
 
-      @trace(traceHandlerFetchDataMock, traceContextFetchData)
+      @trace(onTraceEventFetchDataMock, traceContextFetchData)
       @empty()
       async fetchDataFunctionOnAnotherDecorator(
         url: string,
         traceContext: Record<string, unknown> = {}
       ): Promise<{
-          data: string;
-        }> {
+        data: string;
+      }> {
         return this.fetchDataFunction(url, traceContext);
       }
 
-      @trace(traceHandlerFetchDataMock, traceContextFetchData, { errorStrategy: 'catch' })
+      @trace(onTraceEventFetchDataMock, traceContextFetchData, { errorStrategy: 'catch' })
       @empty()
       async fetchDataFunctionOnAnotherDecoratorCoughtError(
         url: string,
@@ -188,14 +188,14 @@ describe('trace decorator', () => {
     }
 
     beforeEach(() => {
-      traceHandlerFetchDataMock.mockClear();
-      traceHandlerDivisionMock.mockClear();
+      onTraceEventFetchDataMock.mockClear();
+      onTraceEventDivisionMock.mockClear();
     });
 
-    it('should sync trace successfully and pass correct traceHandlerMock and traceContext', () => {
+    it('should sync trace successfully and pass correct onTraceEventMock and traceContext', () => {
       const classInstance = new MyClass();
       const response = classInstance.divisionFunction(1, 2);
-      expect(traceHandlerDivisionMock).toHaveBeenCalledWith(
+      expect(onTraceEventDivisionMock).toHaveBeenCalledWith(
         expect.objectContaining({
           metadata: expect.objectContaining({
             class: 'MyClass',
@@ -213,10 +213,10 @@ describe('trace decorator', () => {
       expect(response).toEqual(0.5);
     });
 
-    it('should sync trace errors and pass correct traceHandlerMock and traceContext', () => {
+    it('should sync trace errors and pass correct onTraceEventMock and traceContext', () => {
       expect(() => new MyClass().divisionFunction(1, 0)).toThrow('Throwing because division by zero is not allowed.');
 
-      expect(traceHandlerDivisionMock).toHaveBeenCalledWith(
+      expect(onTraceEventDivisionMock).toHaveBeenCalledWith(
         expect.objectContaining({
           metadata: expect.objectContaining({
             class: 'MyClass',
@@ -233,9 +233,9 @@ describe('trace decorator', () => {
       );
     });
 
-    it('should async trace successfully and pass correct traceHandlerMock and traceContext', async () => {
+    it('should async trace successfully and pass correct onTraceEventMock and traceContext', async () => {
       const response = await new MyClass().fetchDataFunction('https://api.example.com/data');
-      expect(traceHandlerFetchDataMock).toHaveBeenCalledWith(
+      expect(onTraceEventFetchDataMock).toHaveBeenCalledWith(
         expect.objectContaining({
           metadata: expect.objectContaining({
             class: 'MyClass',
@@ -253,9 +253,9 @@ describe('trace decorator', () => {
       expect(response).toMatchObject({ data: 'Success' });
     });
 
-    it('should async trace errors and pass correct traceHandlerMock and traceContext', async () => {
+    it('should async trace errors and pass correct onTraceEventMock and traceContext', async () => {
       await expect(new MyClass().fetchDataFunction('invalid-url')).rejects.toThrow('Invalid URL provided.');
-      expect(traceHandlerFetchDataMock).toHaveBeenCalledWith(
+      expect(onTraceEventFetchDataMock).toHaveBeenCalledWith(
         expect.objectContaining({
           metadata: expect.objectContaining({
             class: 'MyClass',
@@ -275,7 +275,7 @@ describe('trace decorator', () => {
     it('should async trace successfully divisionFunctionOnAnotherDecorator', async () => {
       const classInstance = new MyClass();
       const response = classInstance.divisionFunctionOnAnotherDecorator(1, 2);
-      expect(traceHandlerDivisionMock).toHaveBeenNthCalledWith(
+      expect(onTraceEventDivisionMock).toHaveBeenNthCalledWith(
         2,
         expect.objectContaining({
           metadata: expect.objectContaining({
@@ -297,7 +297,7 @@ describe('trace decorator', () => {
 
     it('should async trace error divisionFunctionOnAnotherDecorator', async () => {
       expect(() => new MyClass().divisionFunctionOnAnotherDecorator(1, 0)).toThrow('Throwing because division by zero is not allowed.');
-      expect(traceHandlerDivisionMock).toHaveBeenNthCalledWith(
+      expect(onTraceEventDivisionMock).toHaveBeenNthCalledWith(
         2,
         expect.objectContaining({
           metadata: expect.objectContaining({
@@ -318,7 +318,7 @@ describe('trace decorator', () => {
 
     it('should async trace successfully fetchDataFunctionOnAnotherDecorator', async () => {
       const response = await new MyClass().fetchDataFunctionOnAnotherDecorator('https://api.example.com/data');
-      expect(traceHandlerFetchDataMock).toHaveBeenNthCalledWith(
+      expect(onTraceEventFetchDataMock).toHaveBeenNthCalledWith(
         2,
         expect.objectContaining({
           metadata: expect.objectContaining({
@@ -340,7 +340,7 @@ describe('trace decorator', () => {
 
     it('should async trace error fetchDataFunctionOnAnotherDecorator', async () => {
       await expect(new MyClass().fetchDataFunctionOnAnotherDecorator('invalid-url')).rejects.toThrow('Invalid URL provided.');
-      expect(traceHandlerFetchDataMock).toHaveBeenNthCalledWith(
+      expect(onTraceEventFetchDataMock).toHaveBeenNthCalledWith(
         2,
         expect.objectContaining({
           metadata: expect.objectContaining({
@@ -361,7 +361,7 @@ describe('trace decorator', () => {
 
     it('should async trace error fetchDataFunctionOnAnotherDecorator cought', async () => {
       const response = await new MyClass().fetchDataFunctionOnAnotherDecoratorCoughtError('invalid-url');
-      expect(traceHandlerFetchDataMock).toHaveBeenNthCalledWith(
+      expect(onTraceEventFetchDataMock).toHaveBeenNthCalledWith(
         2,
         expect.objectContaining({
           metadata: expect.objectContaining({
