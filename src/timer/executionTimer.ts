@@ -21,7 +21,7 @@ export class ExecutionTimer {
    * Starts the execution timer.
    * @param executionId - An optional identifier for the execution timer. Defaults to 'default'.
    */
-  start(executionId?: string) {
+  start(executionId?: string): void {
     this.timer[executionId ?? 'default'] = {
       startTime: performance.now(),
       endTime: 0
@@ -32,7 +32,7 @@ export class ExecutionTimer {
    * Stops the execution timer.
    * @param executionId - An optional identifier for the execution timer. Defaults to 'default'.
    */
-  stop(executionId?: string) {
+  stop(executionId?: string): void {
     if (this.timer[executionId ?? 'default']?.startTime) {
       this.timer[executionId ?? 'default'].endTime = performance.now();
     }
@@ -44,7 +44,7 @@ export class ExecutionTimer {
    * @param fractionDigits – The number of digits to appear after the decimal point; should be a value between 0 and 100, inclusive.
    * @returns The duration of the execution timer in milliseconds.
    */
-  getDuration(executionId?: string, fractionDigits?: number) {
+  getDuration(executionId?: string, fractionDigits?: number): number {
     const timerId = executionId ?? 'default';
     if (this.timer[executionId ?? 'default']?.startTime) {
       if (!this.timer[executionId ?? 'default'].endTime) {
