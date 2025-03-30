@@ -1,7 +1,7 @@
 import { executeMemoize } from './memoize';
 import { FunctionMetadata } from '../common/models/executionFunction.model';
 import { MemoizationHandler } from '../common/models/executionMemoization.model';
-import { extractClassMethodMetadata } from '../common/utils/functionMetadata';
+import { attachFunctionMetadata, extractClassMethodMetadata } from '../common/utils/functionMetadata';
 
 /**
  * Decorator to memoize method executions and prevent redundant calls.
@@ -22,15 +22,7 @@ export function memoize<O>(memoizationHandler?: MemoizationHandler<O>, expiratio
       const thisMethodMetadata: FunctionMetadata = extractClassMethodMetadata(target.constructor.name, propertyKey, originalMethod);
       return (executeMemoize.bind(this) as typeof executeMemoize<O>)(originalMethod.bind(this), args, {
         functionId: thisMethodMetadata.methodSignature,
-        memoizationHandler:
-          typeof memoizationHandler === 'function'
-            ? (memoContext): ReturnType<typeof memoizationHandler> => {
-              return (memoizationHandler.bind(this) as typeof memoizationHandler)({
-                ...memoContext,
-                metadata: thisMethodMetadata
-              });
-            }
-            : undefined,
+        memoizationHandler: attachFunctionMetadata.bind(this)(memoizationHandler, thisMethodMetadata),
         expirationMs
       });
     };
