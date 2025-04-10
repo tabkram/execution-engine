@@ -1,3 +1,8 @@
+## [3.5.0](https://github.com/tabkram/execution-engine/compare/v3.4.0...v3.5.0) (2025-04-10)
+
+### Features
+
+* add `bypass` argument to `cache` execution to ignore existing value and force new call ([13658aa](https://github.com/tabkram/execution-engine/commit/13658aae74a31921fa3fac3bb56c6bd5f4cabafe))
 ## [3.4.0](https://github.com/tabkram/execution-engine/compare/v3.3.1...v3.4.0) (2025-03-30)
 
 ### Features
