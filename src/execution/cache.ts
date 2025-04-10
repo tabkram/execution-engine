@@ -21,21 +21,31 @@ export async function executeCache<O>(
 ): Promise<Promise<O> | O> {
   const functionMetadata = extractFunctionMetadata(blockFunction);
   const cacheKey = options.cacheKey?.({ metadata: functionMetadata, inputs }) ?? generateHashId(...inputs);
+  const bypass = typeof options.bypass === 'function' && !!options.bypass?.({ metadata: functionMetadata, inputs });
   const ttl = typeof options.ttl === 'function' ? options.ttl({ metadata: functionMetadata, inputs }) : options.ttl;
-
   let cacheStore: CacheStore | MapCacheStore<O>;
+
   if (options.cacheManager) {
     cacheStore = typeof options.cacheManager === 'function' ? options.cacheManager(this) : options.cacheManager;
   } else {
     cacheStore = new MapCacheStore<O>(this[cacheStoreKey], options.functionId);
   }
-  const cachedValue: O = (await cacheStore.get(cacheKey)) as O;
+  const cachedValue: O | undefined = (await cacheStore.get(cacheKey)) as O;
+
 
   if (typeof options.onCacheEvent === 'function') {
-    options.onCacheEvent({ ttl, metadata: functionMetadata, inputs, cacheKey, isCached: !!cachedValue, value: cachedValue });
+    options.onCacheEvent({
+      ttl,
+      metadata: functionMetadata,
+      inputs,
+      cacheKey,
+      isBypassed: !!bypass,
+      isCached: !!cachedValue,
+      value: cachedValue
+    });
   }
 
-  if (cachedValue) {
+  if (!bypass && cachedValue) {
     return cachedValue;
   } else {
     return (execute.bind(this) as typeof execute)(
@@ -44,7 +54,7 @@ export async function executeCache<O>(
       [],
       (res) => {
         cacheStore.set(cacheKey, res as O, ttl);
-        if((cacheStore as MapCacheStore<O>).fullStorage) {
+        if ((cacheStore as MapCacheStore<O>).fullStorage) {
           this[cacheStoreKey] = (cacheStore as MapCacheStore<O>).fullStorage;
         }
         return res;

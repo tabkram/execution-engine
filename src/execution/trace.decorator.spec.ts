@@ -172,8 +172,8 @@ describe('trace decorator', () => {
         url: string,
         traceContext: Record<string, unknown> = {}
       ): Promise<{
-        data: string;
-      }> {
+          data: string;
+        }> {
         return this.fetchDataFunction(url, traceContext);
       }
 
