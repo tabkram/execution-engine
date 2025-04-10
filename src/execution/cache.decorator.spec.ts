@@ -5,18 +5,33 @@ describe('cache decorator', () => {
     let memoizationCheckCount = 0;
     let memoizedCalls = 0;
     let totalFunctionCalls = 0;
-
+    let bypassCache= false;
     class DataService {
       @cache({
         ttl: 3000,
         onCacheEvent: (cacheContext) => {
           memoizationCheckCount++;
-          if (cacheContext.isCached) {
+          if (cacheContext.isCached && !cacheContext.isBypassed) {
             memoizedCalls++;
           }
         }
       })
       async fetchData(id: number): Promise<string> {
+        totalFunctionCalls++;
+        return new Promise((resolve) => setTimeout(() => resolve(`Data for ID: ${id}`), 100));
+      }
+
+      @cache({
+        ttl: 3000,
+        bypass: () => bypassCache,
+        onCacheEvent: (cacheContext) => {
+          memoizationCheckCount++;
+          if (cacheContext.isCached && !cacheContext.isBypassed) {
+            memoizedCalls++;
+          }
+        }
+      })
+      async fetchDataWithByPassedCacheFunction(id: number): Promise<string> {
         totalFunctionCalls++;
         return new Promise((resolve) => setTimeout(() => resolve(`Data for ID: ${id}`), 100));
       }
@@ -65,6 +80,32 @@ describe('cache decorator', () => {
     expect(memoizedCalls).toBe(2); // ID 2 result is now memoized
     expect(totalFunctionCalls).toBe(2); // No extra new calls
     expect(memoizationCheckCount).toBe(4); // 4 checks in total
+
+    // test NO cache for a Bypassed cache function
+    memoizationCheckCount = 0;
+    memoizedCalls = 0;
+    totalFunctionCalls = 0;
+    const result21 = await service.fetchDataWithByPassedCacheFunction(2);
+    expect(result21).toBe('Data for ID: 2');
+    expect(memoizedCalls).toBe(0); // ID 2 result is now memoized
+    expect(totalFunctionCalls).toBe(1); // extra new call
+    expect(memoizationCheckCount).toBe(1); // 5 checks in total
+
+    bypassCache = false;
+    const result22 = await service.fetchDataWithByPassedCacheFunction(2);
+    expect(result22).toBe('Data for ID: 2');
+    expect(memoizedCalls).toBe(1); // ID 2 result is now memoized
+    expect(totalFunctionCalls).toBe(1); // NO extra new call
+    expect(memoizationCheckCount).toBe(2); // 2 checks in total
+
+    bypassCache = true;
+    const result23 = await service.fetchDataWithByPassedCacheFunction(2);
+    expect(result23).toBe('Data for ID: 2');
+    expect(memoizedCalls).toBe(1); // ID 2 result is NOT RETRIEVED FROM CACHE AS THEY ARE BYPASSED
+    expect(totalFunctionCalls).toBe(2); // extra new call as  bypassCache = true
+    expect(memoizationCheckCount).toBe(3); // 5 checks in total
+
+
 
     // test NO cache for a throwing async method
     memoizationCheckCount = 0;

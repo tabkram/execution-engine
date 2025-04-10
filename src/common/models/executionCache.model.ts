@@ -24,16 +24,22 @@ export interface CacheContext<O = unknown> {
   /** Unique key identifying the cache entry. */
   cacheKey: string;
 
+
   /** The time-to-live (TTL) for the cache entry. */
   ttl: number;
 
-  /** Flag indicating whether the value is cached. */
+  /**  Flag indicating whether the cached value is bypassed and a fresh computation is triggered. */
+  isBypassed: boolean;
+
+  /**
+   *  Flag indicating whether the value is found in the cache.
+   * @remarks: To confirm it was retrieved from cache, ensure `isBypassed` is `false`.
+   * */
   isCached: boolean;
 
   /** The cached value, if any. */
   value?: O;
 }
-
 
 /**
  * Configuration options for caching behavior.
@@ -41,6 +47,9 @@ export interface CacheContext<O = unknown> {
 export interface CacheOptions<O = unknown> {
   /** Time-to-live (TTL) for cache items. Can be static (number) or dynamic (function that returns a number). */
   ttl: number | ((params: { metadata: FunctionMetadata; inputs: unknown[] }) => number);
+
+  /** A function that returns `true` to ignore existing cache and force a fresh computation. Defaults to `false`. */
+  bypass?: (params: { metadata: FunctionMetadata; inputs: unknown[] }) => boolean;
 
   /** Function to generate a custom cache key based on method metadata and arguments. */
   cacheKey?: (params: { metadata: FunctionMetadata; inputs: unknown[] }) => string;

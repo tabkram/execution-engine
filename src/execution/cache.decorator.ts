@@ -23,6 +23,7 @@ export function cache(options: CacheOptions): MethodDecorator {
         functionId: thisMethodMetadata.methodSignature as string,
         ...options,
         cacheKey: attachFunctionMetadata.bind(this)(options.cacheKey, thisMethodMetadata),
+        bypass: attachFunctionMetadata.bind(this)(options.bypass, thisMethodMetadata),
         ttl: attachFunctionMetadata.bind(this)(options.ttl, thisMethodMetadata),
         onCacheEvent: attachFunctionMetadata.bind(this)(options.onCacheEvent, thisMethodMetadata)
       });
