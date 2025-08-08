@@ -1,3 +1,12 @@
+## [4.0.0](https://github.com/tabkram/execution-engine/compare/v3.5.0...v4.0.0) (2025-08-08)
+
+### Features
+
+* make context injection into functions optional by default when we `trace` ([1e9cf2a](https://github.com/tabkram/execution-engine/commit/1e9cf2a30e62d4282ee4764e9cbea63526f5f664))
+
+### Bug Fixes
+
+* unnecessary npm script ([1aa31a0](https://github.com/tabkram/execution-engine/commit/1aa31a007190eac04bdcf80a9332ebd63d15418b))
 ## [3.5.0](https://github.com/tabkram/execution-engine/compare/v3.4.0...v3.5.0) (2025-04-10)
 
 ### Features
