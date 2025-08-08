@@ -10,6 +10,7 @@ import { isAsync } from '../common/utils/isAsync';
  * @param options - Configuration options:
  *   - `contextKey`: Key to store trace context on the instance.
  *   - `errorStrategy`: Determines whether errors should be caught (`'catch'`) or thrown (`'throw'`).
+ *   - `injectContextInArgs` (boolean): Whether to inject the context (from `contextKey`) into the function arguments. Defaults to `false`.
  *
  * @returns A method decorator that wraps the original function with execution tracing.
  */
@@ -17,9 +18,10 @@ export function trace<O>(
   onTraceEvent: (traceContext: TraceContext<O>) => void,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   additionalContext: Record<string, any> = {},
-  options: { contextKey?: string; errorStrategy?: 'catch' | 'throw' } = {
+  options: { contextKey?: string; errorStrategy?: 'catch' | 'throw'; injectContextInArgs?: boolean } = {
     contextKey: undefined,
-    errorStrategy: 'throw'
+    errorStrategy: 'throw',
+    injectContextInArgs: false
   }
 ): MethodDecorator {
   return function (target: object, propertyKey: string | symbol, descriptor: PropertyDescriptor): void {

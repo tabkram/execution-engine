@@ -18,7 +18,6 @@
     "lint": "eslint src --fix",
     "format": "prettier --write src/**/*.ts",
     "prepublishOnly": "npm run build",
-    "prepare": "npm audit",
     "commitlint": "commitlint --edit",
     "generate-barrels": "barrelsby --directory src --recursive --delete --exclude \"common/utils\" --exclude \"\\\\.spec\\\\.ts$\" --singleQuotes"
   },

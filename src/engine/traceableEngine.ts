@@ -152,7 +152,9 @@ export class TraceableEngine {
     inputs: Array<unknown> = [],
     options: TraceOptions<Array<any>, O> | TraceOptions<Array<any>, O>['trace'] = {
       trace: {
-        id: [blockFunction.name ? blockFunction.name.replace('bound ', '') : 'function', new Date()?.getTime(), crypto.randomUUID()]?.join('_'),
+        id: [blockFunction.name ? blockFunction.name.replace('bound ', '') : 'function', new Date()?.getTime(), crypto.randomUUID()]?.join(
+          '_'
+        ),
         label: blockFunction.name ? blockFunction.name.replace('bound ', '') : 'function'
       },
       config: DEFAULT_TRACE_CONFIG
@@ -259,15 +261,15 @@ export class TraceableEngine {
 
       const previousNodes = !parallelEdge
         ? this.nodes?.filter(
-          (node) =>
-            !node.data.abstract &&
+            (node) =>
+              !node.data.abstract &&
               node.data.parent === nodeTrace.parent &&
               (!options?.parallel || !node.data.parallel || !node.data.parent || !nodeTrace.parent) &&
               node.data.id !== nodeTrace.id &&
               node.data.parent !== nodeTrace.id &&
               node.data.id !== nodeTrace.parent &&
               !this.edges.find((e) => e.data.source === node.data.id)
-        )
+          )
         : [];
       this.edges = [
         ...(this.edges ?? []),
@@ -283,17 +285,17 @@ export class TraceableEngine {
         })) ?? []),
         ...(parallelEdge
           ? [
-            {
-              data: {
-                id: `${parallelEdge.data.source}->${nodeTrace.id}`,
-                source: parallelEdge.data.source,
-                target: nodeTrace.id,
-                parent: nodeTrace.parent,
-                parallel: options?.parallel
-              },
-              group: 'edges' as const
-            }
-          ]
+              {
+                data: {
+                  id: `${parallelEdge.data.source}->${nodeTrace.id}`,
+                  source: parallelEdge.data.source,
+                  target: nodeTrace.id,
+                  parent: nodeTrace.parent,
+                  parallel: options?.parallel
+                },
+                group: 'edges' as const
+              }
+            ]
           : [])
       ];
     }

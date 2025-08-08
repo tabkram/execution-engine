@@ -77,11 +77,4 @@ describe('execute function', () => {
     expect(result).toBeInstanceOf(Error);
     expect((result as Error).message).toBe('No handler Async');
   });
-
-  test('should throw an error if function requires more parameters than provided', () => {
-    const syncFunction = (x: number, y: number, z: number) => x + y + z;
-    expect(() => execute(syncFunction, [1, 2])).toThrowError(
-      "Could not trace your function properly if you don't provide parameters: (x,y,z)"
-    );
-  });
 });

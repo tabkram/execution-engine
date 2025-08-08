@@ -35,7 +35,7 @@ describe('ExecutionTrace', () => {
         return 'Hello World response with Trace!';
       }
 
-      const response = executionTrace(helloWorldWithTrace);
+      const response = executionTrace(helloWorldWithTrace, undefined, undefined, { injectContextInArgs: true });
       expect(response).toMatchObject(successfullExecutionTraceExpectation);
     });
   });
@@ -56,7 +56,7 @@ describe('ExecutionTrace', () => {
         return 'Hello World async response with Trace!';
       }
 
-      const response = await executionTrace(helloWorldAsyncWithTrace);
+      const response = await executionTrace(helloWorldAsyncWithTrace, undefined, undefined, { injectContextInArgs: true });
       expect(response).toMatchObject(successfullExecutionTraceExpectation);
     });
   });
@@ -125,7 +125,8 @@ describe('ExecutionTrace', () => {
       const response = executionTrace.bind({ __execution: { context: { metadata: { requestId: '12345' } } } })(
         divisionFunction,
         [1, 2],
-        onTraceEventMock
+        onTraceEventMock,
+        { injectContextInArgs: true }
       );
       expect(onTraceEventMock).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -142,7 +143,8 @@ describe('ExecutionTrace', () => {
       const traceContextMock = { context: { metadata: { requestId: '12345' } } };
       const response = executionTrace.bind({ __execution: traceContextMock })(divisionFunction, [1, 0], onTraceEventMock, {
         errorStrategy: 'catch',
-        contextKey: '__execution'
+        contextKey: '__execution',
+        injectContextInArgs: true
       });
       expect(onTraceEventMock).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -161,7 +163,7 @@ describe('ExecutionTrace', () => {
         fetchDataFunction,
         ['https://api.example.com/data'],
         onTraceEventMock,
-        { contextKey: '__execution' }
+        { contextKey: '__execution', injectContextInArgs: true }
       );
       expect(onTraceEventMock).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -178,7 +180,8 @@ describe('ExecutionTrace', () => {
       const traceContextMock = { context: { metadata: { requestId: '12345' } } };
       const response = await executionTrace.bind({ __execution: traceContextMock })(fetchDataFunction, ['invalid-url'], onTraceEventMock, {
         errorStrategy: 'catch',
-        contextKey: '__execution'
+        contextKey: '__execution',
+        injectContextInArgs: true
       });
       expect(onTraceEventMock).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -200,7 +203,7 @@ describe('ExecutionTrace', () => {
           fetchDataFunction,
           ['invalid-url'],
           onTraceEventMock,
-          { contextKey: '__execution' }
+          { contextKey: '__execution', injectContextInArgs: true }
         )
       ).rejects.toThrow('Invalid URL provided.'); // Check the error message
 
