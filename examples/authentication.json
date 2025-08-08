@@ -1,77 +1,77 @@
 [
   {
     "data": {
-      "id": "registerUser_1740522020294_1964fa9d-d423-430b-8b04-393b3d106f1f",
+      "id": "registerUser_1754666078910_f4b93092-9208-47fd-8c4f-14fca5dbf97e",
       "label": "registerUser",
       "inputs": [
         "john_doe",
         "secure_password"
       ],
       "outputs": "User john_doe successfully registered",
-      "startTime": "2025-02-25T22:20:20.295Z",
-      "endTime": "2025-02-25T22:20:25.299Z",
-      "duration": 5004.060708999634,
-      "elapsedTime": "5 seconds and 4.061 ms",
+      "startTime": "2025-08-08T15:14:38.910Z",
+      "endTime": "2025-08-08T15:14:43.913Z",
+      "duration": 5003.102041989565,
+      "elapsedTime": "5 seconds and 3.102 ms",
       "narratives": [],
       "parallel": false,
       "abstract": false,
-      "createTime": "2025-02-25T22:20:25.301Z"
+      "createTime": "2025-08-08T15:14:43.914Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "loginUser_1740522025301_897fb403-54c0-4f7b-b7e9-f6515f454264",
+      "id": "loginUser_1754666083914_6eee6810-1b81-4890-b5db-9b4c7ecd3658",
       "label": "loginUser",
       "inputs": [
         "john_doe",
         "secure_password"
       ],
       "outputs": "User john_doe successfully logged in",
-      "startTime": "2025-02-25T22:20:25.301Z",
-      "endTime": "2025-02-25T22:20:28.302Z",
-      "duration": 3001.5748329162598,
-      "elapsedTime": "3 seconds and 1.575 ms",
+      "startTime": "2025-08-08T15:14:43.914Z",
+      "endTime": "2025-08-08T15:14:46.916Z",
+      "duration": 3002.5040000081062,
+      "elapsedTime": "3 seconds and 2.504 ms",
       "narratives": [],
       "parallel": false,
       "abstract": false,
-      "createTime": "2025-02-25T22:20:28.303Z"
+      "createTime": "2025-08-08T15:14:46.917Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "getUserInformation_1740522028303_58803370-db37-42be-9650-0989b088eb43",
+      "id": "getUserInformation_1754666086917_3c66a9f8-f687-4fad-9e42-97e616071d3b",
       "label": "getUserInformation",
       "inputs": [
         "john_doe"
       ],
       "outputs": "User Information for john_doe: Full Name - John Doe, Email - john.doe@example.com, Role - User",
-      "startTime": "2025-02-25T22:20:28.303Z",
-      "endTime": "2025-02-25T22:20:29.303Z",
-      "duration": 1000.10870885849,
-      "elapsedTime": "1 second and 0.109 ms",
+      "startTime": "2025-08-08T15:14:46.918Z",
+      "endTime": "2025-08-08T15:14:47.919Z",
+      "duration": 1001.6173750162125,
+      "elapsedTime": "1 second and 1.617 ms",
       "narratives": [],
       "parallel": false,
       "abstract": false,
-      "createTime": "2025-02-25T22:20:29.304Z"
+      "createTime": "2025-08-08T15:14:47.921Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "registerUser_1740522020294_1964fa9d-d423-430b-8b04-393b3d106f1f->loginUser_1740522025301_897fb403-54c0-4f7b-b7e9-f6515f454264",
-      "source": "registerUser_1740522020294_1964fa9d-d423-430b-8b04-393b3d106f1f",
-      "target": "loginUser_1740522025301_897fb403-54c0-4f7b-b7e9-f6515f454264",
+      "id": "registerUser_1754666078910_f4b93092-9208-47fd-8c4f-14fca5dbf97e->loginUser_1754666083914_6eee6810-1b81-4890-b5db-9b4c7ecd3658",
+      "source": "registerUser_1754666078910_f4b93092-9208-47fd-8c4f-14fca5dbf97e",
+      "target": "loginUser_1754666083914_6eee6810-1b81-4890-b5db-9b4c7ecd3658",
       "parallel": false
     },
     "group": "edges"
   },
   {
     "data": {
-      "id": "loginUser_1740522025301_897fb403-54c0-4f7b-b7e9-f6515f454264->getUserInformation_1740522028303_58803370-db37-42be-9650-0989b088eb43",
-      "source": "loginUser_1740522025301_897fb403-54c0-4f7b-b7e9-f6515f454264",
-      "target": "getUserInformation_1740522028303_58803370-db37-42be-9650-0989b088eb43",
+      "id": "loginUser_1754666083914_6eee6810-1b81-4890-b5db-9b4c7ecd3658->getUserInformation_1754666086917_3c66a9f8-f687-4fad-9e42-97e616071d3b",
+      "source": "loginUser_1754666083914_6eee6810-1b81-4890-b5db-9b4c7ecd3658",
+      "target": "getUserInformation_1754666086917_3c66a9f8-f687-4fad-9e42-97e616071d3b",
       "parallel": false
     },
     "group": "edges"

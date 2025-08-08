@@ -1,20 +1,20 @@
 [
   {
     "data": {
-      "id": "function_1740522032374_d9532c94-673a-4f96-8fb3-9d58b3c725c7",
+      "id": "function_1754666088682_5033f441-43fe-4287-b978-543ba463ea57",
       "label": "Project Initiation",
       "inputs": [
         "projectX"
       ],
       "outputs": "init ok !",
-      "startTime": "2025-02-25T22:20:32.374Z",
-      "endTime": "2025-02-25T22:20:32.375Z",
-      "duration": 1.1717078685760498,
-      "elapsedTime": "1.172 ms",
+      "startTime": "2025-08-08T15:14:48.683Z",
+      "endTime": "2025-08-08T15:14:48.683Z",
+      "duration": 0.3641670048236847,
+      "elapsedTime": "0.364 ms",
       "narratives": [],
       "parallel": false,
       "abstract": false,
-      "createTime": "2025-02-25T22:20:32.377Z"
+      "createTime": "2025-08-08T15:14:48.683Z"
     },
     "group": "nodes"
   },
@@ -25,38 +25,38 @@
       "narratives": [],
       "parallel": false,
       "abstract": false,
-      "createTime": "2025-02-25T22:20:32.378Z",
+      "createTime": "2025-08-08T15:14:48.683Z",
       "inputs": [
         "projectX"
       ],
       "outputs": "design and planning results",
-      "startTime": "2025-02-25T22:20:32.377Z",
-      "endTime": "2025-02-25T22:20:32.379Z",
-      "duration": 2.0948328971862793,
-      "elapsedTime": "2.095 ms",
-      "updateTime": "2025-02-25T22:20:32.379Z"
+      "startTime": "2025-08-08T15:14:48.683Z",
+      "endTime": "2025-08-08T15:14:48.683Z",
+      "duration": 0.2744159996509552,
+      "elapsedTime": "0.274 ms",
+      "updateTime": "2025-08-08T15:14:48.683Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "function_1740522032377_112b8b58-cacd-401b-80d6-1f56e45a88d4",
+      "id": "function_1754666088683_8cf0a850-692b-45a9-8c98-913269f02df0",
       "label": "Vehicle Design",
       "parent": "designAndPlanning",
       "parallel": true,
       "abstract": false,
-      "createTime": "2025-02-25T22:20:32.378Z"
+      "createTime": "2025-08-08T15:14:48.683Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "function_1740522032378_4e81650b-ae68-41dd-95d5-1ca4c1aa1a77",
+      "id": "function_1754666088683_1d10b94a-221f-4f7b-b68e-a7778ce07dd2",
       "label": "Production Planning",
       "parent": "designAndPlanning",
       "parallel": true,
       "abstract": false,
-      "createTime": "2025-02-25T22:20:32.379Z"
+      "createTime": "2025-08-08T15:14:48.683Z"
     },
     "group": "nodes"
   },
@@ -67,7 +67,7 @@
       "narratives": [],
       "parallel": false,
       "abstract": false,
-      "createTime": "2025-02-25T22:20:32.379Z",
+      "createTime": "2025-08-08T15:14:48.684Z",
       "inputs": [
         "design and planning results"
       ],
@@ -75,33 +75,33 @@
         "engine",
         "chassis"
       ],
-      "startTime": "2025-02-25T22:20:32.379Z",
-      "endTime": "2025-02-25T22:20:32.380Z",
-      "duration": 1.136125087738037,
-      "elapsedTime": "1.136 ms",
-      "updateTime": "2025-02-25T22:20:32.380Z"
+      "startTime": "2025-08-08T15:14:48.683Z",
+      "endTime": "2025-08-08T15:14:48.684Z",
+      "duration": 0.17583400011062622,
+      "elapsedTime": "0.176 ms",
+      "updateTime": "2025-08-08T15:14:48.684Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "function_1740522032379_8579f3a3-27a2-49e3-abfc-7381c153f02f",
+      "id": "function_1754666088684_0f577b9a-9d20-4a84-bd7a-f1e704d09a90",
       "label": "Engine Manufacturing",
       "parent": "ComponentManufacturing",
       "parallel": true,
       "abstract": false,
-      "createTime": "2025-02-25T22:20:32.379Z"
+      "createTime": "2025-08-08T15:14:48.684Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "function_1740522032379_693f8093-1c59-4612-9ad8-470eb8f878e2",
+      "id": "function_1754666088684_d939705e-f4f9-48c9-a29f-9a25733cd251",
       "label": "Body and Chassis Production",
       "parent": "ComponentManufacturing",
       "parallel": true,
       "abstract": false,
-      "createTime": "2025-02-25T22:20:32.380Z"
+      "createTime": "2025-08-08T15:14:48.684Z"
     },
     "group": "nodes"
   },
@@ -112,22 +112,22 @@
       "narratives": [],
       "parallel": false,
       "abstract": false,
-      "createTime": "2025-02-25T22:20:32.382Z",
+      "createTime": "2025-08-08T15:14:48.684Z",
       "parent": "VehicleAssembly",
       "inputs": [
         "design and planning results"
       ],
-      "startTime": "2025-02-25T22:20:32.381Z",
-      "endTime": "2025-02-25T22:20:32.383Z",
-      "duration": 2.058957815170288,
-      "elapsedTime": "2.059 ms",
-      "updateTime": "2025-02-25T22:20:32.383Z"
+      "startTime": "2025-08-08T15:14:48.684Z",
+      "endTime": "2025-08-08T15:14:48.684Z",
+      "duration": 0.3086249828338623,
+      "elapsedTime": "0.309 ms",
+      "updateTime": "2025-08-08T15:14:48.684Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "function_1740522032381_0f78e7cd-4c19-49e4-b255-ff16105fa810",
+      "id": "function_1754666088684_8360d267-2810-4304-b42c-95bec2a70ec0",
       "label": "Engine installation",
       "parent": "assembly",
       "parallel": false,
@@ -135,19 +135,19 @@
         "plans"
       ],
       "outputs": "ok!",
-      "startTime": "2025-02-25T22:20:32.381Z",
-      "endTime": "2025-02-25T22:20:32.382Z",
-      "duration": 0.18762493133544922,
-      "elapsedTime": "0.188 ms",
+      "startTime": "2025-08-08T15:14:48.684Z",
+      "endTime": "2025-08-08T15:14:48.684Z",
+      "duration": 0.016333013772964478,
+      "elapsedTime": "0.016 ms",
       "narratives": [],
       "abstract": false,
-      "createTime": "2025-02-25T22:20:32.382Z"
+      "createTime": "2025-08-08T15:14:48.684Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "function_1740522032382_b7c00af1-f65b-46f2-b357-a3488611e92c",
+      "id": "function_1754666088684_093684cb-00db-49cd-8570-3e123b2ea09b",
       "label": "Chassis integration",
       "parent": "assembly",
       "parallel": false,
@@ -155,19 +155,19 @@
         "plans"
       ],
       "outputs": "ok!",
-      "startTime": "2025-02-25T22:20:32.382Z",
-      "endTime": "2025-02-25T22:20:32.382Z",
-      "duration": 0.04004192352294922,
-      "elapsedTime": "0.040 ms",
+      "startTime": "2025-08-08T15:14:48.684Z",
+      "endTime": "2025-08-08T15:14:48.684Z",
+      "duration": 0.010832995176315308,
+      "elapsedTime": "0.011 ms",
       "narratives": [],
       "abstract": false,
-      "createTime": "2025-02-25T22:20:32.382Z"
+      "createTime": "2025-08-08T15:14:48.684Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "function_1740522032382_3b7e74d7-5c0d-4d60-98db-3fdb4c193cde",
+      "id": "function_1754666088684_8e783c1a-9d36-45af-b527-1aa49d982f7c",
       "label": "Interior assembly",
       "parent": "assembly",
       "parallel": false,
@@ -175,13 +175,13 @@
         "plans"
       ],
       "outputs": "ok!",
-      "startTime": "2025-02-25T22:20:32.382Z",
-      "endTime": "2025-02-25T22:20:32.382Z",
-      "duration": 0.05441594123840332,
-      "elapsedTime": "0.054 ms",
+      "startTime": "2025-08-08T15:14:48.684Z",
+      "endTime": "2025-08-08T15:14:48.684Z",
+      "duration": 0.016209006309509277,
+      "elapsedTime": "0.016 ms",
       "narratives": [],
       "abstract": false,
-      "createTime": "2025-02-25T22:20:32.383Z"
+      "createTime": "2025-08-08T15:14:48.684Z"
     },
     "group": "nodes"
   },
@@ -192,7 +192,7 @@
       "narratives": [],
       "parallel": false,
       "abstract": false,
-      "createTime": "2025-02-25T22:20:32.383Z",
+      "createTime": "2025-08-08T15:14:48.684Z",
       "inputs": [
         "assembly documents",
         [
@@ -204,76 +204,76 @@
         "engine",
         "chassis"
       ],
-      "startTime": "2025-02-25T22:20:32.380Z",
-      "endTime": "2025-02-25T22:20:32.383Z",
-      "duration": 2.856541872024536,
-      "elapsedTime": "2.857 ms",
-      "updateTime": "2025-02-25T22:20:32.383Z"
+      "startTime": "2025-08-08T15:14:48.684Z",
+      "endTime": "2025-08-08T15:14:48.684Z",
+      "duration": 0.45191699266433716,
+      "elapsedTime": "0.452 ms",
+      "updateTime": "2025-08-08T15:14:48.684Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "function_1740522032383_01ce359c-8ea0-4ea7-98c9-6091a6de1746",
+      "id": "function_1754666088684_fd37f0d9-5c06-4147-89b0-c3b9bc9e81b3",
       "label": "Final Assembly",
       "parent": "VehicleAssembly",
       "inputs": [
         "plans"
       ],
       "outputs": "ok!",
-      "startTime": "2025-02-25T22:20:32.383Z",
-      "endTime": "2025-02-25T22:20:32.383Z",
-      "duration": 0.06049990653991699,
-      "elapsedTime": "0.060 ms",
+      "startTime": "2025-08-08T15:14:48.684Z",
+      "endTime": "2025-08-08T15:14:48.684Z",
+      "duration": 0.015208005905151367,
+      "elapsedTime": "0.015 ms",
       "narratives": [],
       "parallel": false,
       "abstract": false,
-      "createTime": "2025-02-25T22:20:32.383Z"
+      "createTime": "2025-08-08T15:14:48.684Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "function_1740522032383_6b20d3a4-c2ca-48e7-a8e8-b43e418ec5f7",
+      "id": "function_1754666088684_7f3ad976-353c-4fb5-8888-996638ff3e87",
       "label": "Quality Assurance and Testing",
       "inputs": [
         "model X"
       ],
       "outputs": "bip bip",
-      "startTime": "2025-02-25T22:20:32.383Z",
-      "endTime": "2025-02-25T22:20:32.383Z",
-      "duration": 0.039041996002197266,
-      "elapsedTime": "0.039 ms",
+      "startTime": "2025-08-08T15:14:48.684Z",
+      "endTime": "2025-08-08T15:14:48.684Z",
+      "duration": 0.013584017753601074,
+      "elapsedTime": "0.014 ms",
       "narratives": [],
       "parallel": false,
       "abstract": false,
-      "createTime": "2025-02-25T22:20:32.383Z"
+      "createTime": "2025-08-08T15:14:48.684Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "function_1740522032384_32078ccb-ad0d-4ab6-aa80-ce82f3aff57d",
+      "id": "function_1754666088684_635c229d-a4b4-4003-ad9b-7180a1625a58",
       "label": "Delivery",
       "inputs": [
         "model X"
       ],
       "outputs": "bip bip",
-      "startTime": "2025-02-25T22:20:32.384Z",
-      "endTime": "2025-02-25T22:20:32.384Z",
-      "duration": 0.13662505149841309,
-      "elapsedTime": "0.137 ms",
+      "startTime": "2025-08-08T15:14:48.684Z",
+      "endTime": "2025-08-08T15:14:48.684Z",
+      "duration": 0.009000003337860107,
+      "elapsedTime": "0.009 ms",
       "narratives": [],
       "parallel": false,
       "abstract": false,
-      "createTime": "2025-02-25T22:20:32.385Z"
+      "createTime": "2025-08-08T15:14:48.684Z"
     },
     "group": "nodes"
   },
   {
     "data": {
-      "id": "function_1740522032374_d9532c94-673a-4f96-8fb3-9d58b3c725c7->designAndPlanning",
-      "source": "function_1740522032374_d9532c94-673a-4f96-8fb3-9d58b3c725c7",
+      "id": "function_1754666088682_5033f441-43fe-4287-b978-543ba463ea57->designAndPlanning",
+      "source": "function_1754666088682_5033f441-43fe-4287-b978-543ba463ea57",
       "target": "designAndPlanning",
       "parallel": false
     },
@@ -290,9 +290,9 @@
   },
   {
     "data": {
-      "id": "function_1740522032381_0f78e7cd-4c19-49e4-b255-ff16105fa810->function_1740522032382_b7c00af1-f65b-46f2-b357-a3488611e92c",
-      "source": "function_1740522032381_0f78e7cd-4c19-49e4-b255-ff16105fa810",
-      "target": "function_1740522032382_b7c00af1-f65b-46f2-b357-a3488611e92c",
+      "id": "function_1754666088684_8360d267-2810-4304-b42c-95bec2a70ec0->function_1754666088684_093684cb-00db-49cd-8570-3e123b2ea09b",
+      "source": "function_1754666088684_8360d267-2810-4304-b42c-95bec2a70ec0",
+      "target": "function_1754666088684_093684cb-00db-49cd-8570-3e123b2ea09b",
       "parent": "assembly",
       "parallel": false
     },
@@ -300,9 +300,9 @@
   },
   {
     "data": {
-      "id": "function_1740522032382_b7c00af1-f65b-46f2-b357-a3488611e92c->function_1740522032382_3b7e74d7-5c0d-4d60-98db-3fdb4c193cde",
-      "source": "function_1740522032382_b7c00af1-f65b-46f2-b357-a3488611e92c",
-      "target": "function_1740522032382_3b7e74d7-5c0d-4d60-98db-3fdb4c193cde",
+      "id": "function_1754666088684_093684cb-00db-49cd-8570-3e123b2ea09b->function_1754666088684_8e783c1a-9d36-45af-b527-1aa49d982f7c",
+      "source": "function_1754666088684_093684cb-00db-49cd-8570-3e123b2ea09b",
+      "target": "function_1754666088684_8e783c1a-9d36-45af-b527-1aa49d982f7c",
       "parent": "assembly",
       "parallel": false
     },
@@ -310,9 +310,9 @@
   },
   {
     "data": {
-      "id": "assembly->function_1740522032383_01ce359c-8ea0-4ea7-98c9-6091a6de1746",
+      "id": "assembly->function_1754666088684_fd37f0d9-5c06-4147-89b0-c3b9bc9e81b3",
       "source": "assembly",
-      "target": "function_1740522032383_01ce359c-8ea0-4ea7-98c9-6091a6de1746",
+      "target": "function_1754666088684_fd37f0d9-5c06-4147-89b0-c3b9bc9e81b3",
       "parent": "VehicleAssembly",
       "parallel": false
     },
@@ -329,18 +329,18 @@
   },
   {
     "data": {
-      "id": "VehicleAssembly->function_1740522032383_6b20d3a4-c2ca-48e7-a8e8-b43e418ec5f7",
+      "id": "VehicleAssembly->function_1754666088684_7f3ad976-353c-4fb5-8888-996638ff3e87",
       "source": "VehicleAssembly",
-      "target": "function_1740522032383_6b20d3a4-c2ca-48e7-a8e8-b43e418ec5f7",
+      "target": "function_1754666088684_7f3ad976-353c-4fb5-8888-996638ff3e87",
       "parallel": false
     },
     "group": "edges"
   },
   {
     "data": {
-      "id": "function_1740522032383_6b20d3a4-c2ca-48e7-a8e8-b43e418ec5f7->function_1740522032384_32078ccb-ad0d-4ab6-aa80-ce82f3aff57d",
-      "source": "function_1740522032383_6b20d3a4-c2ca-48e7-a8e8-b43e418ec5f7",
-      "target": "function_1740522032384_32078ccb-ad0d-4ab6-aa80-ce82f3aff57d",
+      "id": "function_1754666088684_7f3ad976-353c-4fb5-8888-996638ff3e87->function_1754666088684_635c229d-a4b4-4003-ad9b-7180a1625a58",
+      "source": "function_1754666088684_7f3ad976-353c-4fb5-8888-996638ff3e87",
+      "target": "function_1754666088684_635c229d-a4b4-4003-ad9b-7180a1625a58",
       "parallel": false
     },
     "group": "edges"

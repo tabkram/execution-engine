@@ -140,7 +140,7 @@ describe('trace decorator', () => {
     }
 
     class MyClass {
-      @trace(onTraceEventDivisionMock, traceContextDivision, { contextKey: '__execution' })
+      @trace(onTraceEventDivisionMock, traceContextDivision, { contextKey: '__execution', injectContextInArgs: true })
       divisionFunction(x: number, y: number, traceContext: Record<string, unknown> = {}): number {
         if (y === 0) {
           traceContext['narratives'] = [`Throwing because division of ${x} by ${y}`];
@@ -150,7 +150,7 @@ describe('trace decorator', () => {
         return x / y;
       }
 
-      @trace(onTraceEventFetchDataMock, traceContextFetchData, { contextKey: '__execution' })
+      @trace(onTraceEventFetchDataMock, traceContextFetchData, { contextKey: '__execution', injectContextInArgs: true })
       async fetchDataFunction(url: string, traceContext: Record<string, unknown> = {}): Promise<{ data: string }> {
         traceContext['narratives'] = [`Fetching data from ${url}`];
         if (!url.startsWith('http')) {
@@ -160,13 +160,13 @@ describe('trace decorator', () => {
         return { data: 'Success' };
       }
 
-      @trace(onTraceEventDivisionMock, traceContextDivision)
+      @trace(onTraceEventDivisionMock, traceContextDivision, { injectContextInArgs: true })
       @empty()
       divisionFunctionOnAnotherDecorator(x: number, y: number, traceContext: Record<string, unknown> = {}): number {
         return this.divisionFunction(x, y, traceContext);
       }
 
-      @trace(onTraceEventFetchDataMock, traceContextFetchData)
+      @trace(onTraceEventFetchDataMock, traceContextFetchData, { injectContextInArgs: true })
       @empty()
       async fetchDataFunctionOnAnotherDecorator(
         url: string,
@@ -177,7 +177,7 @@ describe('trace decorator', () => {
         return this.fetchDataFunction(url, traceContext);
       }
 
-      @trace(onTraceEventFetchDataMock, traceContextFetchData, { errorStrategy: 'catch' })
+      @trace(onTraceEventFetchDataMock, traceContextFetchData, { errorStrategy: 'catch', injectContextInArgs: true })
       @empty()
       async fetchDataFunctionOnAnotherDecoratorCoughtError(
         url: string,

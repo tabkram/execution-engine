@@ -5,7 +5,7 @@ describe('cache decorator', () => {
     let memoizationCheckCount = 0;
     let memoizedCalls = 0;
     let totalFunctionCalls = 0;
-    let bypassCache= false;
+    let bypassCache = false;
     class DataService {
       @cache({
         ttl: 3000,
@@ -104,8 +104,6 @@ describe('cache decorator', () => {
     expect(memoizedCalls).toBe(1); // ID 2 result is NOT RETRIEVED FROM CACHE AS THEY ARE BYPASSED
     expect(totalFunctionCalls).toBe(2); // extra new call as  bypassCache = true
     expect(memoizationCheckCount).toBe(3); // 5 checks in total
-
-
 
     // test NO cache for a throwing async method
     memoizationCheckCount = 0;

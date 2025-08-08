@@ -1,4 +1,3 @@
-import { extractFunctionParamNames } from '../common/utils/functionMetadata';
 import { isAsync } from '../common/utils/isAsync';
 
 // Overload for synchronous blockFunction returning OUTPUT
@@ -48,12 +47,6 @@ export function execute<INPUT extends unknown[], OUTPUT, RESPONSE = OUTPUT, ERRO
   successCallback?: (output: OUTPUT, isPromise: boolean) => RESPONSE,
   errorCallback?: (error: unknown, isPromise: boolean) => ERROR
 ): RESPONSE | Promise<RESPONSE> | ERROR | Promise<ERROR> {
-  const functionParamNames = extractFunctionParamNames(blockFunction);
-  if (blockFunction.length > inputs.length + extraInputs.length) {
-    const paramNames = extraInputs.length ? functionParamNames.slice(0, -extraInputs.length) : functionParamNames;
-    throw new Error(`Could not trace your function properly if you don't provide parameters: (${paramNames})`);
-  }
-
   if (isAsync(blockFunction)) {
     return blockFunction
       .bind(this)(...inputs, ...extraInputs)

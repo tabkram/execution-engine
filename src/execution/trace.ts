@@ -21,17 +21,17 @@ function calculateTimeAndDuration(executionTimer: ExecutionTimer): TimerDetailsM
 }
 
 export function executionTrace<O>(
-  blockFunction: (...params: unknown[])=> Promise<O>,
+  blockFunction: (...params: unknown[]) => Promise<O>,
   inputs?: Array<unknown>,
   onTraceEvent?: (traceContext: TraceContext<O>) => void,
-  options?: { contextKey?: string; errorStrategy?: 'catch' | 'throw' }
+  options?: { contextKey?: string; errorStrategy?: 'catch' | 'throw'; injectContextInArgs?: boolean }
 ): Promise<ExecutionTrace<Array<unknown>, Awaited<O>>>;
 
 export function executionTrace<O>(
   blockFunction: (...params: unknown[]) => O,
   inputs?: Array<unknown>,
   onTraceEvent?: (traceContext: TraceContext<O>) => void,
-  options?: { contextKey?: string; errorStrategy?: 'catch' | 'throw' }
+  options?: { contextKey?: string; errorStrategy?: 'catch' | 'throw'; injectContextInArgs?: boolean }
 ): ExecutionTrace<Array<unknown>, O>;
 
 /**
@@ -48,6 +48,7 @@ export function executionTrace<O>(
  *   - `errorStrategy`: Determines how errors are handled:
  *     - `'catch'`: Captures errors and includes them in the trace.
  *     - `'throw'`: Throws the error after recording it in the trace.
+ *     - `injectContextInArgs` (boolean): Whether to inject the context (from `contextKey`) into the function arguments. Defaults to `false`.
  *
  * @returns An Either:
  *   - `ExecutionTrace` object containing execution details.
@@ -57,9 +58,10 @@ export function executionTrace<O>(
   blockFunction: (...params: unknown[]) => O | Promise<O>,
   inputs: Array<unknown> = [],
   onTraceEvent?: (traceContext: TraceContext<O>) => void,
-  options: { contextKey?: string; errorStrategy?: 'catch' | 'throw' } = {
+  options: { contextKey?: string; errorStrategy?: 'catch' | 'throw'; injectContextInArgs?: boolean } = {
     contextKey: undefined,
-    errorStrategy: 'throw'
+    errorStrategy: 'throw',
+    injectContextInArgs: false
   }
 ): Promise<ExecutionTrace<Array<unknown>, Awaited<O>>> | ExecutionTrace<Array<unknown>, O> {
   const id = crypto.randomUUID();
@@ -76,7 +78,7 @@ export function executionTrace<O>(
   return (execute.bind(this) as typeof execute)(
     blockFunction.bind(this),
     inputs,
-    [traceContext],
+    options?.injectContextInArgs ? [traceContext] : [],
     function (outputs: O, isPromise: boolean): Promise<ExecutionTrace<Array<unknown>, Awaited<O>>> | ExecutionTrace<Array<unknown>, O> {
       const { startTime, ...traceContextWithoutStartTime } = traceContext;
       traceContext = {

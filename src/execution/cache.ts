@@ -32,7 +32,6 @@ export async function executeCache<O>(
   }
   const cachedValue: O | undefined = (await cacheStore.get(cacheKey)) as O;
 
-
   if (typeof options.onCacheEvent === 'function') {
     options.onCacheEvent({
       ttl,
