@@ -9,6 +9,9 @@ A TypeScript library for tracing and visualizing code execution workflows
 
 - [Installation](#installation-)
 - [Components](#components-)
+    - [Trace](#trace)
+    - [Cache](#cache)
+    - [Memoize](#memoize)
     - [ExecutionTimer](#executiontimer)
     - [TraceableEngine](#traceableengine)
     - [ExecutionEngine](#executionengine)
@@ -92,6 +95,21 @@ You can:
   tool. [→ See the result ←](https://tabkram.github.io/json-to-graph/?data=https://raw.githubusercontent.com/tabkram/execution-engine/main/examples/usage2.json)
 
 ## Components 🧩
+
+### Trace
+
+The __[Trace](./Trace.md)__ decorator (`@trace`) and its underlying `executionTrace` function capture the execution
+details of a function or method: inputs, outputs, errors, timing, and metadata.
+
+### Cache
+
+The __[Cache](./Cache.md)__ decorator (`@cache`) and its underlying `executeCache` function store function results
+to avoid redundant expensive computations, with configurable TTL, cache key, and cache store.
+
+### Memoize
+
+The __[Memoize](./Memoize.md)__ decorator (`@memoize`) and its underlying `executeMemoize` function deduplicate
+short-lived repeated calls with the same inputs, useful for optimizing recursive or bursty computations.
 
 ### ExecutionTimer
 
