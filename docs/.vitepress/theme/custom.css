@@ -1,0 +1,596 @@
+/**
+ * Execution Engine component and layout styles.
+ * Edit colors, surfaces, radii and shadows in tokens.scss.
+ */
+
+@media (min-width: 640px) {
+  :root {
+    --vp-home-hero-image-filter: blur(26px);
+  }
+}
+
+@media (min-width: 960px) {
+  :root {
+    --vp-home-hero-image-filter: blur(30px);
+  }
+}
+
+::selection {
+  background: var(--ee-selection-bg);
+}
+
+:where(.VPButton, .ee-part-links a, .ee-small-card, .ee-banner, .ee-card a):focus-visible {
+  outline: 3px solid var(--ee-focus-ring);
+  outline-offset: 3px;
+}
+
+.VPButton.medium {
+  border-radius: var(--ee-radius-md);
+  transition: background-color var(--ee-motion-fast), border-color var(--ee-motion-fast),
+    box-shadow var(--ee-motion-fast), transform var(--ee-motion-fast);
+}
+
+.VPButton.brand {
+  box-shadow: var(--ee-button-shadow);
+}
+
+.VPButton.brand:hover {
+  box-shadow: var(--ee-button-shadow-hover);
+  transform: translateY(-1px);
+}
+
+.VPButton.alt {
+  border-color: var(--ee-border);
+}
+
+.VPSidebarItem.is-link > .item > .link {
+  margin: 0 -8px;
+  padding: 0 8px;
+  border-radius: var(--ee-radius-sm);
+  transition: background-color var(--ee-motion-fast);
+}
+
+.VPSidebarItem.is-link > .item > .link:hover {
+  background: var(--ee-neutral-soft);
+}
+
+.VPSidebarItem.is-active > .item > .link {
+  background: var(--ee-brand-soft);
+}
+
+.vp-doc .custom-block {
+  border-radius: var(--ee-radius-md);
+}
+/*
+ * Hero typography.
+ *
+ * The default theme sizes `name` and `text` almost identically, which reads as
+ * mush when the slogan is a full sentence. Give the three lines a clear scale —
+ * brand, then promise, then detail — with a tightening weight and colour ramp,
+ * and cap the measure so no line runs the full width of the column.
+ */
+.VPHero .name {
+  display: block;
+  margin-bottom: 2px;
+  /* `background-clip: text` clips to the line box, so a tight line-height cuts
+     the descender on "g". Give it room rather than shrinking the type. */
+  padding-bottom: 0.06em;
+  font-size: clamp(38px, 5.6vw, 62px);
+  line-height: 1.18;
+  letter-spacing: -0.025em;
+}
+
+.VPHero .ee-hero-kicker {
+  margin: 0 0 10px;
+  color: var(--ee-hero-kicker-color);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.VPHero .text {
+  display: block;
+  font-size: clamp(22px, 3.2vw, 32px);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: var(--ee-hero-heading-color);
+}
+
+/*
+ * The slogan is two clauses split by a <br>. On desktop, pin them to exactly two
+ * lines: `nowrap` still honours <br>, so it prevents a wrap mid-clause while
+ * keeping the intended break. Size is tied to viewport width so the longer
+ * clause always fits the column — a fixed size would re-wrap on narrow desktops.
+ */
+@media (min-width: 960px) {
+  .VPHero .text {
+    white-space: nowrap;
+    /* The column stops growing once the container hits its 1152px max (~576px
+       of text), so the cap is set to the largest size the longer clause fits
+       at that width — measured at 32.6px, held at 31px for safety. */
+    font-size: min(2.4vw, 31px);
+  }
+}
+
+.VPHero .ee-hero-support {
+  max-width: 46ch;
+  margin: 14px 0 0;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--ee-hero-support-color);
+}
+
+.VPHero .ee-hero-install {
+  display: table;
+  margin-top: 16px;
+  padding: 9px 14px;
+  border: 1px solid var(--ee-install-border);
+  border-radius: var(--ee-radius-sm);
+  background: var(--ee-install-bg);
+  box-shadow: var(--ee-install-shadow);
+  color: var(--ee-install-text);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* Rhythm: a tight brand/slogan pair, then progressively wider gaps down to the
+   buttons, so the block reads as one unit instead of four stacked lines. */
+.VPHero .heading {
+  margin-bottom: 0;
+}
+
+.VPHero .actions {
+  padding-top: 22px;
+}
+
+/* Centre the copy against the mark rather than letting it sit top-aligned. */
+@media (min-width: 960px) {
+  .VPHero .container {
+    align-items: center;
+  }
+}
+
+/* On the stacked mobile layout the caps would centre awkwardly. */
+@media (max-width: 959px) {
+  .VPHero .text,
+  .VPHero .ee-hero-support {
+    max-width: 100%;
+  }
+}
+
+.VPHero .image-bg {
+  width: 330px;
+  height: 330px;
+  opacity: 0.5;
+}
+
+.VPHome .VPHero img.image-src {
+  width: 310px;
+  height: auto;
+  max-width: 310px;
+  max-height: 320px;
+  filter: var(--ee-logo-shadow);
+}
+
+@media (max-width: 959px) {
+  .VPHome .VPHero.VPHomeHero {
+    padding-top: calc(var(--vp-nav-height) + 12px);
+  }
+
+  .VPHero .image {
+    margin: 0 -8px 48px;
+  }
+
+  .VPHero .image-container {
+    width: min(calc(100vw - 32px), 360px);
+    height: 320px;
+    transform: translateY(28px);
+  }
+}
+
+@media (min-width: 960px) {
+  .VPHome .VPHero .container {
+    max-width: 1200px;
+    gap: 40px;
+  }
+
+  .VPHome .VPHero.has-image .main {
+    max-width: 640px;
+  }
+
+  .VPHero .image-bg {
+    width: 420px;
+    height: 420px;
+  }
+
+  .VPHero .image-container {
+    width: 430px;
+    height: 416px;
+    transform: translate(8px, 18px);
+  }
+
+  .VPHome .VPHero img.image-src {
+    width: 400px;
+    max-width: 400px;
+    max-height: 416px;
+  }
+}
+
+/*
+ * Vertical rhythm: the stock hero reserves 144px of top padding, which pushed
+ * the tiles off screen for no benefit. Tighten it at every breakpoint so the
+ * hero and the two lead tiles share the first screen.
+ */
+/* Specificity note: VitePress styles the hero via a Vue scoped selector
+   (.VPHero[data-v-…]), which outranks a bare .VPHero. Qualify with both the
+   wrapper and the second class so these win without !important. */
+.VPHome .VPHero.VPHomeHero {
+  padding: 40px 24px 32px;
+  background-image: var(--ee-home-hero-bg);
+}
+
+@media (min-width: 640px) {
+  .VPHome .VPHero.VPHomeHero {
+    padding: 40px 48px 28px;
+  }
+}
+
+@media (min-width: 960px) {
+  .VPHome .VPHero.VPHomeHero {
+    padding: 56px 40px 36px;
+  }
+}
+
+/* ==========================================================================
+   Home: the two parts of the library, as blocks that contain their own pages.
+   Written as markup in index.md because the theme's `features:` frontmatter is
+   a flat list and cannot nest.
+   ========================================================================== */
+
+/* The home content container already supplies horizontal padding; adding more
+   here doubled it and squeezed the blocks on narrow screens. */
+.VPHome .vp-doc > div {
+  max-width: 1152px;
+  margin: 0 auto;
+  padding: 0 0 24px;
+}
+
+.ee-parts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(330px, 100%), 1fr));
+  gap: 20px;
+}
+
+.ee-part {
+  position: relative;
+  overflow: hidden;
+  padding: 22px 22px 18px;
+  border: 1px solid var(--ee-border);
+  border-radius: var(--ee-radius-lg);
+  background: var(--ee-card-bg);
+  box-shadow: var(--ee-card-shadow);
+  transition: border-color var(--ee-motion-base), box-shadow var(--ee-motion-base), transform var(--ee-motion-base);
+}
+
+.ee-part::before {
+  position: absolute;
+  top: 0;
+  right: 22px;
+  left: 22px;
+  height: 1px;
+  background: var(--ee-accent-line);
+  content: '';
+  opacity: 0.55;
+}
+
+.ee-part:hover {
+  border-color: var(--vp-c-brand-2);
+  box-shadow: var(--ee-card-shadow-hover);
+  transform: translateY(-2px);
+}
+
+.ee-part-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.ee-part-icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--ee-radius-md);
+  background: var(--ee-icon-bg);
+  font-size: 19px;
+}
+
+/* .vp-doc gives h2 a top rule and large margins; neither suits a card header. */
+.VPHome .ee-part h2 {
+  margin: 0;
+  padding: 0;
+  border-top: 0;
+  font-size: 20px;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.VPHome .ee-part .ee-part-sub {
+  margin: 3px 0 0;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--vp-c-text-2);
+}
+
+.ee-part-links {
+  display: grid;
+  gap: 3px;
+}
+
+.VPHome .ee-part-links a {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 9px 34px 9px 11px;
+  border: 1px solid transparent;
+  border-radius: var(--ee-radius-sm);
+  text-decoration: none;
+  transition: background-color var(--ee-motion-fast), border-color var(--ee-motion-fast);
+}
+
+.VPHome .ee-part-links a::after {
+  position: absolute;
+  top: 50%;
+  right: 13px;
+  color: var(--vp-c-brand-1);
+  content: '→';
+  opacity: 0;
+  transform: translate(-4px, -50%);
+  transition: opacity var(--ee-motion-fast), transform var(--ee-motion-fast);
+}
+
+.VPHome .ee-part-links a:hover {
+  border-color: var(--ee-border);
+  background: var(--ee-surface-soft);
+}
+
+.VPHome .ee-part-links a:hover::after {
+  opacity: 1;
+  transform: translate(0, -50%);
+}
+
+.ee-link-title {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--vp-c-brand-1);
+}
+
+.ee-link-desc {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--vp-c-text-2);
+}
+
+/* The two cross-cutting notes below the blocks — deliberately lighter. */
+.ee-small {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.VPHome .ee-small-card {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--ee-border);
+  border-radius: var(--ee-radius-lg);
+  background: var(--ee-card-bg);
+  box-shadow: var(--ee-card-shadow);
+  text-decoration: none;
+  transition: border-color var(--ee-motion-base), box-shadow var(--ee-motion-base), transform var(--ee-motion-base);
+}
+
+.VPHome .ee-small-card:hover {
+  border-color: var(--vp-c-brand-2);
+  box-shadow: var(--ee-card-shadow-hover);
+  transform: translateY(-2px);
+}
+
+.ee-small-icon {
+  flex: 0 0 auto;
+  font-size: 17px;
+  line-height: 1.4;
+}
+
+.ee-small-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.VPFooter strong {
+  color: var(--vp-c-text-1);
+  font-weight: 650;
+}
+
+.Layout.ee-home .VPFooter {
+  margin-top: calc(0px - var(--vp-nav-height) - 32px);
+  padding-top: 26px;
+  padding-bottom: 26px;
+}
+
+@media (min-width: 960px) {
+  .Layout.ee-home .VPFooter {
+    margin-top: calc(0px - var(--vp-nav-height) - var(--vp-nav-height));
+  }
+}
+
+.ee-small-body strong {
+  font-size: 14px;
+  color: var(--vp-c-text-1);
+}
+
+.ee-small-body span {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--vp-c-text-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .VPButton,
+  .ee-part,
+  .VPHome .ee-small-card,
+  .VPHome .ee-part-links a::after,
+  .vp-doc a.ee-banner,
+  .ee-card {
+    transition: none;
+  }
+}
+
+/* Keep wide API signature tables scrollable instead of blowing out the layout. */
+.vp-doc table {
+  display: block;
+  border-radius: var(--ee-radius-sm);
+  overflow-x: auto;
+}
+
+/* ---- Link banner (e.g. the json-to-graph viewer) ---- */
+.vp-doc a.ee-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 24px 0;
+  padding: 16px 18px;
+  border: 1px solid var(--ee-border);
+  border-radius: var(--ee-radius-md);
+  background: var(--ee-surface-soft);
+  text-decoration: none;
+  font-weight: 400;
+  transition: border-color var(--ee-motion-base), background-color var(--ee-motion-base),
+    box-shadow var(--ee-motion-base), transform var(--ee-motion-base);
+}
+
+.vp-doc a.ee-banner:hover {
+  border-color: var(--vp-c-brand-1);
+  background: var(--ee-surface-raised);
+  box-shadow: var(--ee-card-shadow);
+  transform: translateY(-1px);
+}
+
+.ee-banner img {
+  flex: 0 0 auto;
+  border-radius: var(--ee-radius-sm);
+}
+
+.ee-banner-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+  line-height: 1.45;
+}
+
+.ee-banner-body strong {
+  color: var(--vp-c-text-1);
+}
+
+.ee-banner-body span {
+  font-size: 14px;
+  color: var(--vp-c-text-2);
+}
+
+.ee-banner-cta {
+  flex: 0 0 auto;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--vp-c-brand-1);
+}
+
+/* Align small project icons with surrounding link text. */
+.ee-inline-project-icon {
+  display: inline-block;
+  margin-right: 4px;
+  border-radius: calc(var(--ee-radius-sm) / 2);
+  vertical-align: -4px;
+}
+
+/* ---- Example cards ---- */
+.ee-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: 16px;
+  margin: 20px 0 24px;
+}
+
+.ee-card {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 18px;
+  border: 1px solid var(--ee-border);
+  border-radius: var(--ee-radius-md);
+  background: var(--ee-surface-soft);
+  transition: border-color var(--ee-motion-base), background-color var(--ee-motion-base);
+}
+
+.ee-card:hover {
+  border-color: var(--vp-c-brand-1);
+  background: var(--ee-surface-raised);
+}
+
+.vp-doc .ee-card h4 {
+  margin: 0 0 6px;
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+.vp-doc .ee-card p {
+  margin: 0 0 12px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--vp-c-text-2);
+}
+
+.vp-doc .ee-card a.ee-open {
+  margin-top: auto;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.vp-doc .ee-card a.ee-open:hover {
+  text-decoration: underline;
+}
+
+.ee-card .ee-src {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--ee-border);
+}
+
+.vp-doc .ee-card .ee-src a {
+  font-family: var(--vp-font-family-mono);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--vp-c-text-2);
+  text-decoration: none;
+}
+
+.vp-doc .ee-card .ee-src a:hover {
+  color: var(--vp-c-brand-1);
+}

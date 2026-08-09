@@ -20,6 +20,10 @@ reports
 **/lib
 **/dist
 
+# VitePress
+docs/.vitepress/cache
+docs/.vitepress/dist
+
 # Yarn
 .yarn
 .yarn-cache/

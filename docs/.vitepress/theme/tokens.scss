@@ -1,0 +1,231 @@
+/**
+ * Execution Engine design tokens
+ *
+ * Edit this file to retheme the docs. Brand colors are shared, while the
+ * light and dark palettes are intentionally listed side by side below.
+ */
+
+// UI primitives. The logo and graph artwork keep their own asset colors.
+$brand-700: #5140bf;
+$brand-600: #5b4bd6;
+$brand-500: #6d5ce7;
+$brand-300: #a396f5;
+$brand-200: #b7aeff;
+$accent-700: #1687ae;
+$accent-400: #41d1ff;
+
+// Light palette.
+$light-canvas: #fcfcff;
+$light-sidebar: #f7f6fc;
+$light-surface: #ffffff;
+$light-soft: #f2f0fa;
+$light-code: #f5f3fa;
+$light-text-1: #242038;
+$light-text-2: #5e5873;
+$light-text-3: #746e85;
+$light-border: #dedbea;
+$light-border-strong: #c9c4da;
+
+// Dark palette.
+$dark-canvas: #0d0c1b;
+$dark-sidebar: #111021;
+$dark-surface: #19172f;
+$dark-soft: #15132a;
+$dark-code: #11101f;
+$dark-text-1: #f4f2ff;
+$dark-text-2: #bbb5cf;
+$dark-text-3: #8e87a5;
+$dark-border: #2e2a43;
+$dark-border-strong: #45405e;
+
+// Shared shape and motion.
+$radius-sm: 8px;
+$radius-md: 12px;
+$radius-lg: 16px;
+$motion-fast: 160ms ease;
+$motion-base: 220ms ease;
+
+:root {
+  color-scheme: light;
+
+  // Shared primitives exposed to regular CSS and components.
+  --ee-brand-700: #{$brand-700};
+  --ee-brand-600: #{$brand-600};
+  --ee-brand-500: #{$brand-500};
+  --ee-brand-300: #{$brand-300};
+  --ee-brand-200: #{$brand-200};
+  --ee-accent-700: #{$accent-700};
+  --ee-accent-400: #{$accent-400};
+
+  // Semantic light-theme tokens.
+  --ee-surface-page: #{$light-canvas};
+  --ee-surface-sidebar: #{$light-sidebar};
+  --ee-surface-raised: #{$light-surface};
+  --ee-surface-soft: #{$light-soft};
+  --ee-surface-code: #{$light-code};
+  --ee-text-1: #{$light-text-1};
+  --ee-text-2: #{$light-text-2};
+  --ee-text-3: #{$light-text-3};
+  --ee-border: #{$light-border};
+  --ee-border-strong: #{$light-border-strong};
+  --ee-link: #{$brand-700};
+  --ee-link-hover: #{$brand-600};
+  --ee-brand-solid: #{$brand-500};
+  --ee-brand-solid-hover: #{$brand-600};
+  --ee-brand-solid-active: #{$brand-700};
+  --ee-brand-soft: color-mix(in srgb, var(--ee-brand-500) 13%, transparent);
+  --ee-accent-soft: color-mix(in srgb, var(--ee-accent-400) 11%, transparent);
+  --ee-selection-bg: color-mix(in srgb, var(--ee-brand-500) 24%, transparent);
+  --ee-focus-ring: color-mix(in srgb, var(--ee-brand-500) 38%, transparent);
+
+  --ee-neutral-1: var(--ee-border-strong);
+  --ee-neutral-2: color-mix(in srgb, var(--ee-border-strong) 72%, var(--ee-surface-raised));
+  --ee-neutral-3: color-mix(in srgb, var(--ee-border-strong) 45%, var(--ee-surface-raised));
+  --ee-neutral-soft: color-mix(in srgb, var(--ee-text-3) 11%, transparent);
+  --ee-control-bg: var(--ee-neutral-3);
+  --ee-control-hover: var(--ee-neutral-2);
+  --ee-control-active: var(--ee-neutral-1);
+
+  --ee-radius-sm: #{$radius-sm};
+  --ee-radius-md: #{$radius-md};
+  --ee-radius-lg: #{$radius-lg};
+  --ee-motion-fast: #{$motion-fast};
+  --ee-motion-base: #{$motion-base};
+
+  --ee-card-bg: var(--ee-surface-raised);
+  --ee-card-shadow: 0 1px 2px rgba(35, 28, 73, 0.04), 0 16px 40px rgba(54, 44, 120, 0.07);
+  --ee-card-shadow-hover: 0 2px 4px rgba(35, 28, 73, 0.05), 0 20px 48px rgba(54, 44, 120, 0.11);
+  --ee-button-shadow: 0 8px 20px color-mix(in srgb, var(--ee-brand-solid) 24%, transparent);
+  --ee-button-shadow-hover: 0 10px 24px color-mix(in srgb, var(--ee-brand-solid) 30%, transparent);
+  --ee-icon-bg: linear-gradient(145deg, var(--ee-brand-soft), var(--ee-accent-soft));
+  --ee-accent-line: linear-gradient(90deg, transparent, var(--ee-brand-300), var(--ee-accent-400), transparent);
+  --ee-home-hero-bg:
+    radial-gradient(700px 460px at 91% 24%, color-mix(in srgb, var(--ee-accent-400) 8%, transparent), transparent 68%),
+    radial-gradient(760px 500px at 3% 2%, color-mix(in srgb, var(--ee-brand-500) 9%, transparent), transparent 66%);
+  --ee-hero-kicker-color: var(--ee-text-2);
+  --ee-hero-heading-color: var(--ee-text-1);
+  --ee-hero-support-color: var(--ee-text-3);
+  --ee-install-border: var(--ee-border);
+  --ee-install-bg: var(--ee-surface-raised);
+  --ee-install-text: var(--ee-text-1);
+  --ee-install-shadow: 0 5px 18px rgba(54, 44, 120, 0.07);
+  --ee-logo-shadow: drop-shadow(0 18px 30px rgba(40, 35, 94, 0.14));
+
+  // VitePress aliases. Components inherit the same semantic system.
+  --vp-c-bg: var(--ee-surface-page);
+  --vp-c-bg-alt: var(--ee-surface-sidebar);
+  --vp-c-bg-elv: var(--ee-surface-raised);
+  --vp-c-bg-soft: var(--ee-surface-soft);
+  --vp-c-border: var(--ee-border-strong);
+  --vp-c-divider: var(--ee-border);
+  --vp-c-gutter: var(--ee-border);
+  --vp-c-text-1: var(--ee-text-1);
+  --vp-c-text-2: var(--ee-text-2);
+  --vp-c-text-3: var(--ee-text-3);
+
+  --vp-c-gray-1: var(--ee-neutral-1);
+  --vp-c-gray-2: var(--ee-neutral-2);
+  --vp-c-gray-3: var(--ee-neutral-3);
+  --vp-c-gray-soft: var(--ee-neutral-soft);
+  --vp-c-brand-1: var(--ee-link);
+  --vp-c-brand-2: var(--ee-link-hover);
+  --vp-c-brand-3: var(--ee-brand-solid);
+  --vp-c-brand-soft: var(--ee-brand-soft);
+
+  --vp-button-brand-bg: var(--ee-brand-solid);
+  --vp-button-brand-hover-bg: var(--ee-brand-solid-hover);
+  --vp-button-brand-active-bg: var(--ee-brand-solid-active);
+  --vp-button-alt-bg: var(--ee-control-bg);
+  --vp-button-alt-hover-bg: var(--ee-control-hover);
+  --vp-button-alt-active-bg: var(--ee-control-active);
+
+  --vp-code-bg: var(--ee-brand-soft);
+  --vp-code-block-bg: var(--ee-surface-code);
+  --vp-code-block-divider-color: var(--ee-border);
+  --vp-code-line-highlight-color: var(--ee-neutral-soft);
+  --vp-code-copy-code-border-color: var(--ee-border);
+  --vp-code-copy-code-bg: var(--ee-surface-soft);
+  --vp-code-copy-code-hover-bg: var(--ee-surface-raised);
+
+  --vp-custom-block-info-border: var(--ee-border);
+  --vp-custom-block-info-bg: var(--ee-surface-soft);
+  --vp-custom-block-info-code-bg: var(--ee-neutral-soft);
+  --vp-custom-block-note-border: var(--ee-border);
+  --vp-custom-block-note-bg: var(--ee-surface-soft);
+  --vp-custom-block-tip-border: color-mix(in srgb, var(--ee-brand-500) 30%, transparent);
+  --vp-custom-block-tip-bg: var(--ee-brand-soft);
+  --vp-custom-block-warning-border: color-mix(in srgb, var(--vp-c-warning-2) 28%, transparent);
+  --vp-custom-block-danger-border: color-mix(in srgb, var(--vp-c-danger-2) 28%, transparent);
+
+  --vp-nav-bg-color: var(--ee-surface-page);
+  --vp-nav-screen-bg-color: var(--ee-surface-page);
+  --vp-local-nav-bg-color: var(--ee-surface-page);
+  --vp-sidebar-bg-color: var(--ee-surface-sidebar);
+  --vp-input-bg-color: var(--ee-surface-sidebar);
+  --vp-local-search-bg: var(--ee-surface-raised);
+  --vp-local-search-result-bg: var(--ee-surface-raised);
+
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(120deg, var(--ee-brand-500) 30%, var(--ee-accent-700));
+  --vp-home-hero-image-background-image: radial-gradient(
+    circle at 50% 50%,
+    color-mix(in srgb, var(--ee-brand-500) 55%, transparent) 0%,
+    color-mix(in srgb, color-mix(in srgb, var(--ee-brand-500) 62%, var(--ee-accent-400)) 34%, transparent) 40%,
+    color-mix(in srgb, var(--ee-accent-400) 14%, transparent) 66%,
+    transparent 100%
+  );
+  --vp-home-hero-image-filter: blur(22px);
+}
+
+.dark {
+  color-scheme: dark;
+
+  --ee-surface-page: #{$dark-canvas};
+  --ee-surface-sidebar: #{$dark-sidebar};
+  --ee-surface-raised: #{$dark-surface};
+  --ee-surface-soft: #{$dark-soft};
+  --ee-surface-code: #{$dark-code};
+  --ee-text-1: #{$dark-text-1};
+  --ee-text-2: #{$dark-text-2};
+  --ee-text-3: #{$dark-text-3};
+  --ee-border: #{$dark-border};
+  --ee-border-strong: #{$dark-border-strong};
+  --ee-link: #{$brand-200};
+  --ee-link-hover: #{$brand-300};
+  --ee-brand-soft: color-mix(in srgb, var(--ee-brand-500) 22%, transparent);
+  --ee-accent-soft: color-mix(in srgb, var(--ee-accent-400) 12%, transparent);
+  --ee-selection-bg: color-mix(in srgb, var(--ee-brand-300) 30%, transparent);
+  --ee-focus-ring: color-mix(in srgb, var(--ee-brand-200) 42%, transparent);
+
+  --ee-neutral-soft: color-mix(in srgb, var(--ee-text-2) 11%, transparent);
+
+  --ee-card-bg: var(--ee-surface-raised);
+  --ee-card-shadow: 0 1px 0 rgba(255, 255, 255, 0.025), 0 18px 46px rgba(0, 0, 0, 0.25);
+  --ee-card-shadow-hover: 0 1px 0 rgba(255, 255, 255, 0.035), 0 22px 52px rgba(0, 0, 0, 0.34);
+  --ee-icon-bg: linear-gradient(145deg, var(--ee-brand-soft), var(--ee-accent-soft));
+  --ee-home-hero-bg:
+    radial-gradient(760px 580px at 91% 28%, color-mix(in srgb, var(--ee-accent-400) 10%, transparent), transparent 70%),
+    radial-gradient(820px 580px at 2% 0%, color-mix(in srgb, var(--ee-brand-500) 19%, transparent), transparent 68%);
+  --ee-hero-kicker-color: color-mix(in srgb, var(--ee-text-2) 78%, var(--ee-brand-200));
+  --ee-hero-heading-color: color-mix(in srgb, var(--ee-text-1) 88%, var(--ee-brand-200));
+  --ee-hero-support-color: var(--ee-text-3);
+  --ee-install-border: color-mix(in srgb, var(--ee-accent-400) 24%, transparent);
+  --ee-install-bg: color-mix(in srgb, var(--ee-accent-400) 6%, transparent);
+  --ee-install-text: color-mix(in srgb, var(--ee-accent-400) 56%, white);
+  --ee-install-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  --ee-logo-shadow: drop-shadow(0 20px 34px rgba(0, 0, 0, 0.28));
+
+  --vp-home-hero-name-background: linear-gradient(
+    118deg,
+    white 8%,
+    color-mix(in srgb, var(--ee-brand-200) 68%, white) 52%,
+    color-mix(in srgb, var(--ee-accent-400) 66%, white) 96%
+  );
+  --vp-home-hero-image-background-image: radial-gradient(
+    circle at 50% 50%,
+    color-mix(in srgb, var(--ee-brand-300) 48%, transparent) 0%,
+    color-mix(in srgb, color-mix(in srgb, var(--ee-brand-500) 58%, var(--ee-accent-400)) 28%, transparent) 42%,
+    color-mix(in srgb, var(--ee-accent-400) 12%, transparent) 68%,
+    transparent 100%
+  );
+}
