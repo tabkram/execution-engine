@@ -1,3 +1,4 @@
+## [4.0.1](https://github.com/tabkram/execution-engine/compare/v4.0.0...v4.0.1) (2026-08-10)
 ## [4.0.0](https://github.com/tabkram/execution-engine/compare/v3.5.0...v4.0.0) (2025-08-08)
 
 ### Features
