@@ -125,7 +125,10 @@
 }
 
 .VPHero .ee-hero-install {
-  display: table;
+  /* inline-block, not table: both shrink-wrap, but a table box is left-aligned
+     whatever the container says, so the chip stayed flush left in the stacked
+     layout where the theme centres the hero with `text-align: center`. */
+  display: inline-block;
   margin-top: 16px;
   padding: 9px 14px;
   border: 1px solid var(--ee-install-border);
@@ -149,10 +152,23 @@
   padding-top: 22px;
 }
 
-/* Centre the copy against the mark rather than letting it sit top-aligned. */
+/*
+ * Centre the copy against the mark rather than letting it sit top-aligned.
+ *
+ * The copy is the only thing with layout height here — the artwork is absolutely
+ * positioned, so without a floor the row collapses to the height of the words and
+ * the graph spills out of the hero at both ends, under the nav at the top.
+ *
+ * The floor is a share of the artwork's rendered height, which is `min(49vw, 640px)`
+ * wide (below) on a 640×390 viewBox. 360 of those 390 units, not all of them: the
+ * top and bottom bands of the drawing are the fade the mask takes to nothing, so
+ * letting them reach into the hero's padding costs nothing and keeps the padding
+ * around everything you can actually see.
+ */
 @media (min-width: 960px) {
   .VPHero .container {
     align-items: center;
+    min-height: calc(min(49vw, 640px) * 360 / 640);
   }
 }
 
@@ -165,85 +181,114 @@
 }
 
 .VPHero .image-bg {
-  width: 330px;
-  height: 330px;
-  opacity: 0.5;
+  display: none;
 }
 
 .VPHome .VPHero img.image-src {
-  width: 310px;
+  width: 100%;
   height: auto;
-  max-width: 310px;
-  max-height: 320px;
-  filter: var(--ee-logo-shadow);
+  max-width: none;
+  max-height: none;
+  opacity: 0.76;
+  filter: drop-shadow(0 16px 30px color-mix(in srgb, var(--ee-brand-700) 10%, transparent));
+}
+
+.dark .VPHome .VPHero img.image-src {
+  opacity: 0.84;
 }
 
 @media (max-width: 959px) {
-  .VPHome .VPHero.VPHomeHero {
-    padding-top: calc(var(--vp-nav-height) + 12px);
-  }
-
   .VPHero .image {
-    margin: 0 -8px 48px;
+    order: 1;
+    width: 100%;
+    margin: 0 auto 24px;
   }
 
+  /* VitePress normally absolutely centres hero images. Let the shared SVG
+     establish a real, contained block above the copy on narrow screens. */
   .VPHero .image-container {
-    width: min(calc(100vw - 32px), 360px);
-    height: 320px;
-    transform: translateY(28px);
+    width: min(100%, 360px);
+    height: auto;
+    transform: none;
+  }
+
+  .VPHome .VPHero img.image-src {
+    position: static;
+    transform: none;
   }
 }
 
 @media (min-width: 960px) {
   .VPHome .VPHero .container {
     max-width: 1200px;
-    gap: 40px;
+    gap: 28px;
   }
 
   .VPHome .VPHero.has-image .main {
     max-width: 640px;
   }
 
-  .VPHero .image-bg {
-    width: 420px;
-    height: 420px;
-  }
-
+  /* No vertical nudge: the container above is sized from the artwork, so the graph
+     already centres against the copy. */
   .VPHero .image-container {
-    width: 430px;
-    height: 416px;
-    transform: translate(8px, 18px);
+    width: min(49vw, 640px);
+    height: auto;
+    max-width: none;
+    transform: translateX(-44px);
   }
+}
 
-  .VPHome .VPHero img.image-src {
-    width: 400px;
-    max-width: 400px;
-    max-height: 416px;
+@media (min-width: 1100px) {
+  .VPHero .image-container {
+    transform: translateX(-125px);
   }
 }
 
 /*
- * Vertical rhythm: the stock hero reserves 144px of top padding, which pushed
- * the tiles off screen for no benefit. Tighten it at every breakpoint so the
- * hero and the two lead tiles share the first screen.
+ * Vertical rhythm. The stock hero reserves 144px of top padding, which pushed the
+ * tiles off screen for no benefit — but it cannot simply be tightened, because the
+ * hero slides under the nav (margin-top: -64px) and padding-top is the only thing
+ * holding the container clear of it. So every breakpoint pays the nav's own height
+ * first, and the number added to it is the gap you actually see above the copy.
+ *
+ * One shorthand per breakpoint, no partial overrides: the padding used to be set
+ * in five places whose media queries overlapped, and the 640–959 band ended up
+ * with a flat 40px top — 24px of the copy tucked in behind the nav.
  */
 /* Specificity note: VitePress styles the hero via a Vue scoped selector
    (.VPHero[data-v-…]), which outranks a bare .VPHero. Qualify with both the
    wrapper and the second class so these win without !important. */
 .VPHome .VPHero.VPHomeHero {
-  padding: 40px 24px 32px;
+  padding: calc(var(--vp-nav-height) + 12px) 24px 32px;
   background-image: var(--ee-home-hero-bg);
+  overflow: visible;
+}
+
+/* The artwork fades before the viewport edge; clip only invisible horizontal
+   filter overflow so it never creates a page-wide scrollbar. */
+.VPHome {
+  overflow-x: clip;
+}
+
+/* Let the transparent graph fade behind the copy without dimming the words. */
+.VPHome .VPHero .main {
+  position: relative;
+  z-index: 2;
+}
+
+.VPHome .VPHero .image {
+  z-index: 1;
 }
 
 @media (min-width: 640px) {
   .VPHome .VPHero.VPHomeHero {
-    padding: 40px 48px 28px;
+    padding: calc(var(--vp-nav-height) + 12px) 48px 28px;
   }
 }
 
 @media (min-width: 960px) {
   .VPHome .VPHero.VPHomeHero {
-    padding: 56px 40px 36px;
+    padding: calc(var(--vp-nav-height) + 32px) 40px 44px;
   }
 }
 
@@ -258,7 +303,7 @@
 .VPHome .vp-doc > div {
   max-width: 1152px;
   margin: 0 auto;
-  padding: 0 0 24px;
+  padding: 0 0 16px;
 }
 
 .ee-parts {
@@ -270,7 +315,7 @@
 .ee-part {
   position: relative;
   overflow: hidden;
-  padding: 22px 22px 18px;
+  padding: 18px 22px 12px;
   border: 1px solid var(--ee-border);
   border-radius: var(--ee-radius-lg);
   background: var(--ee-card-bg);
@@ -299,7 +344,7 @@
   display: flex;
   align-items: flex-start;
   gap: 14px;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .ee-part-icon {
@@ -340,7 +385,7 @@
   display: flex;
   flex-direction: column;
   gap: 1px;
-  padding: 9px 34px 9px 11px;
+  padding: 8px 34px 8px 11px;
   border: 1px solid transparent;
   border-radius: var(--ee-radius-sm);
   text-decoration: none;
@@ -380,12 +425,14 @@
   color: var(--vp-c-text-2);
 }
 
-/* The two cross-cutting notes below the blocks — deliberately lighter. */
+/* The two cross-cutting notes below the blocks — deliberately lighter. The gap
+   above them matches the one between the blocks, so the three rows read as one
+   grid rather than two stacks that happen to line up. */
 .ee-small {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
-  gap: 16px;
-  margin-top: 16px;
+  gap: 20px;
+  margin-top: 20px;
 }
 
 .VPHome .ee-small-card {
@@ -393,7 +440,7 @@
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  padding: 14px 16px;
+  padding: 12px 16px;
   border: 1px solid var(--ee-border);
   border-radius: var(--ee-radius-lg);
   background: var(--ee-card-bg);
@@ -426,16 +473,20 @@
   font-weight: 650;
 }
 
-.Layout.ee-home .VPFooter {
-  margin-top: calc(0px - var(--vp-nav-height) - 32px);
-  padding-top: 26px;
-  padding-bottom: 26px;
+/*
+ * The theme reserves a fixed band under the home content and the footer is what
+ * goes in it. Pulling the footer up with a negative margin left whatever the band
+ * was taller than the footer as dead scroll at the end of the page; dropping the
+ * band instead removes it, and the footer's own padding is the gap.
+ */
+.Layout.ee-home .VPHome {
+  margin-bottom: 0;
 }
 
-@media (min-width: 960px) {
-  .Layout.ee-home .VPFooter {
-    margin-top: calc(0px - var(--vp-nav-height) - var(--vp-nav-height));
-  }
+.Layout.ee-home .VPFooter {
+  margin-top: 0;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .ee-small-body strong {
@@ -525,6 +576,55 @@
   margin-right: 4px;
   border-radius: calc(var(--ee-radius-sm) / 2);
   vertical-align: -4px;
+}
+
+/* ---- Examples page: how to read the graphs ---- */
+.ee-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin: 22px 0 4px;
+  padding-top: 16px;
+  border-top: 1px solid var(--ee-border);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--vp-c-text-2);
+}
+
+.ee-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ee-legend i {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 13px;
+  border-radius: 3px;
+}
+
+.ee-legend-box {
+  border: 1px solid var(--ee-border-strong);
+  background: var(--ee-surface-raised);
+}
+
+.ee-legend-group {
+  border: 1px solid var(--ee-border);
+  background: var(--ee-surface-soft);
+}
+
+/* Not a box: a short length of edge, drawn the way the graphs draw one. */
+.ee-legend-edge {
+  width: 22px;
+  height: 0;
+  border-top: 2px solid var(--ee-brand-300);
+  border-radius: 0;
+}
+
+.ee-legend-tag {
+  border: 1px solid var(--ee-accent-400);
+  background: var(--ee-accent-soft);
 }
 
 /* ---- Example cards ---- */

@@ -6,17 +6,17 @@ hero:
   name: Execution Engine
   # <br> forces the break at the comma; the hero fields are rendered with v-html.
   text: Trace and optimize your function calls,<br>See your whole code run as a graph.
+  # Shared with assets/social-preview.html: one transparent asset, no component logic.
   image:
-    light: /hero-graph-light.svg
-    dark: /hero-graph-dark.svg
-    alt: Execution trace graph with function nodes, timings, and a cached result
+    src: /abstract-execution-graph.svg
+    alt: Abstract execution graph
   actions:
     - theme: brand
-      text: Get Started
-      link: /guide/getting-started
-    - theme: alt
       text: What is Execution Engine?
       link: /guide/what-is-execution-engine
+    - theme: alt
+      text: See Examples
+      link: /examples
     - theme: alt
       text: View on GitHub
       link: https://github.com/tabkram/execution-engine
@@ -102,6 +102,13 @@ hero:
     <span class="ee-small-body">
       <strong>Zero dependencies</strong>
       <span>No production dependencies. Types bundled, Node.js 18 and above.</span>
+    </span>
+  </a>
+  <a class="ee-small-card" href="/execution-engine/examples">
+    <span class="ee-small-icon">📈</span>
+    <span class="ee-small-body">
+      <strong>See a real run</strong>
+      <span>Working examples, each with the code and the trace it produced.</span>
     </span>
   </a>
 </div>

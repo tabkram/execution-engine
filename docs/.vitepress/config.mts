@@ -20,7 +20,7 @@ export default defineConfig({
 
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/execution-engine/logo.svg' }],
-    ['meta', { name: 'theme-color', content: '#6d5ce7' }],
+    ['meta', { name: 'theme-color', content: '#5c5ce7' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: 'Execution Engine' }],
     ['meta', { property: 'og:description', content: 'Trace, cache and visualize TypeScript code execution as a graph.' }],
@@ -34,7 +34,7 @@ export default defineConfig({
       { text: 'Guide', link: '/guide/what-is-execution-engine', activeMatch: '/guide/' },
       { text: 'Execution', link: '/execution/trace', activeMatch: '/execution/' },
       { text: 'Engine', link: '/engine/trace', activeMatch: '/engine/' },
-      { text: 'Examples', link: `${REPO}/tree/main/examples` },
+      { text: 'Examples', link: '/examples', activeMatch: '/examples' },
       {
         text: 'v4',
         items: [
@@ -53,7 +53,8 @@ export default defineConfig({
         items: [
           { text: 'What is Execution Engine?', link: '/guide/what-is-execution-engine' },
           { text: 'Getting Started', link: '/guide/getting-started' },
-          { text: 'Which API to use', link: '/guide/which-api-to-use' }
+          { text: 'Which API to use', link: '/guide/which-api-to-use' },
+          { text: 'Examples', link: '/examples' }
         ]
       },
       {

@@ -1,0 +1,224 @@
+[
+  {
+    "data": {
+      "id": "resolvePackage_1786369432581_aef6e837-c1fb-40ea-803a-bd7f6561424a",
+      "label": "api",
+      "narratives": [],
+      "parallel": "app",
+      "abstract": false,
+      "createTime": "2026-08-10T13:43:52.639Z",
+      "parent": "resolvePackage_1786369432562_3566e98d-eaeb-4a76-81dd-229b9aceaf18",
+      "inputs": [
+        "api"
+      ],
+      "outputs": [
+        "api",
+        "core",
+        "types",
+        "http"
+      ],
+      "startTime": "2026-08-10T13:43:52.581Z",
+      "endTime": "2026-08-10T13:43:52.671Z",
+      "duration": 89.389917,
+      "elapsedTime": "89.390 ms",
+      "updateTime": "2026-08-10T13:43:52.671Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "resolvePackage_1786369432608_f33dde6f-cae8-4bf0-8037-2ed8e2cbc77c",
+      "label": "http",
+      "parent": "resolvePackage_1786369432581_aef6e837-c1fb-40ea-803a-bd7f6561424a",
+      "inputs": [
+        "http"
+      ],
+      "outputs": [
+        "http"
+      ],
+      "startTime": "2026-08-10T13:43:52.608Z",
+      "endTime": "2026-08-10T13:43:52.639Z",
+      "duration": 31.644042,
+      "elapsedTime": "31.644 ms",
+      "narratives": [],
+      "parallel": "api",
+      "abstract": false,
+      "createTime": "2026-08-10T13:43:52.640Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "resolvePackage_1786369432605_09f98e90-60cf-412f-aeeb-093d7aa64606",
+      "label": "core",
+      "narratives": [],
+      "parallel": "cli",
+      "abstract": false,
+      "createTime": "2026-08-10T13:43:52.670Z",
+      "parent": "resolvePackage_1786369432581_43a1ae26-81aa-4265-92fc-9d8474c4f7a7",
+      "inputs": [
+        "core"
+      ],
+      "outputs": [
+        "core",
+        "types"
+      ],
+      "startTime": "2026-08-10T13:43:52.605Z",
+      "endTime": "2026-08-10T13:43:52.670Z",
+      "duration": 65.77437499999999,
+      "elapsedTime": "65.774 ms",
+      "updateTime": "2026-08-10T13:43:52.670Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "resolvePackage_1786369432654_9e7f0bfc-3576-4bfd-a3de-ac16adbc44f2",
+      "label": "types",
+      "parent": "resolvePackage_1786369432605_09f98e90-60cf-412f-aeeb-093d7aa64606",
+      "inputs": [
+        "types"
+      ],
+      "outputs": [
+        "types"
+      ],
+      "startTime": "2026-08-10T13:43:52.654Z",
+      "endTime": "2026-08-10T13:43:52.670Z",
+      "duration": 16.56008299999999,
+      "elapsedTime": "16.560 ms",
+      "narratives": [],
+      "parallel": "core",
+      "abstract": false,
+      "createTime": "2026-08-10T13:43:52.670Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "resolvePackage_1786369432607_1ca1346f-b98b-4a9c-b0e9-1bc73461195c",
+      "label": "core",
+      "parent": "resolvePackage_1786369432581_aef6e837-c1fb-40ea-803a-bd7f6561424a",
+      "inputs": [
+        "core"
+      ],
+      "outputs": [
+        "core",
+        "types"
+      ],
+      "startTime": "2026-08-10T13:43:52.607Z",
+      "endTime": "2026-08-10T13:43:52.670Z",
+      "duration": 62.88741700000001,
+      "elapsedTime": "62.887 ms",
+      "narratives": [],
+      "parallel": "api",
+      "abstract": false,
+      "createTime": "2026-08-10T13:43:52.670Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "resolvePackage_1786369432581_c5ac7035-97f2-4d09-a462-cddd69e668ca",
+      "label": "ui",
+      "narratives": [],
+      "parallel": "app",
+      "abstract": false,
+      "createTime": "2026-08-10T13:43:52.670Z",
+      "parent": "resolvePackage_1786369432562_3566e98d-eaeb-4a76-81dd-229b9aceaf18",
+      "inputs": [
+        "ui"
+      ],
+      "outputs": [
+        "ui",
+        "core",
+        "types"
+      ],
+      "startTime": "2026-08-10T13:43:52.581Z",
+      "endTime": "2026-08-10T13:43:52.671Z",
+      "duration": 89.519542,
+      "elapsedTime": "89.520 ms",
+      "updateTime": "2026-08-10T13:43:52.671Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "resolvePackage_1786369432617_669508bb-438b-4dae-8d8f-f43013b4d694",
+      "label": "core",
+      "parent": "resolvePackage_1786369432581_c5ac7035-97f2-4d09-a462-cddd69e668ca",
+      "inputs": [
+        "core"
+      ],
+      "outputs": [
+        "core",
+        "types"
+      ],
+      "startTime": "2026-08-10T13:43:52.617Z",
+      "endTime": "2026-08-10T13:43:52.670Z",
+      "duration": 53.622333,
+      "elapsedTime": "53.622 ms",
+      "narratives": [],
+      "parallel": "ui",
+      "abstract": false,
+      "createTime": "2026-08-10T13:43:52.670Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "resolvePackage_1786369432581_43a1ae26-81aa-4265-92fc-9d8474c4f7a7",
+      "label": "cli",
+      "narratives": [],
+      "parallel": "app",
+      "abstract": false,
+      "createTime": "2026-08-10T13:43:52.670Z",
+      "parent": "resolvePackage_1786369432562_3566e98d-eaeb-4a76-81dd-229b9aceaf18",
+      "inputs": [
+        "cli"
+      ],
+      "outputs": [
+        "cli",
+        "core",
+        "types"
+      ],
+      "startTime": "2026-08-10T13:43:52.581Z",
+      "endTime": "2026-08-10T13:43:52.671Z",
+      "duration": 89.311084,
+      "elapsedTime": "89.311 ms",
+      "updateTime": "2026-08-10T13:43:52.671Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "resolvePackage_1786369432562_3566e98d-eaeb-4a76-81dd-229b9aceaf18",
+      "label": "app",
+      "narratives": [],
+      "parallel": false,
+      "abstract": false,
+      "createTime": "2026-08-10T13:43:52.671Z",
+      "inputs": [
+        "app"
+      ],
+      "outputs": [
+        "app",
+        "ui",
+        "core",
+        "types",
+        "api",
+        "core",
+        "types",
+        "http",
+        "cli",
+        "core",
+        "types"
+      ],
+      "startTime": "2026-08-10T13:43:52.562Z",
+      "endTime": "2026-08-10T13:43:52.671Z",
+      "duration": 108.64470899999999,
+      "elapsedTime": "108.645 ms",
+      "updateTime": "2026-08-10T13:43:52.671Z"
+    },
+    "group": "nodes"
+  }
+]

@@ -1,0 +1,165 @@
+[
+  {
+    "data": {
+      "id": "readExport_1786369516492_fc725c80-82d5-495c-91c0-fa925b801251",
+      "label": "readExport",
+      "inputs": [
+        "orders.csv"
+      ],
+      "outputs": [
+        {
+          "id": "o_1",
+          "total": 42,
+          "region": "eu"
+        },
+        {
+          "id": "o_2",
+          "total": 0,
+          "region": "eu"
+        },
+        {
+          "id": "o_3",
+          "total": 91,
+          "region": "us"
+        }
+      ],
+      "startTime": "2026-08-10T13:45:16.493Z",
+      "endTime": "2026-08-10T13:45:16.532Z",
+      "duration": 39.584042,
+      "elapsedTime": "39.584 ms",
+      "narratives": [],
+      "parallel": false,
+      "abstract": false,
+      "createTime": "2026-08-10T13:45:16.532Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "dropInvalid_1786369516532_642d1f76-eb7b-4bb3-9dd6-cddf99428ef0",
+      "label": "dropInvalid",
+      "inputs": [
+        [
+          {
+            "id": "o_1",
+            "total": 42,
+            "region": "eu"
+          },
+          {
+            "id": "o_2",
+            "total": 0,
+            "region": "eu"
+          },
+          {
+            "id": "o_3",
+            "total": 91,
+            "region": "us"
+          }
+        ]
+      ],
+      "outputs": [
+        {
+          "id": "o_1",
+          "total": 42,
+          "region": "eu"
+        },
+        {
+          "id": "o_3",
+          "total": 91,
+          "region": "us"
+        }
+      ],
+      "startTime": "2026-08-10T13:45:16.533Z",
+      "endTime": "2026-08-10T13:45:16.533Z",
+      "duration": 0.07466600000000057,
+      "elapsedTime": "0.075 ms",
+      "narratives": [],
+      "parallel": false,
+      "abstract": false,
+      "createTime": "2026-08-10T13:45:16.533Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "summarise_1786369516533_ebf75dc3-b08a-4e06-af86-1164904d0507",
+      "label": "summarise",
+      "inputs": [
+        [
+          {
+            "id": "o_1",
+            "total": 42,
+            "region": "eu"
+          },
+          {
+            "id": "o_3",
+            "total": 91,
+            "region": "us"
+          }
+        ]
+      ],
+      "outputs": {
+        "eu": 42,
+        "us": 91
+      },
+      "startTime": "2026-08-10T13:45:16.533Z",
+      "endTime": "2026-08-10T13:45:16.558Z",
+      "duration": 25.151417000000002,
+      "elapsedTime": "25.151 ms",
+      "narratives": [],
+      "parallel": false,
+      "abstract": false,
+      "createTime": "2026-08-10T13:45:16.558Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "writeReport_1786369516558_d2c1b935-8c59-495a-90f6-ca48885f62fa",
+      "label": "writeReport",
+      "inputs": [
+        {
+          "eu": 42,
+          "us": 91
+        }
+      ],
+      "outputs": "2 regions written",
+      "startTime": "2026-08-10T13:45:16.558Z",
+      "endTime": "2026-08-10T13:45:16.575Z",
+      "duration": 17.13362500000001,
+      "elapsedTime": "17.134 ms",
+      "narratives": [],
+      "parallel": false,
+      "abstract": false,
+      "createTime": "2026-08-10T13:45:16.575Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "readExport_1786369516492_fc725c80-82d5-495c-91c0-fa925b801251->dropInvalid_1786369516532_642d1f76-eb7b-4bb3-9dd6-cddf99428ef0",
+      "source": "readExport_1786369516492_fc725c80-82d5-495c-91c0-fa925b801251",
+      "target": "dropInvalid_1786369516532_642d1f76-eb7b-4bb3-9dd6-cddf99428ef0",
+      "parallel": false
+    },
+    "group": "edges"
+  },
+  {
+    "data": {
+      "id": "dropInvalid_1786369516532_642d1f76-eb7b-4bb3-9dd6-cddf99428ef0->summarise_1786369516533_ebf75dc3-b08a-4e06-af86-1164904d0507",
+      "source": "dropInvalid_1786369516532_642d1f76-eb7b-4bb3-9dd6-cddf99428ef0",
+      "target": "summarise_1786369516533_ebf75dc3-b08a-4e06-af86-1164904d0507",
+      "parallel": false
+    },
+    "group": "edges"
+  },
+  {
+    "data": {
+      "id": "summarise_1786369516533_ebf75dc3-b08a-4e06-af86-1164904d0507->writeReport_1786369516558_d2c1b935-8c59-495a-90f6-ca48885f62fa",
+      "source": "summarise_1786369516533_ebf75dc3-b08a-4e06-af86-1164904d0507",
+      "target": "writeReport_1786369516558_d2c1b935-8c59-495a-90f6-ca48885f62fa",
+      "parallel": false
+    },
+    "group": "edges"
+  }
+]

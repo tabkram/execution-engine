@@ -1,0 +1,457 @@
+[
+  {
+    "data": {
+      "id": "receiveOrder_1786370685625_2d9ee233-547a-4746-9e8e-5d16f6431e36",
+      "label": "receiveOrder",
+      "inputs": [
+        "ord-7431"
+      ],
+      "outputs": {
+        "id": "ord-7431",
+        "customerId": "c_88",
+        "country": "FR",
+        "items": [
+          "sku-1",
+          "sku-2"
+        ]
+      },
+      "startTime": "2026-08-10T14:04:45.626Z",
+      "endTime": "2026-08-10T14:04:45.639Z",
+      "duration": 13.503083000000004,
+      "elapsedTime": "13.503 ms",
+      "narratives": [],
+      "parallel": false,
+      "abstract": false,
+      "createTime": "2026-08-10T14:04:45.640Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "enrichOrder_1786370685640_be6126e6-8098-4c2f-8369-ad627266c75a",
+      "label": "enrichOrder",
+      "narratives": [],
+      "parallel": false,
+      "abstract": false,
+      "createTime": "2026-08-10T14:04:45.640Z",
+      "inputs": [
+        {
+          "id": "ord-7431",
+          "customerId": "c_88",
+          "country": "FR",
+          "items": [
+            "sku-1",
+            "sku-2"
+          ]
+        }
+      ],
+      "outputs": {
+        "tier": "gold",
+        "subtotal": 80
+      },
+      "startTime": "2026-08-10T14:04:45.640Z",
+      "endTime": "2026-08-10T14:04:45.697Z",
+      "duration": 57.320791000000014,
+      "elapsedTime": "57.321 ms",
+      "updateTime": "2026-08-10T14:04:45.697Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "fetchCatalog_1786370685640_3801a73a-3cf8-4a76-8e9a-0ecff5d8f474",
+      "label": "fetchCatalog",
+      "parent": "enrichOrder_1786370685640_be6126e6-8098-4c2f-8369-ad627266c75a",
+      "inputs": [
+        [
+          "sku-1",
+          "sku-2"
+        ]
+      ],
+      "outputs": 80,
+      "startTime": "2026-08-10T14:04:45.640Z",
+      "endTime": "2026-08-10T14:04:45.640Z",
+      "duration": 0.19770800000000577,
+      "elapsedTime": "0.198 ms",
+      "narratives": [],
+      "parallel": "enrich",
+      "abstract": false,
+      "createTime": "2026-08-10T14:04:45.640Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "fetchCustomer_1786370685640_0fe1b169-a826-4f8e-8419-8df6d23936eb",
+      "label": "fetchCustomer",
+      "parent": "enrichOrder_1786370685640_be6126e6-8098-4c2f-8369-ad627266c75a",
+      "inputs": [
+        "c_88"
+      ],
+      "outputs": {
+        "id": "c_88",
+        "tier": "gold"
+      },
+      "startTime": "2026-08-10T14:04:45.640Z",
+      "endTime": "2026-08-10T14:04:45.697Z",
+      "duration": 57.02354199999999,
+      "elapsedTime": "57.024 ms",
+      "narratives": [],
+      "parallel": "enrich",
+      "abstract": false,
+      "createTime": "2026-08-10T14:04:45.697Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "explodeBundle_1786370685713_ee772763-f41b-44e1-b330-2c2ed1952ddd",
+      "label": "explodeBundle",
+      "narratives": [],
+      "parallel": false,
+      "abstract": false,
+      "createTime": "2026-08-10T14:04:45.743Z",
+      "parent": "explodeBundle_1786370685697_c5f2569d-be37-43a0-afd1-23bb82412861",
+      "inputs": [
+        "sku-1a"
+      ],
+      "outputs": [
+        "sku-1b"
+      ],
+      "startTime": "2026-08-10T14:04:45.713Z",
+      "endTime": "2026-08-10T14:04:45.743Z",
+      "duration": 30.531541000000004,
+      "elapsedTime": "30.532 ms",
+      "updateTime": "2026-08-10T14:04:45.743Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "explodeBundle_1786370685728_bab8ef6b-0975-460f-a1d5-3b4168d37321",
+      "label": "explodeBundle",
+      "parent": "explodeBundle_1786370685713_ee772763-f41b-44e1-b330-2c2ed1952ddd",
+      "inputs": [
+        "sku-1b"
+      ],
+      "outputs": [
+        "sku-1b"
+      ],
+      "startTime": "2026-08-10T14:04:45.728Z",
+      "endTime": "2026-08-10T14:04:45.743Z",
+      "duration": 15.130540999999994,
+      "elapsedTime": "15.131 ms",
+      "narratives": [],
+      "parallel": false,
+      "abstract": false,
+      "createTime": "2026-08-10T14:04:45.743Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "explodeBundle_1786370685697_c5f2569d-be37-43a0-afd1-23bb82412861",
+      "label": "explodeBundle",
+      "narratives": [],
+      "parallel": false,
+      "abstract": false,
+      "createTime": "2026-08-10T14:04:45.743Z",
+      "inputs": [
+        "sku-1"
+      ],
+      "outputs": [
+        "sku-1b"
+      ],
+      "startTime": "2026-08-10T14:04:45.697Z",
+      "endTime": "2026-08-10T14:04:45.743Z",
+      "duration": 46.10733400000001,
+      "elapsedTime": "46.107 ms",
+      "updateTime": "2026-08-10T14:04:45.743Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "applyTax_1786370685744_56466df6-7bcf-4df9-9803-33b7d882f58a",
+      "label": "applyTax",
+      "narratives": [],
+      "parallel": "price",
+      "abstract": false,
+      "createTime": "2026-08-10T14:04:45.804Z",
+      "parent": "priceOrder_1786370685743_dc2b3c9f-4f2f-4936-af8c-696d6d88e078",
+      "inputs": [
+        "FR",
+        80
+      ],
+      "outputs": 96,
+      "startTime": "2026-08-10T14:04:45.744Z",
+      "endTime": "2026-08-10T14:04:45.824Z",
+      "duration": 80.54483299999998,
+      "elapsedTime": "80.545 ms",
+      "updateTime": "2026-08-10T14:04:45.824Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "fetchRates_1786370685744_de31a8a4-8a93-4759-b64e-109854bfe964",
+      "label": "fetchRates",
+      "parent": "applyTax_1786370685744_56466df6-7bcf-4df9-9803-33b7d882f58a",
+      "inputs": [
+        "FR"
+      ],
+      "outputs": {
+        "vat": 0.2,
+        "eurUsd": 1.09
+      },
+      "startTime": "2026-08-10T14:04:45.744Z",
+      "endTime": "2026-08-10T14:04:45.804Z",
+      "duration": 60.52283299999999,
+      "elapsedTime": "60.523 ms",
+      "narratives": [],
+      "parallel": false,
+      "abstract": false,
+      "createTime": "2026-08-10T14:04:45.805Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "priceOrder_1786370685743_dc2b3c9f-4f2f-4936-af8c-696d6d88e078",
+      "label": "priceOrder",
+      "narratives": [],
+      "parallel": false,
+      "abstract": false,
+      "createTime": "2026-08-10T14:04:45.824Z",
+      "inputs": [
+        {
+          "id": "ord-7431",
+          "customerId": "c_88",
+          "country": "FR",
+          "items": [
+            "sku-1",
+            "sku-2"
+          ]
+        },
+        {
+          "tier": "gold",
+          "subtotal": 80
+        }
+      ],
+      "outputs": {
+        "total": 96,
+        "usd": 87.2
+      },
+      "startTime": "2026-08-10T14:04:45.743Z",
+      "endTime": "2026-08-10T14:04:45.831Z",
+      "duration": 87.63304099999999,
+      "elapsedTime": "87.633 ms",
+      "updateTime": "2026-08-10T14:04:45.831Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "convertCurrency_1786370685744_df94d96c-9a0e-453e-831d-44d3af2898aa",
+      "label": "convertCurrency",
+      "parent": "priceOrder_1786370685743_dc2b3c9f-4f2f-4936-af8c-696d6d88e078",
+      "inputs": [
+        "FR",
+        80
+      ],
+      "outputs": 87.2,
+      "startTime": "2026-08-10T14:04:45.744Z",
+      "endTime": "2026-08-10T14:04:45.831Z",
+      "duration": 86.98020900000003,
+      "elapsedTime": "86.980 ms",
+      "narratives": [],
+      "parallel": "price",
+      "abstract": false,
+      "createTime": "2026-08-10T14:04:45.831Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "chargeCard_1786370685831_0748c8c9-3029-448b-bf42-e792b87050d6",
+      "label": "chargeCard",
+      "narratives": [],
+      "parallel": "fulfil",
+      "abstract": false,
+      "createTime": "2026-08-10T14:04:45.872Z",
+      "inputs": [
+        96
+      ],
+      "outputs": "charged via auth_96",
+      "startTime": "2026-08-10T14:04:45.831Z",
+      "endTime": "2026-08-10T14:04:45.904Z",
+      "duration": 72.98337499999997,
+      "elapsedTime": "72.983 ms",
+      "updateTime": "2026-08-10T14:04:45.904Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "authorize_1786370685831_ba89166b-bec0-4f2e-b255-c4873f632c33",
+      "label": "authorize",
+      "parent": "chargeCard_1786370685831_0748c8c9-3029-448b-bf42-e792b87050d6",
+      "inputs": [
+        96
+      ],
+      "outputs": "auth_96",
+      "startTime": "2026-08-10T14:04:45.831Z",
+      "endTime": "2026-08-10T14:04:45.872Z",
+      "duration": 40.89504199999999,
+      "elapsedTime": "40.895 ms",
+      "narratives": [],
+      "parallel": false,
+      "abstract": false,
+      "createTime": "2026-08-10T14:04:45.872Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "reserveStock_1786370685831_932abd79-d4fb-482b-8ebf-51235e750e93",
+      "label": "reserveStock",
+      "inputs": [
+        [
+          "sku-1",
+          "sku-2"
+        ]
+      ],
+      "outputs": "2 items held",
+      "startTime": "2026-08-10T14:04:45.831Z",
+      "endTime": "2026-08-10T14:04:45.874Z",
+      "duration": 42.40158300000002,
+      "elapsedTime": "42.402 ms",
+      "narratives": [],
+      "parallel": "fulfil",
+      "abstract": false,
+      "createTime": "2026-08-10T14:04:45.874Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "capture_1786370685872_8a2b3164-2009-4877-a7a9-5626ac2f95dd",
+      "label": "capture",
+      "parent": "chargeCard_1786370685831_0748c8c9-3029-448b-bf42-e792b87050d6",
+      "inputs": [
+        "auth_96"
+      ],
+      "outputs": "charged via auth_96",
+      "startTime": "2026-08-10T14:04:45.872Z",
+      "endTime": "2026-08-10T14:04:45.904Z",
+      "duration": 31.62733300000002,
+      "elapsedTime": "31.627 ms",
+      "narratives": [],
+      "parallel": false,
+      "abstract": false,
+      "createTime": "2026-08-10T14:04:45.904Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "confirmOrder_1786370685904_0c7a0f4d-4728-4df5-8fe1-de5e5876ab94",
+      "label": "confirmOrder",
+      "inputs": [
+        {
+          "id": "ord-7431",
+          "customerId": "c_88",
+          "country": "FR",
+          "items": [
+            "sku-1",
+            "sku-2"
+          ]
+        },
+        "charged via auth_96"
+      ],
+      "outputs": "ord-7431 confirmed — charged via auth_96",
+      "startTime": "2026-08-10T14:04:45.905Z",
+      "endTime": "2026-08-10T14:04:45.905Z",
+      "duration": 0.236458999999968,
+      "elapsedTime": "0.236 ms",
+      "narratives": [],
+      "parallel": false,
+      "abstract": false,
+      "createTime": "2026-08-10T14:04:45.905Z"
+    },
+    "group": "nodes"
+  },
+  {
+    "data": {
+      "id": "receiveOrder_1786370685625_2d9ee233-547a-4746-9e8e-5d16f6431e36->enrichOrder_1786370685640_be6126e6-8098-4c2f-8369-ad627266c75a",
+      "source": "receiveOrder_1786370685625_2d9ee233-547a-4746-9e8e-5d16f6431e36",
+      "target": "enrichOrder_1786370685640_be6126e6-8098-4c2f-8369-ad627266c75a",
+      "parallel": false
+    },
+    "group": "edges"
+  },
+  {
+    "data": {
+      "id": "enrichOrder_1786370685640_be6126e6-8098-4c2f-8369-ad627266c75a->explodeBundle_1786370685697_c5f2569d-be37-43a0-afd1-23bb82412861",
+      "source": "enrichOrder_1786370685640_be6126e6-8098-4c2f-8369-ad627266c75a",
+      "target": "explodeBundle_1786370685697_c5f2569d-be37-43a0-afd1-23bb82412861",
+      "parallel": false
+    },
+    "group": "edges"
+  },
+  {
+    "data": {
+      "id": "explodeBundle_1786370685697_c5f2569d-be37-43a0-afd1-23bb82412861->priceOrder_1786370685743_dc2b3c9f-4f2f-4936-af8c-696d6d88e078",
+      "source": "explodeBundle_1786370685697_c5f2569d-be37-43a0-afd1-23bb82412861",
+      "target": "priceOrder_1786370685743_dc2b3c9f-4f2f-4936-af8c-696d6d88e078",
+      "parallel": false
+    },
+    "group": "edges"
+  },
+  {
+    "data": {
+      "id": "priceOrder_1786370685743_dc2b3c9f-4f2f-4936-af8c-696d6d88e078->reserveStock_1786370685831_932abd79-d4fb-482b-8ebf-51235e750e93",
+      "source": "priceOrder_1786370685743_dc2b3c9f-4f2f-4936-af8c-696d6d88e078",
+      "target": "reserveStock_1786370685831_932abd79-d4fb-482b-8ebf-51235e750e93",
+      "parallel": "fulfil"
+    },
+    "group": "edges"
+  },
+  {
+    "data": {
+      "id": "authorize_1786370685831_ba89166b-bec0-4f2e-b255-c4873f632c33->capture_1786370685872_8a2b3164-2009-4877-a7a9-5626ac2f95dd",
+      "source": "authorize_1786370685831_ba89166b-bec0-4f2e-b255-c4873f632c33",
+      "target": "capture_1786370685872_8a2b3164-2009-4877-a7a9-5626ac2f95dd",
+      "parent": "chargeCard_1786370685831_0748c8c9-3029-448b-bf42-e792b87050d6",
+      "parallel": false
+    },
+    "group": "edges"
+  },
+  {
+    "data": {
+      "id": "priceOrder_1786370685743_dc2b3c9f-4f2f-4936-af8c-696d6d88e078->chargeCard_1786370685831_0748c8c9-3029-448b-bf42-e792b87050d6",
+      "source": "priceOrder_1786370685743_dc2b3c9f-4f2f-4936-af8c-696d6d88e078",
+      "target": "chargeCard_1786370685831_0748c8c9-3029-448b-bf42-e792b87050d6",
+      "parallel": "fulfil"
+    },
+    "group": "edges"
+  },
+  {
+    "data": {
+      "id": "chargeCard_1786370685831_0748c8c9-3029-448b-bf42-e792b87050d6->confirmOrder_1786370685904_0c7a0f4d-4728-4df5-8fe1-de5e5876ab94",
+      "source": "chargeCard_1786370685831_0748c8c9-3029-448b-bf42-e792b87050d6",
+      "target": "confirmOrder_1786370685904_0c7a0f4d-4728-4df5-8fe1-de5e5876ab94",
+      "parallel": false
+    },
+    "group": "edges"
+  },
+  {
+    "data": {
+      "id": "reserveStock_1786370685831_932abd79-d4fb-482b-8ebf-51235e750e93->confirmOrder_1786370685904_0c7a0f4d-4728-4df5-8fe1-de5e5876ab94",
+      "source": "reserveStock_1786370685831_932abd79-d4fb-482b-8ebf-51235e750e93",
+      "target": "confirmOrder_1786370685904_0c7a0f4d-4728-4df5-8fe1-de5e5876ab94",
+      "parallel": false
+    },
+    "group": "edges"
+  }
+]

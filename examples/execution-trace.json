@@ -1,0 +1,24 @@
+{
+  "metadata": {
+    "name": "fetchInvoice",
+    "parameters": [
+      "id"
+    ],
+    "isAsync": true,
+    "isBound": false
+  },
+  "id": "c6441898-5a8b-4792-9cd6-40f063faa28f",
+  "inputs": [
+    "inv_204"
+  ],
+  "outputs": {
+    "id": "inv_204",
+    "total": 128.4,
+    "currency": "EUR"
+  },
+  "isPromise": true,
+  "startTime": "2026-08-10T13:42:50.815Z",
+  "endTime": "2026-08-10T13:42:50.861Z",
+  "duration": 46.60808299999999,
+  "elapsedTime": "46.608 ms"
+}

@@ -1,0 +1,89 @@
+/*
+ * Trace graph parts.
+ *
+ * These live outside the components on purpose: anything that draws a run uses
+ * the same vocabulary — a box is a call, a box inside a box is a nested run, an
+ * arrow is an inferred edge, a pill is a cache or memoize hit — and that
+ * vocabulary should be defined once.
+ */
+
+.ee-graph-group {
+  fill: var(--ee-surface-soft);
+  stroke: var(--ee-border);
+  stroke-width: 1;
+}
+
+.ee-graph-box {
+  fill: var(--ee-surface-raised);
+  stroke: var(--ee-border-strong);
+  stroke-width: 1;
+}
+
+.ee-graph-box.is-accent {
+  fill: var(--ee-accent-soft);
+  stroke: var(--ee-accent-400);
+}
+
+.ee-graph-dot {
+  fill: var(--ee-brand-500);
+}
+
+.ee-graph-dot.is-accent {
+  fill: var(--ee-accent-400);
+}
+
+/* A container is a node too — same dot, drawn hollow so it reads as the parent. */
+.ee-graph-dot.is-group {
+  fill: var(--ee-surface-page);
+  stroke: var(--ee-brand-500);
+  stroke-width: 2;
+}
+
+.ee-graph-label,
+.ee-graph-group-label {
+  font-family: var(--vp-font-family-mono);
+  font-size: 12px;
+  fill: var(--ee-text-1);
+}
+
+.ee-graph-group-label {
+  fill: var(--ee-text-2);
+}
+
+.ee-graph-ms {
+  font-family: var(--vp-font-family-mono);
+  font-size: 10.5px;
+  fill: var(--ee-text-3);
+}
+
+.ee-graph-edge {
+  fill: none;
+  stroke: var(--ee-brand-300);
+  stroke-width: 1.6;
+}
+
+.ee-graph-arrow {
+  fill: var(--ee-brand-300);
+}
+
+.ee-graph-tag {
+  fill: var(--ee-accent-400);
+}
+
+.ee-graph-tag.is-muted {
+  fill: var(--ee-brand-soft);
+  stroke: var(--ee-border-strong);
+  stroke-width: 1;
+}
+
+.ee-graph-tag-text {
+  font-family: var(--vp-font-family-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  fill: var(--ee-surface-page);
+}
+
+.ee-graph-tag-text.is-muted {
+  fill: var(--ee-text-2);
+}

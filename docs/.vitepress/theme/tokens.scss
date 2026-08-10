@@ -6,37 +6,45 @@
  */
 
 // UI primitives. The logo and graph artwork keep their own asset colors.
-$brand-700: #5140bf;
-$brand-600: #5b4bd6;
-$brand-500: #6d5ce7;
-$brand-300: #a396f5;
-$brand-200: #b7aeff;
+//
+// The ramp sits at hue 240° — indigo rather than violet. It was 247°, which
+// carried enough red to read as purple across every surface that tints with it.
+// Saturation and lightness are unchanged, so only the cast moves, and the ramp
+// now leans towards the cyan accent it is always paired with.
+$brand-700: #4040bf;
+$brand-600: #4b4bd6;
+$brand-500: #5c5ce7;
+$brand-300: #9696f5;
+$brand-200: #aeaeff;
 $accent-700: #1687ae;
 $accent-400: #41d1ff;
 
-// Light palette.
+// Light palette. Neutrals carry a slate tint instead of a violet one. The muted
+// text steps are darkened past what the hue shift alone gives: on the page,
+// text-2 goes 6.6:1 → 7.5:1 and text-3 4.8:1 → 5.4:1 (was only just over AA).
 $light-canvas: #fcfcff;
-$light-sidebar: #f7f6fc;
+$light-sidebar: #f6f7fb;
 $light-surface: #ffffff;
-$light-soft: #f2f0fa;
-$light-code: #f5f3fa;
-$light-text-1: #242038;
-$light-text-2: #5e5873;
-$light-text-3: #746e85;
-$light-border: #dedbea;
-$light-border-strong: #c9c4da;
+$light-soft: #f1f2f8;
+$light-code: #f4f5fa;
+$light-text-1: #1f2231;
+$light-text-2: #4f5265;
+$light-text-3: #646878;
+$light-border: #dcdee8;
+$light-border-strong: #c4c7d4;
 
-// Dark palette.
-$dark-canvas: #0d0c1b;
-$dark-sidebar: #111021;
-$dark-surface: #19172f;
-$dark-soft: #15132a;
-$dark-code: #11101f;
-$dark-text-1: #f4f2ff;
-$dark-text-2: #bbb5cf;
-$dark-text-3: #8e87a5;
-$dark-border: #2e2a43;
-$dark-border-strong: #45405e;
+// Dark palette. Same de-tinting; the muted steps are lifted rather than
+// darkened, since here they sit on a near-black canvas.
+$dark-canvas: #0c0d1a;
+$dark-sidebar: #101120;
+$dark-surface: #17192e;
+$dark-soft: #141628;
+$dark-code: #10111e;
+$dark-text-1: #f2f3ff;
+$dark-text-2: #c2c4d8;
+$dark-text-3: #9599ad;
+$dark-border: #2a2d42;
+$dark-border-strong: #414559;
 
 // Shared shape and motion.
 $radius-sm: 8px;
