@@ -1,37 +1,66 @@
-# Execution Engine
+<div align="center">
 
-[![execution-engine on npm](https://img.shields.io/npm/v/execution-engine.svg?logo=npm&label=NPM+package&color=limegreen)](https://www.npmjs.com/package/execution-engine)
-[![npm](https://img.shields.io/npm/dm/execution-engine?color=limegreen)](https://www.npmjs.com/package/execution-engine)
-[![install size](https://packagephobia.com/badge?p=execution-engine)](https://packagephobia.com/result?p=execution-engine)
-[![Bundle size](https://img.shields.io/bundlephobia/min/execution-engine)](https://bundlephobia.com/result?p=execution-engine)
-[![Coverage Status](https://coveralls.io/repos/github/tabkram/execution-engine/badge.svg?branch=main)](https://coveralls.io/github/tabkram/execution-engine?branch=main)
-[![Dependencies](https://img.shields.io/librariesio/release/npm/execution-engine.svg)](https://www.npmjs.com/package/execution-engine)
-[![Github repo](https://img.shields.io/badge/github-grey?logo=github)](https://github.com/tabkram/execution-engine)
-[![GitHub Repo stars](https://img.shields.io/github/stars/tabkram/execution-engine?style=social)](https://github.com/tabkram/execution-engine/stargazers)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Documentation](https://img.shields.io/badge/documentation-grey?logo=githubpages&color=blue)](https://tabkram.github.io/execution-engine)
-[![jsDocs.io](https://img.shields.io/badge/jsDocs.io-reference-blue)](https://www.jsdocs.io/package/execution-engine)
+<img src="docs/public/logo.svg" alt="Execution Engine logo" width="84" height="84" />
 
-Execution Engine is a TypeScript library that enables tracing, visualization, and optimization of code execution
-workflows. It provides tools to trace execution flow, manage caching, and optimize repeated computations, offering
-insights through structured execution traces in JSON format.
+<h1>Execution Engine</h1>
+
+<p><strong>Trace and optimize your function calls. See your whole code run as a graph.</strong></p>
+
+<p>
+  <a href="https://www.npmjs.com/package/execution-engine"><img alt="execution-engine on npm" src="https://img.shields.io/npm/v/execution-engine.svg?logo=npm&amp;label=NPM+package&amp;color=limegreen" /></a>
+  <a href="https://www.npmjs.com/package/execution-engine"><img alt="npm downloads" src="https://img.shields.io/npm/dm/execution-engine?color=limegreen" /></a>
+  <a href="https://packagephobia.com/result?p=execution-engine"><img alt="install size" src="https://packagephobia.com/badge?p=execution-engine" /></a>
+  <a href="https://bundlephobia.com/result?p=execution-engine"><img alt="Bundle size" src="https://img.shields.io/bundlephobia/min/execution-engine" /></a>
+  <a href="https://coveralls.io/github/tabkram/execution-engine?branch=main"><img alt="Coverage Status" src="https://coveralls.io/repos/github/tabkram/execution-engine/badge.svg?branch=main" /></a>
+  <a href="https://www.npmjs.com/package/execution-engine"><img alt="Dependencies" src="https://img.shields.io/librariesio/release/npm/execution-engine.svg" /></a>
+</p>
+
+<p>
+  <a href="https://github.com/tabkram/execution-engine"><img alt="Github repo" src="https://img.shields.io/badge/github-grey?logo=github" /></a>
+  <a href="https://github.com/tabkram/execution-engine/stargazers"><img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/tabkram/execution-engine?style=social" /></a>
+  <a href="LICENSE"><img alt="GitHub license" src="https://img.shields.io/badge/license-MIT-blue.svg" /></a>
+  <a href="https://tabkram.github.io/execution-engine"><img alt="Documentation" src="https://img.shields.io/badge/documentation-grey?logo=githubpages&amp;color=blue" /></a>
+  <a href="https://www.jsdocs.io/package/execution-engine"><img alt="jsDocs.io" src="https://img.shields.io/badge/jsDocs.io-reference-blue" /></a>
+</p>
+
+<p><a href="https://tabkram.github.io/execution-engine"><strong>Read the documentation →</strong></a></p>
+
+</div>
+
+---
+
+Execution Engine records what your code did at runtime — inputs, outputs, errors and timing — without asking you to
+rewrite the functions themselves. It runs in your own process, adds no dependencies, and returns plain JSON you can
+visualize, assert on in tests, or store and resume later.
 
 ## Features ✨
 
-Features are divided into two main parts:
+Two independent parts. Use either one without adopting the other.
 
-### 1. Execution:
+### 1. Execution — one function at a time
 
-- **Trace:** Capture detailed execution flow for debugging and analysis.
-- **Cache:** Prevent redundant function executions by storing results temporarily.
-- **Memoize:** Optimize repeated computations within the same execution call.
+No engine and no graph: wrap a single call to see what it did, or to stop it from happening twice.
 
-### 2. Engine:
+- **[Trace](https://tabkram.github.io/execution-engine/execution/trace):** Capture inputs, outputs, errors and timing
+  of a single call.
+- **[Cache](https://tabkram.github.io/execution-engine/execution/cache):** Reuse a result for a configurable TTL.
+- **[Memoize](https://tabkram.github.io/execution-engine/execution/memoize):** Collapse duplicate concurrent calls
+  into one.
+- **[Timer](https://tabkram.github.io/execution-engine/execution/timer):** Measure a code block, in ms and in words.
 
-- **Tracing:** Trace the execution flow of code within your project.
-- **Timing:** Capture the timing of each executed function.
-- **Visualization:** Generate traces in JSON format for clear and insightful visualization.
-    - Easily parseable into graphs using tools like [json-to-graph online demo](https://tabkram.github.io/json-to-graph/).
+### 2. Engine — the whole run as a graph
+
+Route related calls through an engine, and the graph assembles itself while they run.
+
+- **[Nodes and edges](https://tabkram.github.io/execution-engine/engine/trace):** Each call becomes a node, and the
+  edges are inferred from order, nesting and parallelism — you never draw them yourself.
+- **Timing:** Every node carries its own start, end, duration and elapsed time.
+- **Portable JSON:** A [Cytoscape](https://js.cytoscape.org/)-compatible shape you can assert on in tests, store and
+  resume, or open in the
+  <a href="https://tabkram.github.io/json-to-graph/"><img src="docs/public/json-to-graph.svg" alt="" width="16" height="16" align="absmiddle" /> <strong>json-to-graph viewer</strong></a>.
+
+Every feature ships twice — a decorator for classes, a plain function for everything else.
+See [Which API to use](https://tabkram.github.io/execution-engine/guide/which-api-to-use).
 
 ## Installation 📦
 
@@ -47,176 +76,85 @@ Or use the [yarn](https://yarnpkg.com/package?name=execution-engine) package man
 yarn add execution-engine
 ```
 
+Requires Node.js 18+. Decorators need `"experimentalDecorators": true` in your `tsconfig.json`; the plain functions
+work without it — see [Getting Started](https://tabkram.github.io/execution-engine/guide/getting-started).
+
 ## Usage 📚
 
----
-### 1. Execution:
-
-#### Example 1: Memoization with `@memoize`
-
-```typescript
-import { memoize } from "execution-engine";
-
-class Calculator {
-  @memoize() // Store the result of Fibonacci calculations
-  fibonacci(n: number): number {
-    if (n <= 1) return n;
-    return this.fibonacci(n - 1) + this.fibonacci(n - 2);
-  }
-}
-
-const calc = new Calculator();
-console.log(calc.fibonacci(10));  // Calculates and stores result
-console.log(calc.fibonacci(10));  // Reuses pending result, no recalculation
-```
-
-In this example, the `fibonacci` method is decorated with `@memoize`, meaning repeated calls with the same `n` will reuse the stored result instead of recalculating it.
-
-
-#### Example 2: Caching Results with `@cache`
-
-```typescript
-import { cache } from "execution-engine";
-
-class ExampleService {
-  @cache({ ttl: 5000 })  // Store result for 5 seconds
-  async fetchData(id: number): Promise<string> {
-    console.log('Fetching data...');
-    return `Data for ${id}`;
-  }
-}
-
-const service = new ExampleService();
-console.log(await service.fetchData(1));  // Fetches data and stores it
-console.log(await service.fetchData(1));  // Reuses stored result (within ttl)
-```
-
-The `fetchData` method is decorated with `@cache`, storing the result for 5 seconds. Subsequent calls within that time reuse the stored result.
-
-#### Example 3: Tracing with `@trace`
+### 1. Execution: trace one function
 
 ```typescript
 import { trace } from "execution-engine";
 
 class MathOperations {
-  @trace(console.log)  // Trace the execution and log using console.log
+  @trace(console.log) // logs inputs, outputs and duration on every call
   add(a: number, b: number): number {
     return a + b;
   }
 }
 
-const mathOps = new MathOperations();
-console.log(mathOps.add(2, 3));  // Traces the 'add' method execution and logs it
+new MathOperations().add(2, 3); // still returns 5
 ```
 
-In this example, `@trace`logs the method execution, including input parameters, output, timing, duration, start time, end time, and elapsed time.
-
-
----
-### 2. Engine:
-
-#### Example 1: Basic Usage
+### 2. Engine: get the whole run as a graph
 
 ```typescript
 import { ExecutionEngine } from "execution-engine";
 
 const engine = new ExecutionEngine();
 
-// for sync functions:
 const res1 = engine.run((param) => `result1 for ${param}`, ['param1']);
+await engine.run(async (param) => `result2 for ${param}`, [res1.outputs]);
 
-// for async functions:
-const res2 = await engine.run(async (param) => `result2 for ${param}`, [res1.outputs]);
-
-// Retrieve the trace
-const trace = engine.getTrace();
-console.log('Trace:', trace);
+const trace = engine.getTrace(); // a flat array of nodes and edges
 ```
 
-You can:
+Each call becomes a node holding what it received, what it returned and how long it took. You never create the edges:
+the engine works them out from how the calls actually ran.
 
-- view the **complete code** in [examples/usage.ts](examples/usage.ts)
-- inspect the **trace output** in [examples/usage.json](examples/usage.json).
-- visualize the **trace graph** using the json-to-graph online
-  tool. [→ See the result ←](https://tabkram.github.io/json-to-graph/?data=https://raw.githubusercontent.com/tabkram/execution-engine/main/examples/usage.json)
-
-#### Example 2: Usage with Decorators
-
-```typescript
-import { engine, run } from "execution-engine";
-
-@engine({ id: "uniqueEngineId" })
-class MyClass extends EngineTask {
-  @run()
-  myMethod1(param: string) {
-    return `result1 for ${param}`;
-  }
-
-  @run()
-  async myMethod2(param: string) {
-    return `result2 for ${param}`;
-  }
-}
-
-const myInstance = new MyClass();
-myInstance.myMethod2("param1");
-await myInstance.myMethod2("param2");
-
-// Retrieve the trace
-const trace = myInstance.engine.getTrace();
-console.log("Trace:", trace);
-```
-
-You can:
-
-- view the **complete code** in [examples/usage2.ts](examples/usage2.ts)
-- inspect the **trace output** in [examples/usage2.json](examples/usage2.json)
-- visualize the **trace graph** using the json-to-graph online
-  tool. [→ See the result ←](https://tabkram.github.io/json-to-graph/?data=https://raw.githubusercontent.com/tabkram/execution-engine/main/examples/usage2.json)
-
-#### Understanding the Trace 🧭
-
-The `trace` object is an array containing **nodes** and **edges**. It has the following structure:
-
-```typescript
-trace = [
+```json
+[
   {
-    data: {
-      id: function_uuid1,
-      label: "function"
-      //... other properties of the result of the executed function as mentioned above 
+    "data": {
+      "id": "fetchUser_…",
+      "label": "fetchUser",
+      "inputs": ["u_42"],
+      "outputs": { "id": "u_42", "plan": "pro" },
+      "duration": 58.37,
+      "elapsedTime": "58.370 ms"
     },
-    group: nodes
+    "group": "nodes"
   },
   {
-    data: {
-      id: function_uuid2,
-      label: "function"
-      //... other properties of the result of the executed function as mentioned above
-    },
-    group: nodes
-  },
-  {
-    data: {
-      id: function_uuid1 -> function_uuid2,
-      source: function_uuid1,
-      target: function_uuid2,
-      parallel: false
-    },
-    group: edges
+    "data": { "id": "fetchUser_…->chargeCard_…", "source": "fetchUser_…", "target": "chargeCard_…" },
+    "group": "edges"
   }
-];
+]
 ```
 
-#### Examples 📘
+Caching, memoization, decorators, engine context and the full trace format are covered in the
+__[documentation](https://tabkram.github.io/execution-engine)__.
 
-For additional usage examples, please explore the __[/examples](examples)__ directory in this repository.
+## Examples 📘
 
-You'll find a variety of scenarios showcasing the capabilities of Execution Engine.
+Runnable examples live in the __[/examples](examples)__ directory, each with the trace it produced — and the main ones
+are shown beside their graphs on the __[Examples page](https://tabkram.github.io/execution-engine/examples)__.
+
+- [execution-trace.ts](examples/execution-trace.ts) — one call, recorded as a plain record. No engine, no graph.
+- [engine-sequential.ts](examples/engine-sequential.ts) — the smallest graph there is: four calls, four nodes, three
+  inferred edges.
+- [engine-checkout.ts](examples/engine-checkout.ts) — one checkout that exercises everything at once: a chain,
+  nesting, recursion, a cache hit, a memoized call, and a fork and join.
+  <a href="https://tabkram.github.io/json-to-graph/?data=https://raw.githubusercontent.com/tabkram/execution-engine/main/examples/engine-checkout.json"><img src="docs/public/json-to-graph.svg" alt="" width="16" height="16" align="absmiddle" /> <strong>See its graph →</strong></a>
 
 ## Documentation 📔
 
-Explore the comprehensive __[documentation](https://tabkram.github.io/execution-engine)__ for this project.
+Explore the comprehensive __[documentation](https://tabkram.github.io/execution-engine)__ for this project:
+
+- [Getting Started](https://tabkram.github.io/execution-engine/guide/getting-started) — install, requirements, first trace.
+- [Which API to use](https://tabkram.github.io/execution-engine/guide/which-api-to-use) — decorators or functions, and which engine.
+- [Engine trace format](https://tabkram.github.io/execution-engine/engine/trace) — nodes, edges, nesting and parallelism.
+- [Migration](https://tabkram.github.io/execution-engine/reference/migration) — upgrading to v4.
 
 ## Changelog 📝
 
@@ -231,7 +169,7 @@ Before getting started, please read our [Contribution Guidelines](CONTRIBUTING.m
 
 ## Community 👥
 
-Love `execution-engine` ? Give our repo a star ⭐ ⬆️.
+Love `execution-engine`? Give our repo a star ⭐ ⬆️.
 
 ## License 📄
 

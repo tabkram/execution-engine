@@ -1,18 +1,13 @@
 /**
  * The runs drawn on the Examples page, next to the code that produced them.
  *
- * Every label and every duration below came out of actually running the example
- * named in `source` and reading the trace it wrote next to itself. Re-run one
- * and the numbers shift by a millisecond or two; they are a real run, not a
- * sketch of one.
+ * Every label and duration below came out of running the example named in
+ * `source` and reading the trace it wrote next to itself — re-run one and the
+ * numbers shift by a millisecond or two. The execution-level examples have no
+ * `steps`: they record calls one at a time and produce no graph at all.
  *
- * The execution-level examples have no `steps`: `trace`, `cache` and `memoize`
- * record calls one at a time and produce no graph at all. The page shows what
- * those printed instead.
- *
- * Geometry is not authored here. A run is a list of steps, each step a node and
- * the traced nodes that happened inside it, and `layoutFlow` turns that into
- * boxes and edges. Adding a step is one line, not a set of coordinates.
+ * Geometry is not authored here. A run is a list of steps, and `layoutFlow`
+ * turns that into boxes and edges, so adding a step is one line.
  */
 
 export interface FlowNode {
@@ -73,8 +68,7 @@ export const exampleFlows: FlowExample[] = [
         ]
       },
       {
-        // A bundle that contains a bundle: the method calls itself, and the
-        // graph nests once per level without being told how deep to go.
+        // Recursion: the method calls itself, and nests once per level.
         label: 'explodeBundle',
         ms: '46.1 ms',
         children: [{ label: 'explodeBundle', ms: '30.5 ms', children: [{ label: 'explodeBundle', ms: '15.1 ms' }] }]
@@ -84,14 +78,14 @@ export const exampleFlows: FlowExample[] = [
         ms: '87.6 ms',
         parallel: true,
         children: [
-          // Both branches ask for the rates; the second joins the call in flight,
-          // so there is one node for the one execution there was.
+          // Both branches ask for the rates, and there is one node for the one
+          // execution there was: the second joined the call in flight.
           { label: 'applyTax', ms: '80.5 ms', children: [{ label: 'fetchRates', ms: '60.5 ms', tag: 'memoized', accent: true }] },
           { label: 'convertCurrency', ms: '87.0 ms' }
         ]
       },
-      // No call wraps these two. Both hang off `priceOrder` and `confirmOrder`
-      // waits on both, so the graph forks and joins.
+      // An array is one position held by two nodes: the graph forks into them
+      // and `confirmOrder` joins them back.
       [
         { label: 'reserveStock', ms: '42.4 ms' },
         // A graph inside a node: two steps of its own, in order.

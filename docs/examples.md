@@ -254,8 +254,80 @@ Both still appear as nodes — the trace records what was asked for as well as w
 
 ## More
 
-Each example above links to its own source, and to the trace it wrote where there is one. The repository holds the
-rest — a plain sequential run, a recursive dependency resolution, custom trace options, error handling and narratives.
+Each example above links to its own source, and to the trace it wrote where there is one.
+
+### Larger traces, drawn
+
+Two runs in the repository are better opened than read: they are past the size a page of code explains, and the shape
+is the point. Both links below load the recorded trace straight into the viewer — nothing to install.
+
+<div class="ee-cards">
+  <div class="ee-card">
+    <div class="ee-card-preview">
+      <svg viewBox="0 0 148 68" role="img" aria-label="One call opening two that run at the same time inside it, then joining back">
+        <rect class="ee-graph-group" x="30" y="6" width="88" height="56" rx="13" />
+        <rect class="ee-graph-box" x="40" y="14" width="68" height="16" rx="7" />
+        <rect class="ee-graph-box" x="40" y="38" width="68" height="16" rx="7" />
+        <circle class="ee-graph-dot" cx="12" cy="34" r="4.5" />
+        <circle class="ee-graph-dot" cx="136" cy="34" r="4.5" />
+        <circle class="ee-graph-dot" cx="50" cy="22" r="3" />
+        <circle class="ee-graph-dot" cx="50" cy="46" r="3" />
+        <path class="ee-graph-edge" d="M16.5 34 C 26 34, 26 22, 40 22" />
+        <path class="ee-graph-edge" d="M16.5 34 C 26 34, 26 46, 40 46" />
+        <path class="ee-graph-edge" d="M108 22 C 122 22, 122 34, 131.5 34" />
+        <path class="ee-graph-edge" d="M108 46 C 122 46, 122 34, 131.5 34" />
+      </svg>
+      <span class="ee-card-meta">11 nodes · 6 edges</span>
+    </div>
+    <h4>Parallel, nested, and one that fails</h4>
+    <p>
+      One recommendation opens two decisions at once. One of them runs four traced calls of its own; the other throws,
+      and <code>errors: 'catch'</code> keeps it in the graph instead of losing the run. Custom ids and narratives
+      throughout.
+    </p>
+    <a class="ee-open" href="https://tabkram.github.io/json-to-graph/?data=https://raw.githubusercontent.com/tabkram/execution-engine/main/examples/weather.json" target="_blank" rel="noreferrer">Open the graph<span class="ee-open-arrow" aria-hidden="true">↗</span></a>
+    <span class="ee-src">
+      <a href="https://github.com/tabkram/execution-engine/blob/main/examples/weather.ts">weather.ts</a>
+      <a href="https://github.com/tabkram/execution-engine/blob/main/examples/weather.json">weather.json</a>
+    </span>
+  </div>
+  <div class="ee-card">
+    <div class="ee-card-preview">
+      <svg viewBox="0 0 148 68" role="img" aria-label="A stage holding a step and a sub-stage, which holds two more steps">
+        <rect class="ee-graph-group" x="6" y="4" width="136" height="60" rx="13" />
+        <rect class="ee-graph-box" x="16" y="11" width="116" height="15" rx="7" />
+        <rect class="ee-graph-group" x="16" y="34" width="116" height="24" rx="10" />
+        <rect class="ee-graph-box" x="24" y="39" width="48" height="14" rx="6" />
+        <rect class="ee-graph-box" x="78" y="39" width="48" height="14" rx="6" />
+        <circle class="ee-graph-dot" cx="26" cy="18.5" r="3" />
+        <circle class="ee-graph-dot" cx="33" cy="46" r="3" />
+        <circle class="ee-graph-dot" cx="87" cy="46" r="3" />
+        <path class="ee-graph-edge" d="M74 26 V34" />
+      </svg>
+      <span class="ee-card-meta">15 nodes · 8 edges</span>
+    </div>
+    <h4>A workflow three levels deep</h4>
+    <p>
+      A car built end to end: six stages in sequence, three of which hold steps of their own, and an assembly stage
+      whose sub-stage runs three installations at once. The shape long work actually takes.
+    </p>
+    <a class="ee-open" href="https://tabkram.github.io/json-to-graph/?data=https://raw.githubusercontent.com/tabkram/execution-engine/main/examples/car.json" target="_blank" rel="noreferrer">Open the graph<span class="ee-open-arrow" aria-hidden="true">↗</span></a>
+    <span class="ee-src">
+      <a href="https://github.com/tabkram/execution-engine/blob/main/examples/car.ts">car.ts</a>
+      <a href="https://github.com/tabkram/execution-engine/blob/main/examples/car.json">car.json</a>
+    </span>
+  </div>
+</div>
+
+### The rest of the repository
+
+A plain sequential run, a recursive dependency resolution, custom trace options, error handling and narratives. The
+complete set lives in [`examples/`](https://github.com/tabkram/execution-engine/tree/main/examples), and every file
+runs on its own:
+
+```bash
+npm run examples
+```
 
 <a class="ee-banner" href="https://github.com/tabkram/execution-engine/tree/main/examples" target="_blank" rel="noreferrer">
   <span class="ee-banner-body">

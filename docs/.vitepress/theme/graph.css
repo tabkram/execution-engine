@@ -70,20 +70,10 @@
   fill: var(--ee-accent-400);
 }
 
-.ee-graph-tag.is-muted {
-  fill: var(--ee-brand-soft);
-  stroke: var(--ee-border-strong);
-  stroke-width: 1;
-}
-
 .ee-graph-tag-text {
   font-family: var(--vp-font-family-mono);
   font-size: 9.5px;
   font-weight: 600;
   letter-spacing: 0.04em;
   fill: var(--ee-surface-page);
-}
-
-.ee-graph-tag-text.is-muted {
-  fill: var(--ee-text-2);
 }

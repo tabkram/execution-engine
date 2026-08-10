@@ -1,22 +1,27 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 390" fill="none">
   <!--
-    The hero artwork: a window onto a run, drawn with the same vocabulary as the
-    real traces on the Examples page (theme/graph.css, components/FlowExample.vue).
-    A dot on the left is the call, the bars stand in for its name, the duration is
-    right-aligned, a pill is a cache or memoize hit, and a box inside a box is a
-    nested run.
+    The hero artwork: a window onto the middle of a run, drawn with the same
+    vocabulary as the real traces on the Examples page (theme/graph.css,
+    components/FlowExample.vue). A dot on the left is the call, the bars stand in
+    for its name, the duration is right-aligned, a pill is a cache or memoize hit,
+    and a box inside a box is a nested run.
 
-    The middle is one plain DAG read top to bottom — an entry, a nested run, a
-    parallel pair, one measured result. Around it, half-nodes are cut by the frame
-    and edges leave in four directions, so the run reads as a fragment of a graph
-    that started before the frame and carries on past it. Nothing is clipped by a
-    hard border: the whole drawing is masked by a pair of crossed fades, one per
-    axis, so it dissolves into the page at every edge.
+    The frame is a viewport, not the edge of the graph. The flow arrives already in
+    progress through a box the top edge cuts in half, runs down the centre line at
+    x=320 — a nested run, a parallel pair, the result — and carries on into another
+    box the bottom edge cuts. Two more branches leave sideways. Nothing is clipped
+    hard: the whole drawing is masked by a pair of crossed fades, one per axis, so
+    it dissolves into the page at every edge.
+
+    Geometry is a grid, not a sketch. Every plain box is 208 × 44 and centred on the
+    midline; only the parallel pair leaves it, one box per lane at 152 and 488, so
+    the silhouette opens out once and closes again and the fan-out mirrors the
+    fan-in. The nested run is the widest thing here because it is the subject.
 
     Depth is carried by light rather than by geometry — no skew, so the type stays
     upright and legible. Each rank sits a little nearer the viewer than the one
     above it and takes a longer, softer shadow for it, every box is bevelled by the
-    same overhead light, and the half-nodes beyond the frame are flat and dim.
+    same overhead light, and the side branches are flat and dim.
 
     Colours are the brand tokens (tokens.scss) written out, because an <img> SVG
     cannot see the page's custom properties. Everything is translucent so the one
@@ -24,7 +29,7 @@
     which embeds this same file.
   -->
   <defs>
-    <linearGradient id="flow" x1="20" y1="40" x2="600" y2="350" gradientUnits="userSpaceOnUse">
+    <linearGradient id="flow" x1="120" y1="20" x2="520" y2="370" gradientUnits="userSpaceOnUse">
       <stop stop-color="#5c5ce7"/>
       <stop offset=".55" stop-color="#5a7ae8"/>
       <stop offset="1" stop-color="#41d1ff"/>
@@ -64,17 +69,17 @@
     <!--
       One fade per axis, nested at the root so their alpha multiplies: that gives a
       soft border on all four sides without the corner seams four edge rects would
-      leave. Full opacity is reached well inside the frame, so only the half-nodes
-      and the outgoing edges are dimmed by it.
+      leave. The vertical fade is the shallower of the two, because the boxes the
+      frame cuts have to stay legible enough to read as boxes.
     -->
     <linearGradient id="fade-x" x1="0" y1="0" x2="1" y2="0">
       <stop stop-color="white" stop-opacity="0"/>
       <stop offset=".018" stop-color="white" stop-opacity=".28"/>
       <stop offset=".042" stop-color="white" stop-opacity=".7"/>
       <stop offset=".08" stop-color="white"/>
-      <stop offset=".9" stop-color="white"/>
-      <stop offset=".94" stop-color="white" stop-opacity=".72"/>
-      <stop offset=".975" stop-color="white" stop-opacity=".3"/>
+      <stop offset=".92" stop-color="white"/>
+      <stop offset=".958" stop-color="white" stop-opacity=".7"/>
+      <stop offset=".982" stop-color="white" stop-opacity=".28"/>
       <stop offset="1" stop-color="white" stop-opacity="0"/>
     </linearGradient>
     <mask id="edge-x" maskUnits="userSpaceOnUse" x="0" y="0" width="640" height="390">
@@ -82,19 +87,19 @@
     </mask>
     <linearGradient id="fade-y" x1="0" y1="0" x2="0" y2="1">
       <stop stop-color="white" stop-opacity="0"/>
-      <stop offset=".022" stop-color="white" stop-opacity=".28"/>
-      <stop offset=".05" stop-color="white" stop-opacity=".7"/>
-      <stop offset=".095" stop-color="white"/>
-      <stop offset=".89" stop-color="white"/>
-      <stop offset=".935" stop-color="white" stop-opacity=".72"/>
-      <stop offset=".975" stop-color="white" stop-opacity=".3"/>
+      <stop offset=".02" stop-color="white" stop-opacity=".42"/>
+      <stop offset=".075" stop-color="white" stop-opacity=".88"/>
+      <stop offset=".13" stop-color="white"/>
+      <stop offset=".87" stop-color="white"/>
+      <stop offset=".925" stop-color="white" stop-opacity=".88"/>
+      <stop offset=".98" stop-color="white" stop-opacity=".42"/>
       <stop offset="1" stop-color="white" stop-opacity="0"/>
     </linearGradient>
     <mask id="edge-y" maskUnits="userSpaceOnUse" x="0" y="0" width="640" height="390">
       <rect width="640" height="390" fill="url(#fade-y)"/>
     </mask>
 
-    <radialGradient id="background-fade" cx=".5" cy=".46" r=".72">
+    <radialGradient id="background-fade" cx=".5" cy=".5" r=".72">
       <stop offset=".64" stop-color="white"/>
       <stop offset=".86" stop-color="white" stop-opacity=".62"/>
       <stop offset="1" stop-color="white" stop-opacity="0"/>
@@ -114,22 +119,25 @@
     <marker id="arrow-small" viewBox="0 0 7 7" refX="7" refY="3.5" markerWidth="7" markerHeight="7" orient="auto" markerUnits="userSpaceOnUse">
       <path d="M0 0 L7 3.5 L0 7 Z" fill="#41d1ff" fill-opacity=".82"/>
     </marker>
-    <!-- Beyond the frame: enough of a head to keep the direction readable, not
-         enough to compete with the run itself. -->
+    <!-- The branches that leave sideways: enough of a head to keep the direction
+         readable, not enough to compete with the run itself. -->
     <marker id="arrow-far" viewBox="0 0 7 7" refX="7" refY="3.5" markerWidth="7" markerHeight="7" orient="auto" markerUnits="userSpaceOnUse">
       <path d="M0 0 L7 3.5 L0 7 Z" fill="#5c5ce7" fill-opacity=".26"/>
     </marker>
 
-    <!-- Three steps of depth, one per rank: further back is a tighter, weaker
+    <!-- Four steps of depth, one per rank: further back is a tighter, weaker
          shadow, nearer is longer and softer. -->
     <filter id="depth-far" x="-40%" y="-70%" width="180%" height="250%">
-      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#241d63" flood-opacity=".13"/>
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#241d63" flood-opacity=".12"/>
+    </filter>
+    <filter id="depth-back" x="-40%" y="-70%" width="180%" height="250%">
+      <feDropShadow dx="0" dy="6" stdDeviation="7" flood-color="#241d63" flood-opacity=".14"/>
     </filter>
     <filter id="depth-mid" x="-40%" y="-70%" width="180%" height="250%">
-      <feDropShadow dx="1" dy="9" stdDeviation="10" flood-color="#241d63" flood-opacity=".16"/>
+      <feDropShadow dx="1" dy="10" stdDeviation="11" flood-color="#241d63" flood-opacity=".16"/>
     </filter>
     <filter id="depth-mid-accent" x="-40%" y="-70%" width="180%" height="250%">
-      <feDropShadow dx="1" dy="9" stdDeviation="10" flood-color="#241d63" flood-opacity=".12"/>
+      <feDropShadow dx="1" dy="10" stdDeviation="11" flood-color="#241d63" flood-opacity=".12"/>
       <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#41d1ff" flood-opacity=".14"/>
     </filter>
     <filter id="depth-near" x="-45%" y="-80%" width="190%" height="270%">
@@ -155,134 +163,137 @@
       letter-spacing: .02em;
     }
     .bevel { fill: none; stroke: url(#bevel); stroke-width: 1; }
-    @media (max-width: 420px) { .beyond { display: none; } }
+    @media (max-width: 420px) { .aside { display: none; } }
   </style>
 
   <g mask="url(#edge-x)">
   <g mask="url(#edge-y)">
 
     <g mask="url(#background-mask)">
-      <ellipse cx="320" cy="190" rx="360" ry="150" fill="url(#atmosphere)"/>
-      <ellipse cx="460" cy="240" rx="190" ry="95" fill="url(#accent-atmosphere)"/>
+      <ellipse cx="320" cy="195" rx="356" ry="152" fill="url(#atmosphere)"/>
+      <ellipse cx="400" cy="250" rx="200" ry="100" fill="url(#accent-atmosphere)"/>
     </g>
 
     <!--
-      Beyond the frame: the calls this run arrived from and the ones it leads to.
-      Half-boxes, no durations, no bevel and no shadow — they are flat and far off,
-      and the mask above takes them the rest of the way out.
+      Work that branches off to either side and out of the window. Flat, dim and
+      in mirrored pairs, so they read as the rest of the workflow rather than as a
+      ragged edge.
     -->
-    <g class="beyond" opacity=".62">
+    <g class="aside" opacity=".6">
       <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4">
-        <path d="M38 55 H96" stroke="url(#flow)" stroke-opacity=".34" marker-end="url(#arrow-far)"/>
-        <path d="M170 0 V29" stroke="url(#flow)" stroke-opacity=".3" marker-end="url(#arrow-far)"/>
-        <path d="M32 141 H54 Q68 141 68 155 V190" stroke="url(#flow)" stroke-opacity=".3" marker-end="url(#arrow-far)"/>
-        <path d="M566 130 V186 Q566 200 580 200 H590" stroke="url(#flow)" stroke-opacity=".3"/>
-        <path d="M417 320 H476 Q490 320 490 334 V366" stroke="url(#flow)" stroke-opacity=".3"/>
-        <path d="M116 244 V290 Q116 304 102 304 H50 Q36 304 36 318 V332" stroke="url(#flow)" stroke-opacity=".26"/>
+        <path d="M40 76 H186" stroke="url(#flow)" stroke-opacity=".3" marker-end="url(#arrow-far)"/>
+        <path d="M454 76 H600" stroke="url(#flow)" stroke-opacity=".28"/>
+        <path d="M100 246 V296 Q100 310 86 310 H50" stroke="url(#flow)" stroke-opacity=".26"/>
+        <path d="M540 246 V296 Q540 310 554 310 H590" stroke="url(#flow)" stroke-opacity=".26"/>
       </g>
 
       <g opacity=".8">
-        <rect x="-142" y="31" width="180" height="48" rx="13" fill="url(#glass)" stroke="#5c5ce7" stroke-opacity=".28" stroke-width="1.1"/>
-        <rect x="-40" y="51" width="60" height="7" rx="3.5" fill="#5c5ce7" fill-opacity=".24"/>
+        <rect x="-140" y="54" width="180" height="44" rx="13" fill="url(#glass)" stroke="#5c5ce7" stroke-opacity=".28" stroke-width="1.1"/>
+        <rect x="-38" y="73" width="58" height="7" rx="3.5" fill="#5c5ce7" fill-opacity=".24"/>
 
-        <rect x="-148" y="118" width="180" height="46" rx="13" fill="url(#glass)" stroke="#5c5ce7" stroke-opacity=".26" stroke-width="1.1"/>
-        <rect x="-30" y="137" width="52" height="7" rx="3.5" fill="#5c5ce7" fill-opacity=".22"/>
+        <rect x="600" y="54" width="180" height="44" rx="13" fill="url(#glass)" stroke="#5c5ce7" stroke-opacity=".28" stroke-width="1.1"/>
+        <circle cx="622" cy="76" r="4.5" fill="#5c5ce7" fill-opacity=".36"/>
+        <rect x="638" y="72" width="58" height="7" rx="3.5" fill="#5c5ce7" fill-opacity=".24"/>
 
-        <rect x="582" y="176" width="180" height="48" rx="13" fill="url(#glass)" stroke="#5c5ce7" stroke-opacity=".28" stroke-width="1.1"/>
-        <circle cx="604" cy="200" r="4.5" fill="#5c5ce7" fill-opacity=".36"/>
-        <rect x="620" y="196" width="60" height="7" rx="3.5" fill="#5c5ce7" fill-opacity=".24"/>
+        <rect x="-130" y="288" width="180" height="44" rx="13" fill="url(#glass)" stroke="#5c5ce7" stroke-opacity=".28" stroke-width="1.1"/>
+        <rect x="-28" y="307" width="58" height="7" rx="3.5" fill="#5c5ce7" fill-opacity=".24"/>
 
-        <rect x="446" y="362" width="180" height="48" rx="13" fill="url(#glass-accent)" stroke="#41d1ff" stroke-opacity=".32" stroke-width="1.1"/>
-        <circle cx="468" cy="386" r="4.5" fill="#41d1ff" fill-opacity=".4"/>
-        <rect x="484" y="382" width="64" height="7" rx="3.5" fill="#41d1ff" fill-opacity=".27"/>
-
-        <rect x="-124" y="328" width="180" height="48" rx="13" fill="url(#glass)" stroke="#5c5ce7" stroke-opacity=".28" stroke-width="1.1"/>
-        <rect x="-16" y="348" width="60" height="7" rx="3.5" fill="#5c5ce7" fill-opacity=".24"/>
+        <rect x="590" y="288" width="180" height="44" rx="13" fill="url(#glass-accent)" stroke="#41d1ff" stroke-opacity=".3" stroke-width="1.1"/>
+        <circle cx="612" cy="310" r="4.5" fill="#41d1ff" fill-opacity=".38"/>
+        <rect x="628" y="306" width="58" height="7" rx="3.5" fill="#41d1ff" fill-opacity=".26"/>
       </g>
     </g>
 
     <!--
-      Edges first, so every box paints over the line that arrives at it. One entry
-      fans out into a parallel pair and the pair converges again: the diamond is
-      the point of the picture.
+      Edges first, so every box paints over the line that arrives at it. The run
+      comes in from above, splits once into the pair, and meets again on the result
+      before carrying on below.
     -->
     <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8">
-      <path d="M310 55 H342" stroke="url(#flow)" stroke-opacity=".82" marker-end="url(#arrow)"/>
-      <path d="M456 130 V144 Q456 158 442 158 H164 Q150 158 150 172 V190" stroke="url(#flow)" stroke-opacity=".72" marker-end="url(#arrow)"/>
-      <path d="M456 130 V190" stroke="url(#flow)" stroke-opacity=".82" marker-end="url(#arrow-accent)"/>
-      <path d="M186 244 V258 Q186 272 200 272 H267 Q281 272 281 284 V290" stroke="url(#flow)" stroke-opacity=".72" marker-end="url(#arrow-accent)"/>
-      <path d="M456 244 V258 Q456 272 442 272 H339 Q325 272 325 284 V290" stroke="url(#flow)" stroke-opacity=".8" marker-end="url(#arrow-accent)"/>
+      <path d="M320 26 V52" stroke="url(#flow)" stroke-opacity=".8" marker-end="url(#arrow)"/>
+      <path d="M320 156 V165 Q320 177 308 177 H164 Q152 177 152 189 V198" stroke="url(#flow)" stroke-opacity=".74" marker-end="url(#arrow)"/>
+      <path d="M320 156 V165 Q320 177 332 177 H476 Q488 177 488 189 V198" stroke="url(#flow)" stroke-opacity=".82" marker-end="url(#arrow-accent)"/>
+      <path d="M152 246 V255 Q152 267 164 267 H286 Q298 267 298 279 V288" stroke="url(#flow)" stroke-opacity=".74" marker-end="url(#arrow-accent)"/>
+      <path d="M488 246 V255 Q488 267 476 267 H354 Q342 267 342 279 V288" stroke="url(#flow)" stroke-opacity=".82" marker-end="url(#arrow-accent)"/>
+      <path d="M320 336 V364" stroke="url(#flow)" stroke-opacity=".72" marker-end="url(#arrow-accent)"/>
     </g>
 
-    <!-- Rank 1, furthest back: the entry, one traced call. -->
+    <!-- Already in progress: the top edge cuts this one in half. -->
     <g filter="url(#depth-far)">
-      <rect x="96" y="29" width="214" height="52" rx="15" fill="url(#glass)" stroke="#5c5ce7" stroke-opacity=".7" stroke-width="1.4"/>
-      <rect class="bevel" x="97" y="30" width="212" height="50" rx="14"/>
-      <circle cx="118" cy="55" r="4.5" fill="#5c5ce7" fill-opacity=".85"/>
-      <rect x="134" y="44" width="60" height="7" rx="3.5" fill="#5c5ce7" fill-opacity=".62"/>
-      <rect x="134" y="59" width="42" height="6" rx="3" fill="#5c5ce7" fill-opacity=".34"/>
-      <rect x="202" y="46" width="46" height="18" rx="9" fill="#5c5ce7" fill-opacity=".12" stroke="#5c5ce7" stroke-opacity=".26"/>
-      <text class="tag" x="225" y="58.2" text-anchor="middle" fill="#4b4bd6" fill-opacity=".82">trace</text>
-      <text class="ms" x="294" y="58.5" text-anchor="end" fill="#5c5ce7" fill-opacity=".7">4.1ms</text>
+      <rect x="216" y="-22" width="208" height="48" rx="14" fill="url(#glass)" stroke="#5c5ce7" stroke-opacity=".62" stroke-width="1.3"/>
+      <rect class="bevel" x="217" y="-21" width="206" height="46" rx="13"/>
+      <circle cx="238" cy="2" r="4.5" fill="#5c5ce7" fill-opacity=".8"/>
+      <rect x="254" y="-8" width="58" height="7" rx="3.5" fill="#5c5ce7" fill-opacity=".55"/>
+      <rect x="254" y="6" width="40" height="6" rx="3" fill="#5c5ce7" fill-opacity=".3"/>
     </g>
 
-    <!-- Rank 1: a run inside the run. Hollow dot for the parent, two calls in
+    <!-- The subject: a run inside the run. Hollow dot for the parent, two calls in
          sequence, and the children sit a step nearer than the box holding them. -->
-    <g filter="url(#depth-far)">
-      <rect x="342" y="30" width="238" height="100" rx="19" fill="#5c5ce7" fill-opacity=".05" stroke="#5c5ce7" stroke-opacity=".55" stroke-width="1.35"/>
-      <rect class="bevel" x="343" y="31" width="236" height="98" rx="18"/>
-      <circle cx="362" cy="55" r="4.5" fill="none" stroke="#5c5ce7" stroke-opacity=".8" stroke-width="2"/>
-      <rect x="378" y="51" width="74" height="8" rx="4" fill="#5c5ce7" fill-opacity=".5"/>
-      <rect x="462" y="52.5" width="30" height="5" rx="2.5" fill="#5c5ce7" fill-opacity=".26"/>
-      <text class="ms" x="564" y="58.5" text-anchor="end" fill="#5c5ce7" fill-opacity=".62">18.7ms</text>
+    <g filter="url(#depth-back)">
+      <rect x="186" y="52" width="268" height="104" rx="18" fill="#5c5ce7" fill-opacity=".05" stroke="#5c5ce7" stroke-opacity=".55" stroke-width="1.35"/>
+      <rect class="bevel" x="187" y="53" width="266" height="102" rx="17"/>
+      <circle cx="206" cy="76" r="4.5" fill="none" stroke="#5c5ce7" stroke-opacity=".8" stroke-width="2"/>
+      <rect x="222" y="72" width="70" height="8" rx="4" fill="#5c5ce7" fill-opacity=".5"/>
+      <rect x="302" y="67" width="46" height="18" rx="9" fill="#5c5ce7" fill-opacity=".12" stroke="#5c5ce7" stroke-opacity=".26"/>
+      <text class="tag" x="325" y="79.2" text-anchor="middle" fill="#4b4bd6" fill-opacity=".82">trace</text>
+      <text class="ms" x="438" y="79.5" text-anchor="end" fill="#5c5ce7" fill-opacity=".62">18.7ms</text>
 
-      <rect x="360" y="72" width="92" height="38" rx="11" fill="url(#glass)" stroke="#5c5ce7" stroke-opacity=".45" stroke-width="1.1"/>
-      <rect class="bevel" x="361" y="73" width="90" height="36" rx="10"/>
-      <circle cx="376" cy="91" r="3.5" fill="#5c5ce7" fill-opacity=".8"/>
-      <rect x="389" y="88" width="18" height="6" rx="3" fill="#5c5ce7" fill-opacity=".5"/>
-      <text class="ms ms-sm" x="441" y="94.2" text-anchor="end" fill="#5c5ce7" fill-opacity=".6">3.2ms</text>
+      <rect x="204" y="98" width="106" height="38" rx="11" fill="url(#glass)" stroke="#5c5ce7" stroke-opacity=".45" stroke-width="1.1"/>
+      <rect class="bevel" x="205" y="99" width="104" height="36" rx="10"/>
+      <circle cx="220" cy="117" r="3.5" fill="#5c5ce7" fill-opacity=".8"/>
+      <rect x="233" y="114" width="22" height="6" rx="3" fill="#5c5ce7" fill-opacity=".5"/>
+      <text class="ms ms-sm" x="298" y="120.2" text-anchor="end" fill="#5c5ce7" fill-opacity=".6">3.2ms</text>
 
-      <path d="M452 91 H470" stroke="url(#flow)" stroke-opacity=".7" stroke-width="1.4" stroke-linecap="round" marker-end="url(#arrow-small)"/>
+      <path d="M310 117 H330" stroke="url(#flow)" stroke-opacity=".7" stroke-width="1.4" stroke-linecap="round" marker-end="url(#arrow-small)"/>
 
-      <rect x="470" y="72" width="92" height="38" rx="11" fill="url(#glass-accent)" stroke="#41d1ff" stroke-opacity=".6" stroke-width="1.1"/>
-      <rect class="bevel" x="471" y="73" width="90" height="36" rx="10"/>
-      <circle cx="486" cy="91" r="3.5" fill="#41d1ff" fill-opacity=".9"/>
-      <rect x="499" y="88" width="16" height="6" rx="3" fill="#41d1ff" fill-opacity=".62"/>
-      <text class="ms ms-sm" x="551" y="94.2" text-anchor="end" fill="#2ba8cd" fill-opacity=".82">6.4ms</text>
+      <rect x="330" y="98" width="106" height="38" rx="11" fill="url(#glass-accent)" stroke="#41d1ff" stroke-opacity=".6" stroke-width="1.1"/>
+      <rect class="bevel" x="331" y="99" width="104" height="36" rx="10"/>
+      <circle cx="346" cy="117" r="3.5" fill="#41d1ff" fill-opacity=".9"/>
+      <rect x="359" y="114" width="20" height="6" rx="3" fill="#41d1ff" fill-opacity=".62"/>
+      <text class="ms ms-sm" x="424" y="120.2" text-anchor="end" fill="#2ba8cd" fill-opacity=".82">6.4ms</text>
     </g>
 
-    <!-- Rank 2: the parallel pair. Both are answered without running — one from
-         the cache, one by joining a call already in flight. -->
+    <!-- The parallel pair, the only rank that leaves the centre line. Both are
+         answered without running: one from the cache, one by joining a call that
+         was already in flight. -->
     <g filter="url(#depth-mid)">
-      <rect x="44" y="190" width="212" height="54" rx="15" fill="url(#glass)" stroke="#5c5ce7" stroke-opacity=".62" stroke-width="1.35"/>
-      <rect class="bevel" x="45" y="191" width="210" height="52" rx="14"/>
-      <circle cx="66" cy="217" r="4.5" fill="#5c5ce7" fill-opacity=".85"/>
-      <rect x="82" y="206" width="54" height="7" rx="3.5" fill="#5c5ce7" fill-opacity=".6"/>
-      <rect x="82" y="221" width="38" height="6" rx="3" fill="#5c5ce7" fill-opacity=".32"/>
-      <rect x="144" y="208" width="52" height="18" rx="9" fill="#5c5ce7" fill-opacity=".12" stroke="#5c5ce7" stroke-opacity=".26"/>
-      <text class="tag" x="170" y="220.2" text-anchor="middle" fill="#4b4bd6" fill-opacity=".82">cached</text>
-      <text class="ms" x="240" y="220.5" text-anchor="end" fill="#5c5ce7" fill-opacity=".68">8.7ms</text>
+      <rect x="48" y="198" width="208" height="48" rx="14" fill="url(#glass)" stroke="#5c5ce7" stroke-opacity=".62" stroke-width="1.35"/>
+      <rect class="bevel" x="49" y="199" width="206" height="46" rx="13"/>
+      <circle cx="70" cy="222" r="4.5" fill="#5c5ce7" fill-opacity=".85"/>
+      <rect x="86" y="211" width="52" height="7" rx="3.5" fill="#5c5ce7" fill-opacity=".6"/>
+      <rect x="86" y="226" width="36" height="6" rx="3" fill="#5c5ce7" fill-opacity=".32"/>
+      <rect x="146" y="213" width="52" height="18" rx="9" fill="#5c5ce7" fill-opacity=".12" stroke="#5c5ce7" stroke-opacity=".26"/>
+      <text class="tag" x="172" y="225.2" text-anchor="middle" fill="#4b4bd6" fill-opacity=".82">cached</text>
+      <text class="ms" x="240" y="225.5" text-anchor="end" fill="#5c5ce7" fill-opacity=".68">8.7ms</text>
     </g>
     <g filter="url(#depth-mid-accent)">
-      <rect x="350" y="190" width="212" height="54" rx="15" fill="url(#glass-accent)" stroke="#41d1ff" stroke-opacity=".72" stroke-width="1.4"/>
-      <rect class="bevel" x="351" y="191" width="210" height="52" rx="14"/>
-      <circle cx="372" cy="217" r="4.5" fill="#41d1ff" fill-opacity=".92"/>
-      <rect x="388" y="206" width="42" height="7" rx="3.5" fill="#41d1ff" fill-opacity=".62"/>
-      <rect x="388" y="221" width="30" height="6" rx="3" fill="#41d1ff" fill-opacity=".34"/>
-      <rect x="436" y="208" width="66" height="18" rx="9" fill="#41d1ff" fill-opacity=".16" stroke="#41d1ff" stroke-opacity=".4"/>
-      <text class="tag" x="469" y="220.2" text-anchor="middle" fill="#2ba8cd">memoized</text>
-      <text class="ms" x="546" y="220.5" text-anchor="end" fill="#2ba8cd" fill-opacity=".88">0.2ms</text>
+      <rect x="384" y="198" width="208" height="48" rx="14" fill="url(#glass-accent)" stroke="#41d1ff" stroke-opacity=".72" stroke-width="1.35"/>
+      <rect class="bevel" x="385" y="199" width="206" height="46" rx="13"/>
+      <circle cx="406" cy="222" r="4.5" fill="#41d1ff" fill-opacity=".92"/>
+      <rect x="422" y="211" width="36" height="7" rx="3.5" fill="#41d1ff" fill-opacity=".62"/>
+      <rect x="422" y="226" width="26" height="6" rx="3" fill="#41d1ff" fill-opacity=".34"/>
+      <rect x="466" y="213" width="66" height="18" rx="9" fill="#41d1ff" fill-opacity=".16" stroke="#41d1ff" stroke-opacity=".4"/>
+      <text class="tag" x="499" y="225.2" text-anchor="middle" fill="#2ba8cd">memoized</text>
+      <text class="ms" x="576" y="225.5" text-anchor="end" fill="#2ba8cd" fill-opacity=".88">0.2ms</text>
     </g>
 
-    <!-- Rank 3, nearest: everything converges on one measured result. -->
+    <!-- Both halves meet again, measured. -->
     <g filter="url(#depth-near)">
-      <rect x="189" y="290" width="228" height="60" rx="17" fill="#41d1ff" fill-opacity=".11" stroke="#41d1ff" stroke-opacity=".82" stroke-width="1.5"/>
-      <rect class="bevel" x="190" y="291" width="226" height="58" rx="16"/>
-      <circle cx="217" cy="320" r="11" fill="#41d1ff" fill-opacity=".08" stroke="#41d1ff" stroke-opacity=".7"/>
-      <path d="M212.5 320.5 L216 324 L222 316.5" stroke="#41d1ff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
-      <rect x="241" y="307" width="80" height="8" rx="4" fill="#41d1ff" fill-opacity=".62"/>
-      <rect x="241" y="325" width="52" height="7" rx="3.5" fill="#41d1ff" fill-opacity=".36"/>
-      <text class="ms" x="401" y="323.5" text-anchor="end" fill="#2ba8cd" fill-opacity=".9">12.3ms</text>
+      <rect x="216" y="288" width="208" height="48" rx="14" fill="#41d1ff" fill-opacity=".11" stroke="#41d1ff" stroke-opacity=".82" stroke-width="1.5"/>
+      <rect class="bevel" x="217" y="289" width="206" height="46" rx="13"/>
+      <circle cx="242" cy="312" r="10" fill="#41d1ff" fill-opacity=".08" stroke="#41d1ff" stroke-opacity=".7"/>
+      <path d="M237.5 312.5 L241 316 L246.5 308.5" stroke="#41d1ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="264" y="301" width="68" height="8" rx="4" fill="#41d1ff" fill-opacity=".62"/>
+      <rect x="264" y="317" width="46" height="7" rx="3.5" fill="#41d1ff" fill-opacity=".36"/>
+      <text class="ms" x="408" y="315.5" text-anchor="end" fill="#2ba8cd" fill-opacity=".9">12.3ms</text>
+    </g>
+
+    <!-- And on it goes: the bottom edge cuts the next one. -->
+    <g filter="url(#depth-near)">
+      <rect x="216" y="364" width="208" height="48" rx="14" fill="url(#glass)" stroke="#5c5ce7" stroke-opacity=".6" stroke-width="1.3"/>
+      <rect class="bevel" x="217" y="365" width="206" height="46" rx="13"/>
+      <circle cx="238" cy="388" r="4.5" fill="#5c5ce7" fill-opacity=".78"/>
+      <rect x="254" y="378" width="58" height="7" rx="3.5" fill="#5c5ce7" fill-opacity=".52"/>
     </g>
 
   </g>

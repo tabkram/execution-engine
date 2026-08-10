@@ -6,11 +6,8 @@
  */
 
 // UI primitives. The logo and graph artwork keep their own asset colors.
-//
-// The ramp sits at hue 240° — indigo rather than violet. It was 247°, which
-// carried enough red to read as purple across every surface that tints with it.
-// Saturation and lightness are unchanged, so only the cast moves, and the ramp
-// now leans towards the cyan accent it is always paired with.
+// The ramp sits at hue 240° — indigo, so it leans towards the cyan accent it is
+// always paired with rather than reading as purple.
 $brand-700: #4040bf;
 $brand-600: #4b4bd6;
 $brand-500: #5c5ce7;
@@ -19,9 +16,8 @@ $brand-200: #aeaeff;
 $accent-700: #1687ae;
 $accent-400: #41d1ff;
 
-// Light palette. Neutrals carry a slate tint instead of a violet one. The muted
-// text steps are darkened past what the hue shift alone gives: on the page,
-// text-2 goes 6.6:1 → 7.5:1 and text-3 4.8:1 → 5.4:1 (was only just over AA).
+// Light palette, slate-tinted. The muted text steps are dark enough to clear AA
+// with room to spare on the page: text-2 at 7.5:1, text-3 at 5.4:1.
 $light-canvas: #fcfcff;
 $light-sidebar: #f6f7fb;
 $light-surface: #ffffff;
@@ -33,8 +29,8 @@ $light-text-3: #646878;
 $light-border: #dcdee8;
 $light-border-strong: #c4c7d4;
 
-// Dark palette. Same de-tinting; the muted steps are lifted rather than
-// darkened, since here they sit on a near-black canvas.
+// Dark palette. The muted steps are lifted rather than darkened, since here
+// they sit on a near-black canvas.
 $dark-canvas: #0c0d1a;
 $dark-sidebar: #101120;
 $dark-surface: #17192e;
@@ -173,16 +169,10 @@ $motion-base: 220ms ease;
   --vp-local-search-bg: var(--ee-surface-raised);
   --vp-local-search-result-bg: var(--ee-surface-raised);
 
+  // The theme's blurred blob behind the hero art is hidden in custom.css, so
+  // --vp-home-hero-image-background-image and -filter are deliberately unset.
   --vp-home-hero-name-color: transparent;
   --vp-home-hero-name-background: linear-gradient(120deg, var(--ee-brand-500) 30%, var(--ee-accent-700));
-  --vp-home-hero-image-background-image: radial-gradient(
-    circle at 50% 50%,
-    color-mix(in srgb, var(--ee-brand-500) 55%, transparent) 0%,
-    color-mix(in srgb, color-mix(in srgb, var(--ee-brand-500) 62%, var(--ee-accent-400)) 34%, transparent) 40%,
-    color-mix(in srgb, var(--ee-accent-400) 14%, transparent) 66%,
-    transparent 100%
-  );
-  --vp-home-hero-image-filter: blur(22px);
 }
 
 .dark {
@@ -207,16 +197,13 @@ $motion-base: 220ms ease;
 
   --ee-neutral-soft: color-mix(in srgb, var(--ee-text-2) 11%, transparent);
 
-  --ee-card-bg: var(--ee-surface-raised);
   --ee-card-shadow: 0 1px 0 rgba(255, 255, 255, 0.025), 0 18px 46px rgba(0, 0, 0, 0.25);
   --ee-card-shadow-hover: 0 1px 0 rgba(255, 255, 255, 0.035), 0 22px 52px rgba(0, 0, 0, 0.34);
-  --ee-icon-bg: linear-gradient(145deg, var(--ee-brand-soft), var(--ee-accent-soft));
   --ee-home-hero-bg:
     radial-gradient(760px 580px at 91% 28%, color-mix(in srgb, var(--ee-accent-400) 10%, transparent), transparent 70%),
     radial-gradient(820px 580px at 2% 0%, color-mix(in srgb, var(--ee-brand-500) 19%, transparent), transparent 68%);
   --ee-hero-kicker-color: color-mix(in srgb, var(--ee-text-2) 78%, var(--ee-brand-200));
   --ee-hero-heading-color: color-mix(in srgb, var(--ee-text-1) 88%, var(--ee-brand-200));
-  --ee-hero-support-color: var(--ee-text-3);
   --ee-install-border: color-mix(in srgb, var(--ee-accent-400) 24%, transparent);
   --ee-install-bg: color-mix(in srgb, var(--ee-accent-400) 6%, transparent);
   --ee-install-text: color-mix(in srgb, var(--ee-accent-400) 56%, white);

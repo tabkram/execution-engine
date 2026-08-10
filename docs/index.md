@@ -23,10 +23,8 @@ hero:
 ---
 
 <!--
-  The two parts of the library are rendered as blocks below rather than through
-  the theme's `features:` frontmatter, which is a flat list and cannot nest.
-  Each block holds its own pages; the two small cards underneath are
-  cross-cutting and belong to neither part.
+  Markup rather than the theme's `features:` frontmatter, which is a flat list:
+  each block below holds its own pages, and the cards underneath belong to neither.
 -->
 
 <div class="ee-parts">

@@ -1,16 +1,20 @@
 <!doctype html>
 <!--
-  Source for assets/social-preview.png. It embeds the hero artwork itself rather
-  than a copy of it, so re-render after every change to that file:
+  Source for assets/social-preview-light.png: the light counterpart of
+  social-preview.html. Same layout, same embedded hero artwork — only the palette
+  changes, and it changes to the docs' own light tokens (theme/tokens.scss), so a
+  card and the site it links to look like the same product.
+
+  The artwork is shared rather than copied, so re-render after every change to it:
 
     CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
     "$CHROME" --headless --hide-scrollbars --allow-file-access-from-files \
-      --window-size=1280,640 --screenshot=assets/social-preview.png \
-      "file://$PWD/assets/social-preview.html"
+      --window-size=1280,640 --screenshot=assets/social-preview-light.png \
+      "file://$PWD/assets/social-preview-light.html"
     "$CHROME" --headless --hide-scrollbars --allow-file-access-from-files \
       --window-size=1280,640 --force-device-scale-factor=2 \
-      --screenshot="assets/social-preview@2x.png" \
-      "file://$PWD/assets/social-preview.html"
+      --screenshot="assets/social-preview-light@2x.png" \
+      "file://$PWD/assets/social-preview-light.html"
 -->
 <html>
 <head>
@@ -20,26 +24,28 @@
   html, body { width: 1280px; height: 640px; overflow: hidden; }
   body {
     font-family: -apple-system, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    background: #0c0c1a;
+    background: #fcfcff;
     -webkit-font-smoothing: antialiased;
   }
 
+  /* The same two washes as the dark card, at the light theme's strength: on a
+     near-white canvas they only have to tint the corners, not light the room. */
   .stage {
     position: relative;
     width: 1280px;
     height: 640px;
     overflow: hidden;
     background:
-      radial-gradient(760px 580px at 91% 28%, rgba(65,209,255,0.11), transparent 70%),
-      radial-gradient(820px 580px at 2% 0%, rgba(92,92,231,0.22), transparent 68%),
-      #0c0c1a;
+      radial-gradient(700px 460px at 91% 24%, rgba(65,209,255,0.10), transparent 68%),
+      radial-gradient(760px 500px at 3% 2%, rgba(92,92,231,0.10), transparent 66%),
+      #fcfcff;
   }
 
   /* ---------------- left column ---------------- */
   .brand {
     position: absolute; left: 64px; top: 34px;
     display: flex; align-items: center; gap: 10px;
-    color: #f2f0ff;
+    color: #1f2231;
     font-size: 18px; font-weight: 650; letter-spacing: -0.01em;
   }
   .brand .mark { width: 29px; height: 29px; }
@@ -51,13 +57,18 @@
   }
   .eyebrow .txt {
     font-size: 13px; font-weight: 700; letter-spacing: 0.12em;
-    text-transform: uppercase; color: #9d93d8;
+    text-transform: uppercase; color: #4f5265;
   }
 
+  /* Brand into deep teal, the ramp the docs use for the light hero. Two changes
+     for a card this wide: the whole ramp stays dark enough to read on a near-white
+     page — the dark card can start at white — and the stops are pulled inside the
+     box, because at this width the last one otherwise lands past the bottom-right
+     corner and the teal never arrives. */
   .wordmark {
     font-size: 72px; font-weight: 800; line-height: 1.1; letter-spacing: -0.035em;
     white-space: nowrap;
-    background: linear-gradient(118deg, #ffffff 8%, #c7c7ff 52%, #7fdcff 96%);
+    background: linear-gradient(104deg, #5c5ce7 4%, #3a63d5 48%, #1687ae 88%);
     -webkit-background-clip: text; background-clip: text;
     -webkit-text-fill-color: transparent; color: transparent;
     padding-bottom: 5px;
@@ -66,12 +77,12 @@
   .tagline {
     margin-top: 16px;
     font-size: 29px; font-weight: 600; line-height: 1.3; letter-spacing: -0.015em;
-    color: #e0dcf3;
+    color: #1f2231;
   }
 
   .support {
     margin-top: 14px;
-    color: #8882a6;
+    color: #646878;
     font-size: 16px; font-weight: 400; line-height: 1.5;
   }
 
@@ -79,51 +90,57 @@
     margin-top: 21px;
     display: flex; align-items: center;
   }
+  /* A raised card rather than the dark card's tinted glass: on white, a lit chip
+     has nothing to sit on, so it earns its edge from a border and a soft shadow. */
   .foot .cmd {
     font-family: "SF Mono", "JetBrains Mono", Menlo, monospace;
-    font-size: 16px; font-weight: 600; color: #b9f7e5;
+    font-size: 16px; font-weight: 600; color: #1f2231;
     padding: 10px 14px; border-radius: 8px;
-    border: 1px solid rgba(65,209,255,0.24);
-    background: rgba(65,209,255,0.065);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    border: 1px solid #dcdee8;
+    background: #ffffff;
+    box-shadow: 0 5px 18px rgba(54,44,120,0.07);
   }
-  .foot .cmd span { color: #6f9bb0; }
+  .foot .cmd span { color: #a2a7b8; }
 
   /* ---------------- right graph ----------------
      The artwork is 640 × 390, so 620 wide is 378 tall; `top` centres that in the
-     640-tall stage. It fades out on every edge by itself, so it needs no crop. */
+     640-tall stage. It fades out on every edge by itself, so it needs no crop.
+     It is translucent by design and works on either canvas, so it is embedded
+     here unchanged — at full opacity, since white gives back less than the dark
+     canvas did. */
   .graph {
     position: absolute; left: 638px; top: 131px;
     width: 620px;
-    opacity: 0.94;
   }
   .graph img {
     display: block; width: 100%; height: auto;
-    filter: drop-shadow(0 18px 30px rgba(40,35,94,0.16));
+    filter: drop-shadow(0 18px 30px rgba(40,35,94,0.14));
   }
 
   .signature {
     position: absolute; left: 64px; bottom: 34px;
     display: flex; align-items: center; gap: 10px;
-    color: #77708f;
+    color: #646878;
     font-size: 11.5px; font-weight: 500; letter-spacing: 0.045em;
-    opacity: 0.62;
+    opacity: 0.72;
   }
   .signature::before {
     width: 22px; height: 1px;
-    background: linear-gradient(90deg, #5c5ce7, #41d1ff);
+    background: linear-gradient(90deg, #5c5ce7, #1687ae);
     content: '';
-    opacity: 0.65;
+    opacity: 0.7;
   }
 </style>
 </head>
 <body>
 <div class="stage">
   <div class="brand">
+    <!-- The mark's cyan end is the darker accent step here: #41d1ff is a highlight
+         on near-black and a wash on near-white. -->
     <svg class="mark" viewBox="0 0 32 32" fill="none">
       <defs>
         <linearGradient id="ee" x1="2" y1="28" x2="30" y2="4" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#5c5ce7"/><stop offset="1" stop-color="#41d1ff"/>
+          <stop stop-color="#5c5ce7"/><stop offset="1" stop-color="#1687ae"/>
         </linearGradient>
       </defs>
       <path d="M9 16 L23 7 M9 16 L23 25" stroke="url(#ee)" stroke-width="2.5" stroke-linecap="round"/>

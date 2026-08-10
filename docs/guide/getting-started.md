@@ -134,7 +134,8 @@ from `this.engine`.
 ## Visualizing the result
 
 `getTrace()` returns a [Cytoscape](https://js.cytoscape.org/)-compatible array of nodes and edges. Write it to a file
-and open it in the online viewer:
+and drop that file into the [json-to-graph viewer](https://tabkram.github.io/json-to-graph/) to explore the run as an
+interactive diagram:
 
 ```ts
 import { writeFileSync } from 'node:fs';
@@ -142,46 +143,16 @@ import { writeFileSync } from 'node:fs';
 writeFileSync('trace.json', JSON.stringify(engine.getTrace(), null, 2));
 ```
 
-Then drop that file into the viewer:
-
-<a class="ee-banner" href="https://tabkram.github.io/json-to-graph/" target="_blank" rel="noreferrer">
-  <img src="/json-to-graph.svg" alt="" width="44" height="44" />
+<a class="ee-banner" href="/execution-engine/examples">
   <span class="ee-banner-body">
-    <strong>json-to-graph</strong>
-    <span>Load any trace JSON and explore it as an interactive diagram.</span>
+    <strong>See it drawn</strong>
+    <span>Real runs on the Examples page, each with the code that produced it — and larger traces you can open in the viewer.</span>
   </span>
-  <span class="ee-banner-cta">Open&nbsp;↗</span>
+  <span class="ee-banner-cta">Examples&nbsp;→</span>
 </a>
-
-### Explore larger traces
-
-These repository examples show graph shapes that are easier to understand visually.
-
-<div class="ee-cards">
-  <div class="ee-card">
-    <h4>Nested &amp; parallel</h4>
-    <p>Two forecasts fetched concurrently inside a parent step, fanning out and back in.</p>
-    <a class="ee-open" href="https://tabkram.github.io/json-to-graph/?data=https://raw.githubusercontent.com/tabkram/execution-engine/main/examples/weather.json" target="_blank" rel="noreferrer">See the graph →</a>
-    <span class="ee-src">
-      <a href="https://github.com/tabkram/execution-engine/blob/main/examples/weather.ts">weather.ts</a>
-      <a href="https://github.com/tabkram/execution-engine/blob/main/examples/weather.json">weather.json</a>
-    </span>
-  </div>
-  <div class="ee-card">
-    <h4>Deep workflow</h4>
-    <p>A multi-level manufacturing pipeline — the shape traces take on real work.</p>
-    <a class="ee-open" href="https://tabkram.github.io/json-to-graph/?data=https://raw.githubusercontent.com/tabkram/execution-engine/main/examples/car.json" target="_blank" rel="noreferrer">See the graph →</a>
-    <span class="ee-src">
-      <a href="https://github.com/tabkram/execution-engine/blob/main/examples/car.ts">car.ts</a>
-      <a href="https://github.com/tabkram/execution-engine/blob/main/examples/car.json">car.json</a>
-    </span>
-  </div>
-</div>
-
-The complete set lives in [`examples/`](https://github.com/tabkram/execution-engine/tree/main/examples) and runs with
-`npm run examples`.
 
 ## Where to go next
 
+- [Examples](../examples.md) — runs you can read side by side with their graphs.
 - [Trace](../engine/trace.md) — what nodes and edges mean, and how nesting and parallelism are inferred.
 - [Which API to use](./which-api-to-use.md) — whether you actually need the full engine, or just `@trace`.

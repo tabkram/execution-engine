@@ -4,12 +4,8 @@
  *
  * The code is the default slot, so it stays a fenced block in the markdown and
  * keeps the theme's highlighting and copy button. The right side is the graph
- * named by `id`, or — for the execution-level examples, which record calls one
- * at a time and build no graph — whatever the `out` slot holds.
- *
- * Drawing vocabulary is shared with `theme/graph.css`: a box is a call, a box
- * inside a box is a nested run, an arrow is an edge the engine inferred, and a
- * pill is a cache or memoize hit.
+ * named by `id`, or — for the execution-level examples, which build no graph —
+ * whatever the `out` slot holds. Drawing vocabulary lives in `theme/graph.css`.
  */
 import { computed } from 'vue';
 import { exampleFlows, layoutFlow, MS_SLOT, tagWidth } from '../exampleFlows';
@@ -143,13 +139,10 @@ const fileName = (path: string) => path.split('/').pop();
 <style scoped>
 /*
  * Two columns wherever both fit, one where they do not — decided from the space
- * the doc column actually has, which changes with the sidebar and the window. A
- * width media query would be guessing at it, so the example is its own query
- * container and asks its own width.
- *
- * The split is uneven on purpose: the graph is capped at 470px however much room
- * it is given, while the code is what the reader actually reads, so the extra
- * width goes there and keeps snippets off the horizontal scrollbar.
+ * the doc column actually has, which changes with the sidebar and the window, so
+ * the example is its own query container rather than guessing at a breakpoint.
+ * The split is uneven on purpose: the graph is capped at 470px, so the extra
+ * width goes to the code and keeps snippets off the horizontal scrollbar.
  */
 .ee-ex-root {
   container-type: inline-size;
@@ -168,11 +161,8 @@ const fileName = (path: string) => path.split('/').pop();
   }
 }
 
-/*
- * The theme's code block brings its own margins; the grid supplies the spacing.
- * A step down in type size keeps the snippets inside half a column, so the
- * common case is a block that reads straight through with nothing to scroll.
- */
+/* The grid supplies the spacing, and a step down in type size keeps the snippets
+   inside half a column with nothing to scroll. */
 .ee-ex :deep(div[class*='language-']) {
   --vp-code-font-size: 13px;
   margin: 0;
@@ -190,11 +180,8 @@ const fileName = (path: string) => path.split('/').pop();
   color: var(--vp-c-text-3);
 }
 
-/*
- * Capped, not just fluid. A run is 420 units wide, so letting it take a full
- * stacked column blew the 12-unit labels up to half again the size of the code
- * they sit under. 470 keeps the two at about the same reading size.
- */
+/* Capped, not just fluid: a run is 420 units wide, and 470 keeps its 12-unit
+   labels at about the reading size of the code beside them. */
 .ee-ex-svg {
   display: block;
   width: 100%;
