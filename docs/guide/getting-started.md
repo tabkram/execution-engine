@@ -2,26 +2,14 @@
 
 ## Requirements
 
-- **Node.js 18+** — the engine uses `AsyncLocalStorage`.
+- **Node.js 24+** — the engine uses `AsyncLocalStorage` and supports `Error.cause`.
 - **`experimentalDecorators`**, if you use any decorator. The plain functions work without it.
 
 ## Installation
 
-::: code-group
-
-```bash [npm]
+```bash
 npm install execution-engine
 ```
-
-```bash [yarn]
-yarn add execution-engine
-```
-
-```bash [pnpm]
-pnpm add execution-engine
-```
-
-:::
 
 If you use decorators, enable legacy decorator support in `tsconfig.json`:
 

@@ -70,13 +70,7 @@ Use [npm](https://www.npmjs.com/package/execution-engine) package manager:
 npm install execution-engine
 ```
 
-Or use the [yarn](https://yarnpkg.com/package?name=execution-engine) package manager:
-
-```bash
-yarn add execution-engine
-```
-
-Requires Node.js 18+. Decorators need `"experimentalDecorators": true` in your `tsconfig.json`; the plain functions
+Requires Node.js 24+. Decorators need `"experimentalDecorators": true` in your `tsconfig.json`; the plain functions
 work without it — see [Getting Started](https://tabkram.github.io/execution-engine/guide/getting-started).
 
 ## Usage 📚

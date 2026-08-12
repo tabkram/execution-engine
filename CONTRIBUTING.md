@@ -13,6 +13,17 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 * All features or bug fixes **must be tested** by one or more specs (unit-tests).
 * All public API methods **must be documented**.
 
+## Development setup
+
+This repository uses **npm** as its sole package manager. Use Node.js 24 or later, then install the locked dependency
+tree with:
+
+```bash
+npm ci
+```
+
+Do not run Yarn in this repository: `package-lock.json` is the source of truth for dependency resolution and CI.
+
 ## <a name="commit"></a> Commit Message Format
 
 *This specification is inspired by and supersedes the [AngularJS commit message format][commit-message-format].*

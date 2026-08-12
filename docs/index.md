@@ -99,7 +99,7 @@ hero:
     <span class="ee-small-icon">📦</span>
     <span class="ee-small-body">
       <strong>Zero dependencies</strong>
-      <span>No production dependencies. Types bundled, Node.js 18 and above.</span>
+      <span>No production dependencies. Types bundled, Node.js 24 and above.</span>
     </span>
   </a>
   <a class="ee-small-card" href="/execution-engine/examples">
