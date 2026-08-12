@@ -26,7 +26,7 @@ export function trace<O>(
 ): MethodDecorator {
   return function (target: object, propertyKey: string | symbol, descriptor: PropertyDescriptor): void {
     const originalMethod = descriptor.value;
-    descriptor.value = function (...args: unknown[]) {
+    descriptor.value = function (...args: unknown[]): unknown {
       const thisTraceContext = {
         metadata: extractClassMethodMetadata(target.constructor.name, propertyKey, originalMethod),
         ...additionalContext

@@ -62,7 +62,7 @@ export function queryByXPath(
  * @param xPaths array of xPaths to queryBy
  * @example extract(object, ['inputs.number', 'parent', 'outputs.others.2.key', 'outputs.others[key=Y].value'])
  */
-export function extract(object, xPaths: Array<string>) {
+export function extract(object: unknown | Array<unknown>, xPaths: Array<string>): Array<Record<string, unknown>> {
   return xPaths.map((xp, index) => {
     return { [xPaths[index]]: queryByXPath(object, xPaths[index]) };
   });

@@ -38,7 +38,7 @@ export class TraceableEngine {
   private static extractIOExecutionTraceWithConfig<I, O>(
     ioeExecTrace: ExecutionTrace<I, O>['inputs'] | ExecutionTrace<I, O>['outputs'] | ExecutionTrace<I, O>['errors'],
     extractionConfig: boolean | Array<string> | ((i: unknown) => unknown)
-  ) {
+  ): unknown {
     try {
       if (typeof extractionConfig === 'function') {
         return extractionConfig(ioeExecTrace);
@@ -48,7 +48,7 @@ export class TraceableEngine {
         return ioeExecTrace;
       }
     } catch (e) {
-      throw new Error(`error when mapping/extracting ExecutionTrace with config: "${extractionConfig}", ${e?.message}`);
+      throw new Error(`error when mapping/extracting ExecutionTrace with config: "${extractionConfig}", ${e?.message}`, { cause: e });
     }
   }
 
@@ -67,7 +67,7 @@ export class TraceableEngine {
         return narratives;
       }
     } catch (e) {
-      throw new Error(`error when mapping/extracting Narrative with config: "${narrativeConfig}", ${e?.message}`);
+      throw new Error(`error when mapping/extracting Narrative with config: "${narrativeConfig}", ${e?.message}`, { cause: e });
     }
   }
 
@@ -96,7 +96,7 @@ export class TraceableEngine {
    * Gets the nodes of the execution trace.
    * @returns An array containing nodes of the execution trace.
    */
-  getTraceNodes() {
+  getTraceNodes(): Array<EngineNode> {
     return this.nodes;
   }
 
@@ -204,7 +204,7 @@ export class TraceableEngine {
    * @param narratives - The narrative or array of narratives to be processed.
    * @returns The updated instance of TraceableExecution.
    */
-  pushNarratives(nodeId: EngineNodeTrace['id'], narratives: string | string[]) {
+  pushNarratives(nodeId: EngineNodeTrace['id'], narratives: string | string[]): TraceableEngine {
     const existingNodeIndex = this.nodes?.findIndex((n) => n.data.id === nodeId);
 
     if (existingNodeIndex >= 0) {
@@ -238,7 +238,7 @@ export class TraceableEngine {
     executionTrace?: ExecutionTrace<Array<unknown>, O>,
     options: TraceOptions<Array<unknown>, O>['config'] = DEFAULT_TRACE_CONFIG,
     isAutoCreated = false
-  ) {
+  ): void {
     if (nodeTrace.parent && !this.nodes?.find((n) => n.data.id === nodeTrace.parent)) {
       this.buildTrace<O>(
         {
@@ -261,15 +261,15 @@ export class TraceableEngine {
 
       const previousNodes = !parallelEdge
         ? this.nodes?.filter(
-            (node) =>
-              !node.data.abstract &&
-              node.data.parent === nodeTrace.parent &&
-              (!options?.parallel || !node.data.parallel || !node.data.parent || !nodeTrace.parent) &&
-              node.data.id !== nodeTrace.id &&
-              node.data.parent !== nodeTrace.id &&
-              node.data.id !== nodeTrace.parent &&
-              !this.edges.find((e) => e.data.source === node.data.id)
-          )
+          (node) =>
+            !node.data.abstract &&
+            node.data.parent === nodeTrace.parent &&
+            (!options?.parallel || !node.data.parallel || !node.data.parent || !nodeTrace.parent) &&
+            node.data.id !== nodeTrace.id &&
+            node.data.parent !== nodeTrace.id &&
+            node.data.id !== nodeTrace.parent &&
+            !this.edges.find((e) => e.data.source === node.data.id)
+        )
         : [];
       this.edges = [
         ...(this.edges ?? []),
@@ -285,17 +285,17 @@ export class TraceableEngine {
         })) ?? []),
         ...(parallelEdge
           ? [
-              {
-                data: {
-                  id: `${parallelEdge.data.source}->${nodeTrace.id}`,
-                  source: parallelEdge.data.source,
-                  target: nodeTrace.id,
-                  parent: nodeTrace.parent,
-                  parallel: options?.parallel
-                },
-                group: 'edges' as const
-              }
-            ]
+            {
+              data: {
+                id: `${parallelEdge.data.source}->${nodeTrace.id}`,
+                source: parallelEdge.data.source,
+                target: nodeTrace.id,
+                parent: nodeTrace.parent,
+                parallel: options?.parallel
+              },
+              group: 'edges' as const
+            }
+          ]
           : [])
       ];
     }
@@ -348,7 +348,7 @@ export class TraceableEngine {
   private filterNodeExecutionTrace<I, O>(
     nodeData?: EngineNodeData<I, O>,
     doTraceExecution?: TraceOptions<I, O>['config']['traceExecution']
-  ) {
+  ): object {
     if (!doTraceExecution) {
       return {};
     }

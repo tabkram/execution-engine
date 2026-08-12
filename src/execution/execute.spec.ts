@@ -2,19 +2,19 @@ import { execute } from './execute';
 
 describe('execute function', () => {
   test('should execute a synchronous function and return result', () => {
-    const syncFunction = (x: number, y: number) => x + y;
+    const syncFunction = (x: number, y: number): number => x + y;
     const result = execute(syncFunction, [2, 3]);
     expect(result).toBe(5);
   });
 
   test('should execute an async function and return resolved result', async () => {
-    const asyncFunction = async (x: number, y: number) => x + y;
+    const asyncFunction = async (x: number, y: number): Promise<number> => x + y;
     const result = await execute(asyncFunction, [2, 3]);
     expect(result).toBe(5);
   });
 
   test('should execute an async function and return resolved result or fallback value', async () => {
-    const asyncFunction = (x: number, y: number) =>
+    const asyncFunction = (x: number, y: number): Promise<{ result: number; message: string }> | false =>
       x + y > 0 ? Promise.resolve({ result: x + y, message: `positive string: ${x + y}` }) : false;
 
     const resultOfPositive = (await execute(asyncFunction, [2, 3])) as string;
@@ -25,7 +25,7 @@ describe('execute function', () => {
   });
 
   test('should call successCallback with the result', () => {
-    const syncFunction = (x: number) => x * 2;
+    const syncFunction = (x: number): number => x * 2;
     const successCallback = jest.fn((output) => output + 1);
     const result = execute(syncFunction, [3], [], successCallback);
     expect(successCallback).toHaveBeenCalledWith(6, false);
@@ -33,7 +33,7 @@ describe('execute function', () => {
   });
 
   test('should call successCallback with the async result', async () => {
-    const asyncFunction = async (x: number) => x * 2;
+    const asyncFunction = async (x: number): Promise<number> => x * 2;
     const successCallback = jest.fn((output) => output + 1);
     const result = (await execute(asyncFunction, [3], [], successCallback)) satisfies number;
     expect(successCallback).toHaveBeenCalledWith(6, true);
@@ -41,7 +41,7 @@ describe('execute function', () => {
   });
 
   test('should call errorCallback when sync function throws an error', () => {
-    const syncFunction = () => {
+    const syncFunction = (): never => {
       throw new Error('Test Error');
     };
     const errorCallback = jest.fn((error) => `Handled: ${error.message}`);
@@ -51,7 +51,7 @@ describe('execute function', () => {
   });
 
   test('should call errorCallback when async function rejects', async () => {
-    const asyncFunction = async () => {
+    const asyncFunction = async (): Promise<never> => {
       throw new Error('Async Error');
     };
     const errorCallback = jest.fn((error) => `Handled: ${error.message}`);
@@ -61,7 +61,7 @@ describe('execute function', () => {
   });
 
   test('should return error if no errorCallback is provided for sync function', () => {
-    const syncFunction = () => {
+    const syncFunction = (): never => {
       throw new Error('No handler');
     };
     const result = execute(syncFunction, []);
@@ -70,7 +70,7 @@ describe('execute function', () => {
   });
 
   test('should return error if no errorCallback is provided for async function', async () => {
-    const asyncFunction = async () => {
+    const asyncFunction = async (): Promise<never> => {
       throw new Error('No handler Async');
     };
     const result = await execute(asyncFunction, []);

@@ -77,7 +77,7 @@ describe('safeError', () => {
       apromise: Promise.resolve('resolved'), // Promise
       aregex: new RegExp('ab+c'), // Regular Expression
       asymbol: Symbol('symbol'), // Symbol
-      afunction: () => 'this is a function', // Function
+      afunction: (): string => 'this is a function', // Function
       aweakmap: new WeakMap([[{}, 'value']]) // WeakMap (non-serializable)
     };
 

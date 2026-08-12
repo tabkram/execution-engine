@@ -68,7 +68,7 @@ describe('trace decorator', () => {
 
     it('should trace a synchronous function and verify helloWorldHandlerThrows', () => {
       const instance = new SyncClass();
-      expect(() => instance.helloWorldHandlerThrows()).toThrowError('hello but I throw!');
+      expect(() => instance.helloWorldHandlerThrows()).toThrow('hello but I throw!');
       expect(onTraceEventMockThrows).toHaveBeenCalledTimes(1);
       expect(onTraceEventMockThrows).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -133,7 +133,7 @@ describe('trace decorator', () => {
     function empty(): MethodDecorator {
       return function (target: unknown, propertyKey: string, descriptor: PropertyDescriptor) {
         const originalMethod = descriptor.value;
-        descriptor.value = function (...args: unknown[]) {
+        descriptor.value = function (...args: unknown[]): unknown {
           return originalMethod.apply(this, args);
         };
       };
@@ -172,8 +172,8 @@ describe('trace decorator', () => {
         url: string,
         traceContext: Record<string, unknown> = {}
       ): Promise<{
-          data: string;
-        }> {
+        data: string;
+      }> {
         return this.fetchDataFunction(url, traceContext);
       }
 

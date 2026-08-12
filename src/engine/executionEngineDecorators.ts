@@ -63,12 +63,12 @@ export function engine(options?: { id: string }): ClassDecorator {
  * @returns {Function} - A decorator function.
  */
 export function run<O>(options?: TraceOptions<Array<any>, O> | TraceOptions<Array<any>, O>['trace']) {
-  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
     // Store the original method
     const originalMethod = descriptor.value;
 
     // Modify the descriptor's value property
-    descriptor.value = function (...args: any[]) {
+    descriptor.value = function (...args: any[]): unknown {
       if (isAsync(originalMethod)) {
         return this.engine.run(originalMethod.bind(this), args, options)?.then((r) => r.outputs);
       } else {

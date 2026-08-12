@@ -1,7 +1,7 @@
 import eslint from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
 import checkFile from 'eslint-plugin-check-file';
-import importPlugin from "eslint-plugin-import";
+import importPlugin from 'eslint-plugin-import-x';
 import unusedImports from 'eslint-plugin-unused-imports';
 import tseslint from 'typescript-eslint';
 
@@ -111,9 +111,9 @@ export default tseslint.config(
       importPlugin.flatConfigs.recommended
     ],
     rules: {
-      'import/no-unresolved': 'off',
-      'import/namespace': ['error', { 'allowComputed': true }],
-      'import/order': [
+      'import-x/no-unresolved': 'off',
+      'import-x/namespace': ['error', { 'allowComputed': true }],
+      'import-x/order': [
         'error',
         {
           groups: [

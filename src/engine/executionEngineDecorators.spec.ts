@@ -18,7 +18,7 @@ describe('decorators', () => {
       @engine()
       class TestClass extends EngineTask {
         @run()
-        async testMethod() {
+        async testMethod(): Promise<string> {
           return 'Test Result';
         }
       }
@@ -46,7 +46,11 @@ describe('decorators', () => {
             }
           }
         })
-        generateGreeting(person: { [key: string]: unknown }, greeter: { [key: string]: string }, nodeData?: EngineNodeData) {
+        generateGreeting(
+          person: { [key: string]: unknown },
+          greeter: { [key: string]: string },
+          nodeData?: EngineNodeData
+        ): { greeting: { fr: string; es: string; en: string }; greeter: string; hobbies: Array<string>; readonly fullGreeting: string } {
           this.engine.pushNarratives(nodeData.id, [`here is tracing narrative for greeting ${person.name}`]);
           return {
             greeting: {
@@ -56,7 +60,7 @@ describe('decorators', () => {
             },
             greeter: `I'm ${greeter.name}.`,
             hobbies: [`Let's explore the world of ${(person.hobbies as Array<string>).join(', ')} together!`],
-            get fullGreeting() {
+            get fullGreeting(): string {
               return [this.greeting.en, this.greeter, ...this.hobbies].join(' ');
             }
           };
@@ -119,12 +123,12 @@ describe('decorators', () => {
     @engine({ id: 'whetherEngine' })
     class MyWeatherTask extends EngineTask {
       @run()
-      async fetchCurrentTemperature(city: string) {
+      async fetchCurrentTemperature(city: string): Promise<string> {
         return Promise.resolve(`Current Temperature in ${city}: 25°C`);
       }
 
       @run()
-      async fetchDailyForecast(city: string) {
+      async fetchDailyForecast(city: string): Promise<string> {
         return Promise.resolve(`Daily Forecast in ${city}: Sunny`);
       }
 
@@ -144,7 +148,7 @@ describe('decorators', () => {
           traceExecution: { inputs: true, outputs: true, narratives: ['Narrative 1 GoOut', 'Narrative 2 GoOut'] }
         }
       })
-      async decideIfIShouldGoOut(city: string) {
+      async decideIfIShouldGoOut(city: string): Promise<string> {
         const temperature = await new MyWeatherTask().fetchCurrentTemperature(city);
         const forecast = await new MyWeatherTask().fetchDailyForecast(city);
 
@@ -164,12 +168,12 @@ describe('decorators', () => {
       }
 
       @run({ config: { parallel: true, errors: 'catch', traceExecution: true } })
-      async decideIfIShouldGoOutNextYear(city: string) {
+      async decideIfIShouldGoOutNextYear(city: string): Promise<never> {
         throw new Error(`Next year too far!, could not decide for ${city}`);
       }
 
       @run()
-      validateDecision(stringDecision: string) {
+      validateDecision(stringDecision: string): boolean {
         return stringDecision?.includes('GREEN');
       }
     }
@@ -231,7 +235,7 @@ describe('decorators', () => {
       }
 
       @run()
-      runSequence(depth: number) {
+      runSequence(depth: number): Array<string> {
         const res = [];
         while (this.currSequence > 0) {
           res.push(this.task(this.sequence));
@@ -243,7 +247,7 @@ describe('decorators', () => {
       }
 
       @run()
-      task(param: string | number) {
+      task(param: string | number): string {
         return `run for sequence: ${param}`;
       }
     }

@@ -3,12 +3,18 @@
     "experimentalDecorators": true,
     "target": "es2021",
     "module": "commonjs",
-    "lib": ["es2021"],
+    // "lib" only affects type-checking, never emit: target stays es2021 so the
+    // compiled output is unchanged, while es2022 types cover `new Error(msg, { cause })`.
+    "lib": ["es2022"],
     "declaration": true,
     "declarationMap": true,
     "outDir": "./dist",
     "rootDir": "./src",
-//    "strict": true,
+    // TypeScript >=6 defaults this to true; pinned to false to keep the pre-6 behaviour.
+    // Flipping it to true is still the goal, but it needs source changes first.
+    "strict": false,
+    // TypeScript >=6 no longer pulls in every @types/* package automatically.
+    "types": ["node", "jest"],
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true
   },

@@ -62,7 +62,7 @@ describe('ExecutionTrace', () => {
   });
 
   describe('Tracing error scenarios', () => {
-    function throwErrorFunction(param: string) {
+    function throwErrorFunction(param: string): never {
       throw new Error(`Sample Error: ${param}`);
     }
 
@@ -102,7 +102,7 @@ describe('ExecutionTrace', () => {
   });
 
   describe('Tracing function onTraceEventMock and traceContext', () => {
-    const divisionFunction = (x: number, y: number, traceContext: Record<string, unknown>) => {
+    const divisionFunction = (x: number, y: number, traceContext: Record<string, unknown>): number => {
       if (y === 0) {
         traceContext['narratives'] = [`Throwing because division of ${x} by ${y}`];
         throw new Error('Throwing because division by zero is not allowed.');
@@ -111,7 +111,7 @@ describe('ExecutionTrace', () => {
       return x / y;
     };
 
-    const fetchDataFunction = async (url: string, traceContext: Record<string, unknown>) => {
+    const fetchDataFunction = async (url: string, traceContext: Record<string, unknown>): Promise<{ data: string }> => {
       traceContext['narratives'] = [`Fetching data from ${url}`];
       if (!url.startsWith('http')) {
         traceContext['narratives'] = [`Throwing because the URL ${url} is invalid`];

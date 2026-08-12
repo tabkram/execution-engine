@@ -11,7 +11,7 @@ describe('TraceableEngine', () => {
     });
 
     it('should create a trace of consecutive user-related actions', async () => {
-      function registerUser(username: string, password: string) {
+      function registerUser(username: string, password: string): Promise<string> {
         if (username && password) {
           return Promise.resolve(`User ${username} successfully registered`);
         } else {
@@ -19,7 +19,7 @@ describe('TraceableEngine', () => {
         }
       }
 
-      function loginUser(username: string, password: string) {
+      function loginUser(username: string, password: string): string {
         if (username && password) {
           return `User ${username} successfully logged in`;
         } else {
@@ -27,7 +27,7 @@ describe('TraceableEngine', () => {
         }
       }
 
-      function getUserInformation(username: string) {
+      function getUserInformation(username: string): string {
         const userInfo = {
           fullName: 'John Doe',
           email: 'john.doe@example.com',
@@ -55,15 +55,15 @@ describe('TraceableEngine', () => {
     });
 
     it('should create a trace of fetching weather information simultaneously', async () => {
-      async function fetchCurrentTemperature(city: string) {
+      async function fetchCurrentTemperature(city: string): Promise<string> {
         return Promise.resolve(`Current Temperature in ${city}: 25°C`);
       }
 
-      async function fetchDailyForecast(city: string) {
+      async function fetchDailyForecast(city: string): Promise<string> {
         return Promise.resolve(`Daily Forecast in ${city}: Sunny`);
       }
 
-      async function getWeatherInformation(city: string, trace?: EngineNodeData) {
+      async function getWeatherInformation(city: string, trace?: EngineNodeData): Promise<string> {
         const [temperature, forecast] = await Promise.all([
           (
             await traceableExecution.run(fetchCurrentTemperature, [city], {
@@ -145,15 +145,15 @@ describe('TraceableEngine', () => {
     });
 
     it('should generate a trace with implicit parent associations and coherent settings based on AsyncLocalStorage', async () => {
-      async function fetchCurrentTemperature(city: string) {
+      async function fetchCurrentTemperature(city: string): Promise<string> {
         return Promise.resolve(`Current Temperature in ${city}: 25°C`);
       }
 
-      async function fetchDailyForecast(city: string) {
+      async function fetchDailyForecast(city: string): Promise<string> {
         return Promise.resolve(`Daily Forecast in ${city}: Sunny`);
       }
 
-      async function getWeatherInformation(city: string) {
+      async function getWeatherInformation(city: string): Promise<string> {
         const [temperature, forecast] = await Promise.all([
           (await traceableExecution.run(fetchCurrentTemperature, [city], { config: { parallel: true } }))?.outputs,
           (await traceableExecution.run(fetchDailyForecast, [city], { config: { parallel: true } }))?.outputs
@@ -190,13 +190,13 @@ describe('TraceableEngine', () => {
     });
 
     it('should trace sync and async errors in throwErrorFunction and asyncThrowErrorFunction', async () => {
-      function throwErrorFunction(param: string) {
+      function throwErrorFunction(param: string): never {
         throw new Error(`Sample Error: ${param}`);
       }
 
       jest.useFakeTimers({ doNotFake: ['performance'] });
 
-      async function asyncThrowErrorFunction(param: string) {
+      async function asyncThrowErrorFunction(param: string): Promise<never> {
         jest.advanceTimersByTime(1000);
         throw new Error(`Sample Async Error: ${param}`);
       }
@@ -256,7 +256,7 @@ describe('TraceableEngine', () => {
     });
 
     it('should add narratives to a trace node and verify the updated trace and ordered narratives', () => {
-      const sampleFunction = (param: string) => `Result: ${param}`;
+      const sampleFunction = (param: string): string => `Result: ${param}`;
 
       const nodeId = 'sampleFunction_custom_id_1';
       traceableExecution.run(sampleFunction, ['InputParam'], {
@@ -323,12 +323,12 @@ describe('TraceableEngine', () => {
     });
 
     it('should enhance trace details for a sample function with various configurations', () => {
-      const sampleFunction = (param: unknown) => `Result: ${param}`;
+      const sampleFunction = (param: unknown): string => `Result: ${param}`;
       // Run the sample function using the run method and create nodes in the trace
       const traceExecutionConfig = {
-        inputs: (i) => 'better input for trace: ' + i,
-        outputs: (o) => 'better output for trace: ' + o,
-        narratives: (res) => {
+        inputs: (i): string => 'better input for trace: ' + i,
+        outputs: (o): string => 'better output for trace: ' + o,
+        narratives: (res): Array<string> => {
           return [`Narrative 0 with ${res.outputs}`];
         }
       };

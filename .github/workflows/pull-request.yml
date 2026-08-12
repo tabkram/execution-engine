@@ -28,12 +28,12 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: 18
+          node-version: 24
           registry-url: "https://registry.npmjs.org"
 
       - name: Generate Canary Version
@@ -67,12 +67,12 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: 18
+          node-version: 24
           registry-url: "https://registry.npmjs.org"
 
       - name: Remove old Canary versions
@@ -110,7 +110,7 @@ jobs:
           fi
 
       - name: Comment on PR with deployed Version
-        uses: peter-evans/create-or-update-comment@v4
+        uses: peter-evans/create-or-update-comment@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
@@ -130,7 +130,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Remove old Canary versions
         id: unpublish_canary_2
@@ -157,7 +157,7 @@ jobs:
           fi
 
       - name: Comment on PR with deployed Version
-        uses: peter-evans/create-or-update-comment@v4
+        uses: peter-evans/create-or-update-comment@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
