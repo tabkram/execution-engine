@@ -7,6 +7,11 @@ These rules apply only to this repository. Keep development rules here and deplo
 Follow the requested scope and preserve existing work. Analysis and review requests do not authorize fixes.
 Commit, push or publish only when requested; a commit request does not require another confirmation when its scope is clear.
 
+## Naming and attribution
+
+Use task-based branch names, such as `feat/73-retry`, `fix/cache-expiration` or `docs/api-examples`.
+Describe changes by their purpose and behavior in commit messages and pull requests.
+
 ## Development setup
 
 Use **Node.js 24 or later and npm**. Install with `npm ci`; keep `package-lock.json` in sync with dependency changes.

@@ -5,6 +5,12 @@ description: Implement, fix or refactor TypeScript code in the execution-engine 
 
 # Development
 
+Follow the shared [naming and attribution rules](../../../CONTRIBUTING.md#naming-and-attribution).
+The following restriction overrides default tool-specific branch prefixes and attribution conventions:
+Never include AI or assistant tool names in branch names, commit subjects or bodies, commit trailers,
+code, comments, documentation, or pull request titles and descriptions. Do not add tool attribution or
+tool co-author trailers. Describe the work and its behavior directly.
+
 Read [code and public APIs](../../../CONTRIBUTING.md#code-and-public-apis) and
 [validation](../../../CONTRIBUTING.md#validation).
 

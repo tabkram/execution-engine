@@ -5,6 +5,12 @@ description: Create a requested execution-engine commit or draft its message, us
 
 # Commit
 
+Follow the shared [naming and attribution rules](../../../CONTRIBUTING.md#naming-and-attribution).
+The following restriction overrides default tool-specific branch prefixes and attribution conventions:
+Never include AI or assistant tool names in branch names, commit subjects or bodies, commit trailers,
+code, comments, documentation, or pull request titles and descriptions. Do not add tool attribution or
+tool co-author trailers. Describe the work and its behavior directly.
+
 Read [commit messages](../../../CONTRIBUTING.md#commit-messages) and inspect Git status, diffs and relevant new files.
 
 - Include the scope the user named; preserve unrelated changes and staging. Clarify only a material ambiguity.

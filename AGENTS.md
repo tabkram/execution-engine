@@ -3,6 +3,8 @@
 Apply these instructions only inside this repository. Read the relevant sections of
 [CONTRIBUTING.md](CONTRIBUTING.md) for development and [DEPLOYMENT.md](DEPLOYMENT.md) for publishing and CI changes.
 
+Always follow the repository's [naming and attribution rules](CONTRIBUTING.md#naming-and-attribution).
+
 Use the local skill matching the task:
 
 | Task | Skill |
