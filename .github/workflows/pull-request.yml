@@ -6,6 +6,9 @@ on:
     branches:
       - 'main'
 
+permissions:
+  contents: read
+
 jobs:
 
   ci:
@@ -17,6 +20,7 @@ jobs:
     name: Compute version
     runs-on: ubuntu-latest
     if: |
+      github.event.pull_request.head.repo.full_name == github.repository &&
       contains(github.event.pull_request.labels.*.name, 'deploy') &&
       (startsWith(github.head_ref, 'feature/') ||
        startsWith(github.head_ref, 'fix/') ||
@@ -61,6 +65,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ ci , compute-version ]
     if: github.event.action != 'closed'
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    env:
+      CANARY_CLEANUP_ENABLED: ${{ secrets.NPM_TOKEN != '' }}
     environment:
       name: canary
       url: https://www.npmjs.com/package/execution-engine/v/${{ needs.compute-version.outputs.canary_version }}
@@ -74,40 +84,47 @@ jobs:
         with:
           node-version: 24
           registry-url: "https://registry.npmjs.org"
+          package-manager-cache: false
 
-      - name: Remove old Canary versions
+      - name: Remove old Canary versions (optional)
         id: unpublish_canary
+        if: env.CANARY_CLEANUP_ENABLED == 'true'
+        continue-on-error: true
         uses: ./.github/actions/unpublish-prefix
         with:
           version_prefix: ${{ needs.compute-version.outputs.canary_prefix }}
           confirm: 'I confirm to unpublish'
           npm_token: ${{ secrets.NPM_TOKEN }}
 
+      - name: Install npm with OIDC support
+        run: npm install --global npm@11 --ignore-scripts
+
       - name: Install dependencies
         run: npm ci
 
-      - name: Bump Version and Publish Canary
-        run: |
-          npm version ${{ needs.compute-version.outputs.canary_version }} --no-git-tag-version
-          npm publish --tag canary
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Test
+        run: npm test -- --runInBand
 
-      - name: prepare Cleanup Message
-        id: cleanup_message
-        shell: bash
+      - name: Bump version and publish canary using OIDC
+        env:
+          CANARY_VERSION: ${{ needs.compute-version.outputs.canary_version }}
         run: |
-          if [[ -n "${{ steps.unpublish_canary.outputs.UNPUBLISHED_VERSIONS_BY_PREFIX }}" ]]; then
-            # Loop through each version and add a strikethrough (~) around each
-            RESULT_WITH_STRIKETHROUGH=""
-            for version in ${{ steps.unpublish_canary.outputs.UNPUBLISHED_VERSIONS_BY_PREFIX }}; do
-              RESULT_WITH_STRIKETHROUGH="~$version~ $RESULT_WITH_STRIKETHROUGH"
-            done
-            echo "cleanup_message=🚫 **Unpublished versions**: $RESULT_WITH_STRIKETHROUGH" >> "$GITHUB_ENV"
+          npm version "$CANARY_VERSION" --no-git-tag-version
+          npm publish --access public --tag canary
+
+      - name: Prepare cleanup message
+        env:
+          CLEANUP_STATUS: ${{ steps.unpublish_canary.outcome }}
+          REMOVED_VERSIONS: ${{ steps.unpublish_canary.outputs.UNPUBLISHED_VERSIONS_BY_PREFIX }}
+        run: |
+          if [[ "$CLEANUP_STATUS" == "skipped" ]]; then
+            MESSAGE="Cleanup skipped: NPM_TOKEN is not configured."
+          elif [[ "$CLEANUP_STATUS" == "failure" ]]; then
+            MESSAGE="Cleanup failed; the new canary was still published."
           else
-            # If no unpublished versions, leave the message empty
-            echo "cleanup_message=🚫 **Unpublished versions**: ∅" >> "$GITHUB_ENV"
+            MESSAGE="Unpublished versions: ${REMOVED_VERSIONS:-none}."
           fi
+          echo "cleanup_message=$MESSAGE" >> "$GITHUB_ENV"
 
       - name: Comment on PR with deployed Version
         uses: peter-evans/create-or-update-comment@v5
@@ -119,7 +136,7 @@ jobs:
             ✅ **Created Version:** `${{ needs.compute-version.outputs.canary_version }}`
             📦 **Published on NPM:** [View on NPM](https://www.npmjs.com/package/execution-engine/v/${{ needs.compute-version.outputs.canary_version }})
 
-            > ⚠️ **Note:** This version is temporary and will be **unpublished** on the next PR update or merge.
+            > The `canary` tag points to the latest canary. Cleanup of previous versions is best-effort.
           reactions: 'rocket'
 
   unpublish_version:
@@ -127,34 +144,39 @@ jobs:
     runs-on: ubuntu-latest
     needs: compute-version
     if: github.event.action == 'closed'
+    permissions:
+      contents: read
+      pull-requests: write
+    env:
+      CANARY_CLEANUP_ENABLED: ${{ secrets.NPM_TOKEN != '' }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Remove old Canary versions
+      - name: Remove old Canary versions (optional)
         id: unpublish_canary_2
+        if: env.CANARY_CLEANUP_ENABLED == 'true'
+        continue-on-error: true
         uses: ./.github/actions/unpublish-prefix
         with:
           version_prefix: ${{ needs.compute-version.outputs.canary_prefix }}
           confirm: 'I confirm to unpublish'
           npm_token: ${{ secrets.NPM_TOKEN }}
 
-      - name: prepare PR comment message for unpublish
-        id: cleanup_message
-        shell: bash
+      - name: Prepare cleanup message
+        env:
+          CLEANUP_STATUS: ${{ steps.unpublish_canary_2.outcome }}
+          REMOVED_VERSIONS: ${{ steps.unpublish_canary_2.outputs.UNPUBLISHED_VERSIONS_BY_PREFIX }}
         run: |
-          if [[ -n "${{ steps.unpublish_canary_2.outputs.UNPUBLISHED_VERSIONS_BY_PREFIX }}" ]]; then
-            # Loop through each version and add a strikethrough (~) around each
-            RESULT_WITH_STRIKETHROUGH=""
-            for version in ${{ steps.unpublish_canary_2.outputs.UNPUBLISHED_VERSIONS_BY_PREFIX }}; do
-              RESULT_WITH_STRIKETHROUGH="~$version~ $RESULT_WITH_STRIKETHROUGH"
-            done
-            echo "cleanup_message=🚫 **Unpublished versions**: $RESULT_WITH_STRIKETHROUGH" >> "$GITHUB_ENV"
+          if [[ "$CLEANUP_STATUS" == "skipped" ]]; then
+            MESSAGE="Cleanup skipped: NPM_TOKEN is not configured."
+          elif [[ "$CLEANUP_STATUS" == "failure" ]]; then
+            MESSAGE="Cleanup failed; existing canary versions were kept."
           else
-            # If no unpublished versions, leave the message empty
-            echo "cleanup_message=🚫 **Unpublished versions**: ∅" >> "$GITHUB_ENV"
+            MESSAGE="Unpublished versions: ${REMOVED_VERSIONS:-none}."
           fi
+          echo "cleanup_message=$MESSAGE" >> "$GITHUB_ENV"
 
       - name: Comment on PR with deployed Version
         uses: peter-evans/create-or-update-comment@v5

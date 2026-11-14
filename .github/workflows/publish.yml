@@ -1,22 +1,70 @@
 name: Publish to NPM
+
 on:
   release:
-    types: [created]
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing release tag to publish, for example v5.0.0'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: npm-publish-${{ github.event.release.tag_name || inputs.tag }}
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      RELEASE_TAG: ${{ github.event.release.tag_name || inputs.tag }}
+      PRERELEASE: ${{ github.event.release.prerelease }}
     steps:
-      - name: Checkout
+      - name: Checkout release tag
         uses: actions/checkout@v7
+        with:
+          ref: refs/tags/${{ github.event.release.tag_name || inputs.tag }}
+          persist-credentials: false
+
       - name: Setup Node
         uses: actions/setup-node@v7
         with:
-          node-version: '24.x'
+          node-version: 24
           registry-url: 'https://registry.npmjs.org'
-          cache: 'npm'
-      - name: Install dependencies and build 🔧
-        run: npm ci && npm run build
-      - name: Publish package on NPM 📦
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          package-manager-cache: false
+
+      - name: Install npm with OIDC support
+        run: npm install --global npm@11 --ignore-scripts
+
+      - name: Verify release version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if [[ "${RELEASE_TAG#v}" != "$VERSION" ]]; then
+            echo "::error::Release tag $RELEASE_TAG does not match package version $VERSION"
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test
+        run: npm test -- --runInBand
+
+      - name: Build
+        run: npm run build
+
+      - name: Publish to npm using OIDC
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if [[ "$PRERELEASE" == "true" || "$VERSION" == *-* ]]; then
+            npm publish --access public --tag next
+          else
+            npm publish --access public
+          fi

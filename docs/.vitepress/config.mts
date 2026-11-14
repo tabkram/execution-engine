@@ -40,6 +40,7 @@ export default defineConfig({
         items: [
           { text: 'Changelog', link: `${REPO}/blob/main/CHANGELOG.md` },
           { text: 'Migration', link: '/reference/migration' },
+          { text: 'Publishing', link: '/guide/publishing' },
           { text: 'npm package', link: 'https://www.npmjs.com/package/execution-engine' },
           { text: 'Contributing', link: `${REPO}/blob/main/CONTRIBUTING.md` }
         ]
