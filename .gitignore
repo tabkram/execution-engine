@@ -28,3 +28,6 @@ docs/.vitepress/dist
 .yarn
 .yarn-cache/
 
+# Local Claude settings and worktrees
+.claude/settings.local.json
+.claude/worktrees/

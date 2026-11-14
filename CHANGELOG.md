@@ -4,12 +4,6 @@
 
 * **memoize:** expire zero-ttl promises immediately ([01e2c4a](https://github.com/tabkram/execution-engine/commit/01e2c4a387a1bbb61ca7b9f9a4bdf61c3b901ee7))
 
-## Unreleased
-
-### Bug Fixes
-
-* **memoize:** remove zero-TTL entries immediately on fulfillment or rejection, allowing immediate fresh calls in both `executeMemoize` and `@memoize`. Concurrent calls still share their pending promise. Synchronous results retain timer-based expiration, including with zero TTL; default and positive TTLs are unchanged.
-
 ## [4.0.1](https://github.com/tabkram/execution-engine/compare/v4.0.0...v4.0.1) (2026-08-10)
 ## [4.0.0](https://github.com/tabkram/execution-engine/compare/v3.5.0...v4.0.0) (2025-08-08)
 

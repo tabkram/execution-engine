@@ -1,87 +1,62 @@
-# Contributing to Execution Engine 🚀
+# Contributing to execution-engine
 
-Thank you for considering contributing to Execution Engine! We appreciate your interest and support in making this project even better.
+These rules apply only to this repository. Keep development rules here and deployment rules in [DEPLOYMENT.md](DEPLOYMENT.md).
 
-As a contributor, here are the guidelines we would like you to follow:
+## Scope
 
-- [Coding Rules](#rules)
-- [Commit Message Guidelines](#commit)
-
-## <a name="rules"></a> Coding Rules
-To ensure consistency throughout the source code, keep these rules in mind as you are working:
-
-* All features or bug fixes **must be tested** by one or more specs (unit-tests).
-* All public API methods **must be documented**.
+Follow the requested scope and preserve existing work. Analysis and review requests do not authorize fixes.
+Commit, push or publish only when requested; a commit request does not require another confirmation when its scope is clear.
 
 ## Development setup
 
-This repository uses **npm** as its sole package manager. Use Node.js 24 or later, then install the locked dependency
-tree with:
+Use **Node.js 24 or later and npm**. Install with `npm ci`; keep `package-lock.json` in sync with dependency changes.
+The documentation has its own package and lockfile: use `npm ci --prefix docs` when working on the site.
 
-```bash
-npm ci
+## Code and public APIs
+
+- Keep changes focused, reuse existing code and follow nearby conventions. Preserve behavior outside the requested change.
+- Change source modules, not `dist/` or generated barrels. `npm run build` regenerates exports and compiles the package.
+- For affected APIs, check both plain-function and decorator forms: arguments, return types, receiver scope, errors and timing.
+- Cover features and bug fixes with meaningful `*.spec.ts` tests near the implementation, including the regression being fixed.
+- Follow [ESLint](eslint.config.mjs) and [Prettier](.prettierrc); keep formatting changes scoped to the work.
+
+## Validation
+
+Choose checks that exercise the change. Reuse existing tests and distinguish new failures from pre-existing ones.
+
+| Check | Command |
+| --- | --- |
+| Types | `npx --no-install tsc --noEmit` |
+| Changed TypeScript files | `npx --no-install eslint <files>` |
+| Targeted tests | `npm test -- --runTestsByPath <file.spec.ts> --runInBand` |
+| Full test suite | `npm test -- --runInBand` |
+| Package build and exports | `npm run build` |
+| Documentation site | `npm --prefix docs run build` |
+
+`npm run lint` applies `--fix` across `src/`; use targeted ESLint for checks and reviews.
+The package build rewrites generated files. Neither command is a read-only review check.
+Report the checks actually run and any remaining limits; do not claim compatibility from mocked behavior alone.
+
+## Documentation
+
+Document public APIs in source JSDoc and the relevant page under `docs/`. Keep examples consistent with the exported types,
+defaults, units, return values and error behavior. Update `README.md` only when its overview or setup changes.
+Keep explanations short and verify changed examples when practical. Build the site for changes to pages or navigation.
+
+## Commit messages
+
+Use [Conventional Commits](https://www.conventionalcommits.org/), following [commitlint.config.js](commitlint.config.js):
+
+```text
+type(scope): short summary
+
+Explain the behavior change and why it is needed.
 ```
 
-Do not run Yarn in this repository: `package-lock.json` is the source of truth for dependency resolution and CI.
+Write the summary in English, in the present tense, without a final period. The scope is optional and names the affected API or area.
+A body of at least 20 characters is required except for `docs` commits. State breaking changes explicitly.
+Keep one purpose per commit and let the existing hooks run. A message-only request does not authorize creating a commit.
 
-## <a name="commit"></a> Commit Message Format
+## Deployment
 
-*This specification is inspired by and supersedes the [AngularJS commit message format][commit-message-format].*
-
-We have very precise rules over how our Git commit messages must be formatted.
-This format leads to **easier to read commit history**.
-
-Each commit message consists of a **header**, a **body**, and a **footer**.
-
-
-```
-<header>
-<BLANK LINE>
-<body>
-<BLANK LINE>
-<footer>
-```
-
-The `header` is mandatory and must conform to the [Commit Message Header](#commit-header) format.
-
-The `body` is mandatory for all commits except for those of type "docs".
-When the body is present it must be at least 20 characters long and must conform to the [Commit Message Body](#commit-body) format.
-
-The `footer` is optional. The [Commit Message Footer](#commit-footer) format describes what the footer is used for and the structure it must have.
-
-
-#### <a name="commit-header"></a>Commit Message Header
-
-```
-<type>(<scope>):  <short summary>
-  │       │             │
-  │       │             └─⫸ Summary in present tense. Not capitalized. No period at the end.
-  │       │
-  │       └─⫸ Commit Scope: animations|bazel|benchpress|common|compiler|compiler-cli|core|
-  │                          elements|forms|http|language-service|localize|platform-browser|
-  │                          platform-browser-dynamic|platform-server|router|service-worker|
-  │                          upgrade|zone.js|packaging|changelog|docs-infra|migrations|
-  │                          devtools
-  │
-  └─⫸ Commit Type: build|ci|docs|feat|fix|perf|refactor|test
-```
-
-The `<type>` and `<summary>` fields are mandatory, the `(<scope>)` field is optional.
-
-
-##### Type
-
-Must be one of the following:
-
-* **build**: Changes that affect the build system or external dependencies
-* **ci**: Changes to our CI configuration files and scripts (examples: CircleCi, SauceLabs)
-* **docs**: Documentation only changes
-* **feat**: A new feature
-* **fix**: A bug fix
-* **perf**: A code change that improves performance
-* **refactor**: A code change that neither fixes a bug nor adds a feature
-* **test**: Adding missing tests or correcting existing tests
-* **chore**: better not use
-
-##### Scope
-The scope should be the name of the npm package affected (as perceived by the person reading the changelog generated from commit messages).
+See [DEPLOYMENT.md](DEPLOYMENT.md) for one-time OIDC setup and the release/canary workflows.
