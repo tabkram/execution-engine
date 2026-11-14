@@ -45,7 +45,7 @@ No engine and no graph: wrap a single call to see what it did, or to stop it fro
   of a single call.
 - **[Cache](https://tabkram.github.io/execution-engine/execution/cache):** Reuse a result for a configurable TTL.
 - **[Memoize](https://tabkram.github.io/execution-engine/execution/memoize):** Collapse duplicate concurrent calls
-  into one.
+  into one. For asynchronous calls, set the TTL to `0` to share only in-flight work and allow immediate retries after completion or failure.
 - **[Timer](https://tabkram.github.io/execution-engine/execution/timer):** Measure a code block, in ms and in words.
 
 ### 2. Engine — the whole run as a graph

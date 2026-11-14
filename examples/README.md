@@ -21,7 +21,7 @@ No engine and no graph: these wrap a single function and report what it did.
   a record.
 - **[execution-cache.ts](execution-cache.ts)**: `@cache` keyed on the arguments; the repeat call never reaches the API.
 - **[execution-memoize.ts](execution-memoize.ts)**: `@memoize` storing the in-flight promise, so twelve simultaneous
-  callers share one execution.
+  callers share one execution. Its zero TTL discards the entry at settlement, so an immediate later call starts fresh.
 
 ## A run as a graph
 

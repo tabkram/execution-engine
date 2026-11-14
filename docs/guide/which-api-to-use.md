@@ -65,7 +65,7 @@ Tracing, caching and memoization each have a decorator and a plain-function API,
 Use the plain function when you are not writing classes, cannot enable `experimentalDecorators`, or need to wrap
 someone else's function. `executeCache` and `executeMemoize` additionally require a `functionId`, since there is no
 method identity to derive one from. Their stores also live on `this`, so call them with the same receiver (for example,
-`executeMemoize.call(scope, ...)`) when calls should share entries.
+`const scope = { executeMemoize }`, then `scope.executeMemoize(...)`) when calls should share entries.
 
 ## `@cache` or `@memoize`?
 
@@ -74,10 +74,12 @@ Both optimize execution; neither adds trace records.
 | | [`@cache`](../execution/cache.md) | [`@memoize`](../execution/memoize.md) |
 | --- | --- | --- |
 | Purpose | Reuse results across time | Share one result across near-simultaneous identical calls |
-| TTL | You set it | `100 ms`, capped at `1000 ms` |
+| TTL | You set it | `100 ms`, capped at `1000 ms`; `0` expires promises immediately at settlement |
 | Typical use | An API response reused for 5 minutes | Recursion, or 50 callers hitting one endpoint at once |
 | Custom key | Yes | No — hashed from inputs |
 | Custom store | Yes, e.g. Redis | No — in-memory only |
 
 Rule of thumb: use `@cache` when a result should remain reusable and invalidation matters. Use `@memoize` when several
-identical calls arriving together should share one execution.
+identical calls arriving together should share one execution. Set `ttl: 0` (or `@memoize(undefined, 0)`) when an
+asynchronous retry must start fresh after completion or failure. Synchronous results still expire through a timer,
+including a zero-delay timer with `ttl: 0`, preserving immediate reuse and recursion.

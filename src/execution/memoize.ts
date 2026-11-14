@@ -28,6 +28,9 @@ export function executeMemoize<O>(
  * The JavaScript engine may clear the memoized value before another call retrieves it.
  * A short delay (e.g., 100ms) ensures that multiple rapid calls can reuse the stored result.
  * The expiration is capped at 1000ms for efficiency and to avoid unnecessary memory usage.
+ * With ttl: 0, asynchronous calls share only their in-flight promise. The entry is
+ * removed immediately on fulfillment or rejection. Synchronous results still use a
+ * timer, including with ttl: 0, so immediate repeats and recursion can reuse them.
  */
 export function executeMemoize<O>(
   blockFunction: (...params: unknown[]) => O | Promise<O>,
@@ -63,10 +66,20 @@ export function executeMemoize<O>(
     memoizationStore.set(inputsHash, callResponseOrPromise);
     this[memoizationKey].set(options.functionId, memoizationStore);
 
+    const expire = (): void => {
+      memoizationStore.delete(inputsHash);
+    };
+
     if (callResponseOrPromise instanceof Promise) {
-      return callResponseOrPromise.finally(() => setTimeout(() => memoizationStore.delete(inputsHash), ttl));
+      return callResponseOrPromise.finally(() => {
+        if (ttl === 0) {
+          expire();
+        } else {
+          setTimeout(expire, ttl);
+        }
+      });
     } else {
-      setTimeout(() => memoizationStore.delete(inputsHash), ttl);
+      setTimeout(expire, ttl);
       return callResponseOrPromise;
     }
   }

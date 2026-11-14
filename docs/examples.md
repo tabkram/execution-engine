@@ -116,7 +116,7 @@ run. `memoize` stores the in-flight promise instead, so they join the call alrea
 import { memoize } from 'execution-engine';
 
 class FeatureFlags {
-  @memoize()
+  @memoize(undefined, 0) // Share pending work; a later call starts fresh.
   async load(env: string) {
     return fetchFlags(env); // 80 ms
   }
@@ -131,6 +131,7 @@ const asked = Array.from({ length: 12 }, () =>
 );
 
 await Promise.all(asked);
+await flags.load('prod'); // Starts a new request immediately after completion.
 ```
 
 <template #out>
@@ -138,6 +139,7 @@ await Promise.all(asked);
 ```console
 12 calls, 1 execution, 11 reused
 all settled in 82.5 ms
+after the next call: 2 executions, 11 reused
 ```
 
 </template>

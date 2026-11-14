@@ -14,6 +14,9 @@ import { attachFunctionMetadata, extractClassMethodMetadata } from '../common/ut
  * @remarks
  * Uses `executeMemoize` internally to store and reuse results.
  * A short delay (e.g., 100ms) ensures that multiple rapid calls can reuse the stored result.
+ * Pass 0 as the second argument to share asynchronous work only while it is in flight,
+ * removing the entry immediately on fulfillment or rejection. Synchronous methods
+ * retain timer-based expiration, including a zero-delay timer when ttl is 0.
  */
 export function memoize<O>(onMemoizeEvent?: MemoizeOptions<O>['onMemoizeEvent'], ttl?: number): MethodDecorator {
   return function <T extends Record<string, unknown>>(target: T, propertyKey: string, descriptor: PropertyDescriptor) {

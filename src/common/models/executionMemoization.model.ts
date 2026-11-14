@@ -25,6 +25,9 @@ export interface MemoizeOptions<O> {
    * Optional small expiration time in milliseconds for the memoized result.
    * @remarks:
    * Default is 100ms, capped at 1000ms to prevent excessive retention.
+   * A value of 0 shares only in-flight promises and removes them immediately on
+   * fulfillment or rejection. Synchronous results keep timer-based expiration,
+   * including a zero-delay timer when the value is 0.
    */
   ttl?: number;
 

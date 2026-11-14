@@ -211,7 +211,9 @@ These are documented alongside their APIs:
 - [`MemoizeOptions`, `MemoizationContext`](../execution/memoize.md#api)
 
 The memoization module also exports its bounds as constants: `memoizationDefaultTTL` (`100`) and `memoizationMaxTTL`
-(`1000`), both in milliseconds.
+(`1000`), both in milliseconds. An explicit TTL of `0` shares only pending promises and removes the entry
+immediately on fulfillment or rejection. Synchronous results keep timer-based expiration, including a zero-delay
+timer with `ttl: 0`.
 
 ## Type guards
 

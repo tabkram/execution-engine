@@ -22,9 +22,9 @@ let reused = 0;
 
 class FeatureFlags {
   /** The callback fires for every caller and says which side it landed on. */
-  @memoize((context: MemoizationContext<Promise<Record<string, boolean>>>) => {
+  @memoize((context: MemoizationContext<Record<string, boolean>>) => {
     context.isMemoized ? reused++ : executions++;
-  })
+  }, 0) // Share only in-flight work; remove successes and failures immediately.
   async load(env: string): Promise<Record<string, boolean>> {
     await sleep(80);
     return { newCheckout: env === 'prod', darkMode: true };
@@ -43,6 +43,9 @@ export async function run() {
 
   console.log(`12 calls, ${executions} execution, ${reused} reused`);
   console.log(`all settled in ${total} ms`);
+
+  await flags.load('prod');
+  console.log(`after the next call: ${executions} executions, ${reused} reused`);
 }
 
 run().then();
