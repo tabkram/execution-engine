@@ -215,6 +215,11 @@ The memoization module also exports its bounds as constants: `memoizationDefault
 immediately on fulfillment or rejection. Synchronous results keep timer-based expiration, including a zero-delay
 timer with `ttl: 0`.
 
+## Retry
+
+[`RetryOptions`, `RetryContext`, `RetryBackoff`, `RetryFunction`, and `RetryCallOptions`](../execution/retry.md#api)
+describe bounded retries, hooks, backoff strategies and per-call cancellation.
+
 ## Type guards
 
 | Guard | Narrows to |
