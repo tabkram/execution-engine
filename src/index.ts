@@ -19,6 +19,7 @@ export * from './execution/cache';
 export * from './execution/execute';
 export * from './execution/memoize.decorator';
 export * from './execution/memoize';
+export * from './execution/retry';
 export * from './execution/trace.decorator';
 export * from './execution/trace';
 export * from './timer/executionTimer';

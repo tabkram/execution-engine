@@ -54,13 +54,14 @@ Same graph, different ergonomics:
 
 ## Decorator or plain function?
 
-Tracing, caching and memoization each have a decorator and a plain-function API, backed by the same implementation.
+Tracing, caching, memoization and retry each have a decorator and a plain-function API, backed by the same implementation.
 
 | Decorator | Plain function |
 | --- | --- |
 | [`@trace`](../execution/trace.md#trace-decorator) | [`executionTrace`](../execution/trace.md#executiontrace) |
 | [`@cache`](../execution/cache.md#cache-decorator) | [`executeCache`](../execution/cache.md#executecache) |
 | [`@memoize`](../execution/memoize.md#memoize-decorator) | [`executeMemoize`](../execution/memoize.md#executememoize) |
+| [`@retry`](../execution/retry.md#decorator) | [`retry`](../execution/retry.md) |
 
 Use the plain function when you are not writing classes, cannot enable `experimentalDecorators`, or need to wrap
 someone else's function. `executeCache` and `executeMemoize` additionally require a `functionId`, since there is no
