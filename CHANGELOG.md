@@ -1,3 +1,9 @@
+## [5.0.0](https://github.com/tabkram/execution-engine/compare/v4.0.1...v5.0.0) (2026-11-14)
+
+### Bug Fixes
+
+* **memoize:** expire zero-ttl promises immediately ([01e2c4a](https://github.com/tabkram/execution-engine/commit/01e2c4a387a1bbb61ca7b9f9a4bdf61c3b901ee7))
+
 ## Unreleased
 
 ### Bug Fixes
