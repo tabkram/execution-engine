@@ -61,7 +61,7 @@ Tracing, caching, memoization and retry each have a decorator and a plain-functi
 | [`@trace`](../execution/trace.md#trace-decorator) | [`executionTrace`](../execution/trace.md#executiontrace) |
 | [`@cache`](../execution/cache.md#cache-decorator) | [`executeCache`](../execution/cache.md#executecache) |
 | [`@memoize`](../execution/memoize.md#memoize-decorator) | [`executeMemoize`](../execution/memoize.md#executememoize) |
-| [`@retry`](../execution/retry.md#decorator) | [`retry`](../execution/retry.md) |
+| [`@retry`](../execution/retry.md#retry-decorator) | [`retry`](../execution/retry.md) |
 
 Use the plain function when you are not writing classes, cannot enable `experimentalDecorators`, or need to wrap
 someone else's function. `executeCache` and `executeMemoize` additionally require a `functionId`, since there is no
@@ -70,8 +70,8 @@ method identity to derive one from. Their stores also live on `this`, so call th
 
 ## `retry` or `@retry`?
 
-Use [`retry(fn, options?)`](../execution/retry.md#usage) to create a reusable wrapper, or
-[`@retry(options?)`](../execution/retry.md#decorator) on an `async` method. Both return the function's value in a
+Use [`retry(fn, options?)`](../execution/retry.md#retry-fn) to create a reusable wrapper, or
+[`@retry(options?)`](../execution/retry.md#retry-decorator) on an `async` method. Both return the function's value in a
 Promise, preserve arguments and `this`, and use an independent attempt budget for every invocation.
 
 By default, retry permits three executions with exponential delays of 100 ms and 200 ms after failures. Use

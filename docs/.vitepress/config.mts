@@ -66,7 +66,7 @@ export default defineConfig({
           { text: 'Trace', link: '/execution/trace' },
           { text: 'Cache', link: '/execution/cache' },
           { text: 'Memoize', link: '/execution/memoize' },
-          { text: 'Retry and @retry', link: '/execution/retry' },
+          { text: 'Retry', link: '/execution/retry' },
           { text: 'Timer', link: '/execution/timer' }
         ]
       },
