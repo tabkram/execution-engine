@@ -1,3 +1,4 @@
+import { executeCache } from './cache';
 import { cache } from './cache.decorator';
 
 describe('cache decorator', () => {
@@ -117,5 +118,19 @@ describe('cache decorator', () => {
     expect(memoizationCheckCount).toEqual(totalFunctionCalls + memoizedCalls);
     expect(memoizedCalls).toEqual(0); // No cache
     expect(totalFunctionCalls).toBe(3); // we call everytime we get a throw
+  });
+});
+
+describe('default cache key', () => {
+  it('does not share results between distinct Set and BigInt inputs', async () => {
+    const scope = {};
+    const join = (s: Set<string>): string => [...s].join(',');
+    const options = { ttl: 500, functionId: 'join' };
+
+    await expect(executeCache.call(scope, join as never, [new Set(['x'])], options)).resolves.toBe('x');
+    await expect(executeCache.call(scope, join as never, [new Set(['y'])], options)).resolves.toBe('y');
+    await expect(executeCache.call(scope, ((id: unknown) => String(id)) as never, [1n], { ttl: 500, functionId: 'byId' })).resolves.toBe(
+      '1'
+    );
   });
 });
