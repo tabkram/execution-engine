@@ -10,7 +10,7 @@ inputs:
     required: true
 outputs:
   DEPRECATED_VERSIONS:
-    description: 'Versions whose deprecation was verified'
+    description: 'Versions newly deprecated and verified during this run'
     value: ${{ steps.deprecate_versions.outputs.DEPRECATED_VERSIONS }}
 
 runs:

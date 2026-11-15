@@ -48,7 +48,9 @@ function selectVersions(packument, { prefix, prNumber, keepVersion } = {}) {
   if (keepVersion && (!prerelease.test(keepVersion) || !matches(keepVersion))) {
     throw new Error('The version to preserve must be an exact prerelease belonging to this selection.');
   }
-  return Object.keys(packument.versions).filter((version) => prerelease.test(version) && matches(version) && version !== keepVersion);
+  return Object.keys(packument.versions).filter(
+    (version) => prerelease.test(version) && matches(version) && version !== keepVersion && !packument.versions[version].deprecated
+  );
 }
 
 async function verifyDeprecated(version, message, { read = readPackument, pause = sleep } = {}) {
@@ -82,17 +84,16 @@ async function deprecateVersions(
       if (!Object.hasOwn(packument.versions, version)) {
         throw new Error('Version is not present in the npm registry.');
       }
-      if (packument.versions[version].deprecated !== deprecationMessage) {
-        runNpm([
-          'deprecate',
-          `${packageName}@${version}`,
-          deprecationMessage,
-          '--dry-run=false',
-          `--registry=${registry}`,
-          '--loglevel=http'
-        ]);
-        await verify(version, deprecationMessage);
-      }
+      if (packument.versions[version].deprecated) continue;
+      runNpm([
+        'deprecate',
+        `${packageName}@${version}`,
+        deprecationMessage,
+        '--dry-run=false',
+        `--registry=${registry}`,
+        '--loglevel=http'
+      ]);
+      await verify(version, deprecationMessage);
       deprecated.push(version);
     } catch (error) {
       report(`Failed to deprecate ${version}: ${error.message}`);

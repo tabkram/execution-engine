@@ -70,17 +70,25 @@ jobs:
     needs: [ ci, compute-version ]
     permissions:
       contents: read
+      pull-requests: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
 
       - name: Deprecate previous canaries for this PR
+        id: deprecate_canaries
         uses: ./.github/actions/deprecate-prefix
         with:
           pr_number: ${{ github.event.pull_request.number }}
           keep_version: ${{ needs.compute-version.outputs.canary_version }}
           npm_token: ${{ secrets.NPM_TOKEN }}
+
+      - name: Comment on PR with deprecated versions
+        if: steps.deprecate_canaries.outputs.DEPRECATED_VERSIONS != ''
+        uses: ./.github/actions/comment-deprecated
+        with:
+          versions: ${{ steps.deprecate_canaries.outputs.DEPRECATED_VERSIONS }}
 
   publish-version:
     name: Publish
@@ -161,8 +169,7 @@ jobs:
           npm_token: ${{ secrets.NPM_TOKEN }}
 
       - name: Report verified deprecations
-        uses: peter-evans/create-or-update-comment@v5
+        if: steps.deprecate_canaries.outputs.DEPRECATED_VERSIONS != ''
+        uses: ./.github/actions/comment-deprecated
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: ${{ github.event.pull_request.number }}
-          body: "Verified deprecated versions: ${{ steps.deprecate_canaries.outputs.DEPRECATED_VERSIONS || 'none' }}."
+          versions: ${{ steps.deprecate_canaries.outputs.DEPRECATED_VERSIONS }}

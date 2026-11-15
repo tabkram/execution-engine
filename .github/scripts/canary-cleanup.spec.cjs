@@ -58,16 +58,34 @@ test('deprecates exact prereleases directly and counts only verified deprecation
   assert.deepEqual(result, { deprecated: [first, current], failed: [] });
 });
 
-test('already deprecated versions succeed without another npm write', async () => {
-  const result = await deprecateVersions(
-    { versions: first },
-    {
-      read: async () => ({ versions: { [first]: { deprecated: message } } }),
-      runNpm: () => assert.fail('Already deprecated versions need no write.'),
-      verify: () => assert.fail('Fresh registry metadata already verifies the message.')
-    }
-  );
-  assert.deepEqual(result, { deprecated: [first], failed: [] });
+test('already deprecated versions are neither rewritten nor reported as new, regardless of their message', async () => {
+  for (const existingMessage of [message, 'Superseded by a newer canary.']) {
+    const result = await deprecateVersions(
+      { versions: first },
+      {
+        read: async () => ({ versions: { [first]: { deprecated: existingMessage } } }),
+        runNpm: () => assert.fail('Already deprecated versions need no write.'),
+        verify: () => assert.fail('Already deprecated versions must be skipped.')
+      }
+    );
+    assert.deepEqual(result, { deprecated: [], failed: [] });
+  }
+});
+
+test('repeated cleanup reports only new deprecations and allows versions with a cleared message', async () => {
+  const registry = { versions: { [first]: { deprecated: 'Already obsolete.' }, [current]: { deprecated: '' } } };
+  const commands = [];
+  const options = {
+    read: async () => registry,
+    runNpm: (args) => {
+      commands.push(args[1]);
+      registry.versions[current].deprecated = args[2];
+    },
+    verify: async () => {}
+  };
+  assert.deepEqual(await deprecateVersions({ versions: `${first},${current}` }, options), { deprecated: [current], failed: [] });
+  assert.deepEqual(await deprecateVersions({ versions: `${first},${current}` }, options), { deprecated: [], failed: [] });
+  assert.deepEqual(commands, [`execution-engine@${current}`]);
 });
 
 test('missing versions fail without issuing npm commands', async () => {
@@ -181,6 +199,37 @@ test('CLI succeeds after direct deprecation without ever attempting deletion', (
   } finally {
     rmSync(directory, { recursive: true, force: true });
   }
+});
+
+test('CLI emits an empty comment output when every version was already deprecated', () => {
+  const directory = mkdtempSync(join(tmpdir(), 'canary-cleanup-'));
+  try {
+    const preload = join(directory, 'registry.cjs');
+    const output = join(directory, 'outputs');
+    writeFileSync(
+      preload,
+      `
+      require('node:child_process').execFileSync = () => { throw new Error('Unexpected npm write'); };
+      global.fetch = async () => Response.json({ versions: { '${first}': { deprecated: 'Already obsolete.' } } });
+    `
+    );
+    const result = spawnSync(process.execPath, ['--require', preload, join(__dirname, 'canary-cleanup.cjs'), 'deprecate'], {
+      env: { ...process.env, VERSIONS: first, GITHUB_OUTPUT: output },
+      encoding: 'utf8'
+    });
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(readFileSync(output, 'utf8'), 'DEPRECATED_VERSIONS=\nFAILED_VERSIONS=\n');
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+test('discovery excludes deprecated versions even when their existing message differs', () => {
+  const registry = pack(first, current, '5.0.0-canary.76.third');
+  registry.versions[first].deprecated = message;
+  registry.versions[current].deprecated = 'Already obsolete.';
+  assert.deepEqual(selectVersions(registry, { prNumber: '76' }), ['5.0.0-canary.76.third']);
+  assert.deepEqual(selectVersions(registry, { prefix: '5.0.0-canary.76' }), ['5.0.0-canary.76.third']);
 });
 
 test('finds all canaries for a closed PR, including untagged and older base versions', () => {

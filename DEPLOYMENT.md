@@ -44,19 +44,36 @@ earlier canaries are deprecated, across base versions and dist-tags; the exact v
 is excluded. Other PRs' canaries are untouched. If deprecation fails, Publish is skipped. The Publish job itself only publishes.
 
 The separate **Deprecate** job deprecates all of a PR's canaries when it is closed, including after a merge,
-independently of its branch name and labels. Workflows never delete versions: deprecated versions remain downloadable
+independently of its branch name and labels. Automatic cleanup never deletes versions: deprecated versions remain downloadable
 and display `Obsolete prerelease. Use execution-engine@latest for production.`
+CI comments on the PR only for versions newly deprecated and verified during that run, with their npm links.
 
 For manual deprecation, open **Actions → Deprecate from NPM → Run workflow** on `main` and enter exact prerelease
-versions, comma-separated. Stable versions, tags and ranges are rejected. Versions already carrying the expected
-message require no additional write. Deprecation is verified against fresh registry metadata, allowing three checks
+versions, comma-separated. Stable versions, tags and ranges are rejected. Already deprecated versions are skipped,
+preserving their existing message and producing no comment. Deprecation is verified against fresh registry metadata, allowing three checks
 two seconds apart. A zero exit code from npm alone is not sufficient; unresolved failures fail the job.
 
 Deprecation requires `NPM_TOKEN` scoped to `execution-engine` with read/write access and **Bypass 2FA** enabled.
 The action first checks authentication with `npm whoami`. When the token expires, replace it in
 **Settings → Secrets and variables → Actions → NPM_TOKEN** in GitHub. Publishing continues to use OIDC separately.
 
-## Delete a prerelease manually with 2FA
+## Delete a prerelease from GitHub Actions with browser 2FA
+
+Once the workflow is merged to `main`:
+
+1. Open **Actions → Unpublish from NPM with 2FA → Run workflow** and select `main`.
+2. Enter exact prerelease versions, comma-separated, and type `I confirm to unpublish`.
+3. Open the **Unpublish with browser 2FA** logs. Follow the npm login link, sign in as `tabkram`, then follow any
+   additional authentication links to approve deletion with your npm 2FA method, such as Touch ID or a security key.
+4. Check the job summary for verified removals. The job checks both registry metadata and archive availability.
+
+Complete each authentication prompt within five minutes. Do not enter passwords, tokens or OTP codes in workflow
+inputs. If npm asks you to type an OTP instead of opening a browser link, use the local procedure below.
+
+The job uses a temporary npm session and attempts to revoke it on exit. Stable versions, tags and ranges are rejected;
+the [npm unpublish policy](https://docs.npmjs.com/policies/unpublish/) still applies. Automatic PR cleanup only deprecates.
+
+## Delete a prerelease locally with 2FA
 
 npm rejects unpublish requests authenticated with a **Bypass 2FA** token. Use an interactive npm login and validate
 the 2FA challenge instead. Deletion is still subject to the [npm unpublish policy](https://docs.npmjs.com/policies/unpublish/).
