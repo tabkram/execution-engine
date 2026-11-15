@@ -179,3 +179,30 @@ describe('zero-TTL memoization', () => {
     expect(jest.getTimerCount()).toBe(0);
   });
 });
+
+describe('memoization keys', () => {
+  it('does not share results between distinct Map, Set, undefined, null and NaN inputs', () => {
+    const scope = { executeMemoize };
+    const keysOf = (map: Map<string, number>): string => [...map.keys()].join(',');
+    const format = (x: unknown): string => `${typeof x}:${String(x)}`;
+
+    expect([
+      scope.executeMemoize(keysOf as never, [new Map([['a', 1]])], { functionId: 'keysOf' }),
+      scope.executeMemoize(keysOf as never, [new Map([['b', 2]])], { functionId: 'keysOf' })
+    ]).toEqual(['a', 'b']);
+    expect([undefined, null, NaN].map((x) => scope.executeMemoize(format, [x], { functionId: 'format' }))).toEqual([
+      'undefined:undefined',
+      'object:null',
+      'number:NaN'
+    ]);
+  });
+
+  it('memoizes BigInt arguments instead of throwing', () => {
+    const scope = { executeMemoize };
+    const byId = jest.fn((id: unknown) => String(id));
+
+    expect(scope.executeMemoize(byId, [1n], { functionId: 'byId' })).toBe('1');
+    expect(scope.executeMemoize(byId, [1n], { functionId: 'byId' })).toBe('1');
+    expect(byId).toHaveBeenCalledTimes(1);
+  });
+});
