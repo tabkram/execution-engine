@@ -33,8 +33,11 @@ Do not retry a version that is already published: npm versions are immutable.
 
 ## PR canaries
 
-The existing `deploy` label and branch-prefix rules still apply. Only branches in this repository can publish;
-fork PRs still run CI. Canary publication uses the second trusted publisher connection and the `canary` npm tag.
+Add the `deploy` label to a PR targeting `main` to run CI and publish a canary, including when the label is added
+after the initial checks. Eligible branch prefixes are `feat/`, `feature/`, `fix/` and `ci/`. Adding other labels
+does not trigger the canary jobs. Subsequent commits and reopened PRs also publish when the label is present.
+Only branches in this repository can publish; fork PRs still run CI. Canary publication uses the second trusted
+publisher connection and the `canary` npm tag.
 
 Publishing a PR canary works with OIDC; deleting it on merge is a separate operation.
 OIDC does not support `npm unpublish`, and npm rejects unpublish requests authenticated with bypass-2FA granular tokens.
