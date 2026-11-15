@@ -14,6 +14,7 @@
   "scripts": {
     "build": "npm run generate-barrels && tsc",
     "test": "jest",
+    "test:cleanup": "node --test .github/scripts/canary-cleanup.spec.cjs .github/scripts/manual-unpublish.spec.cjs",
     "examples": "for file in examples/*.ts; do ts-node \"$file\"; done\n",
     "lint": "eslint src --fix",
     "format": "prettier --write src/**/*.ts",

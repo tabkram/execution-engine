@@ -1,0 +1,32 @@
+name: Comment on Deprecated Versions
+description: Report verified deprecated versions on the current pull request.
+
+inputs:
+  versions:
+    description: 'Verified deprecated versions, comma-separated'
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/github-script@v8
+      env:
+        DEPRECATED_VERSIONS: ${{ inputs.versions }}
+      with:
+        script: |
+          const value = process.env.DEPRECATED_VERSIONS;
+          if (!value) return;
+          const { parseVersions } = require('./.github/scripts/canary-cleanup.cjs');
+          const versions = parseVersions(value);
+          const issue = { ...context.repo, issue_number: context.issue.number };
+          const comments = await github.paginate(github.rest.issues.listComments, issue);
+          for (const version of versions) {
+            const body = [
+              `⚠️ **Deprecated Version:** \`${version}\``,
+              `📦 **Deprecated on NPM:** [View on NPM](https://www.npmjs.com/package/execution-engine/v/${version})`,
+              '',
+              '> This version is obsolete. Use `execution-engine@latest` for production.'
+            ].join('\n');
+            if (comments.some(comment => comment.user?.login === 'github-actions[bot]' && comment.body === body)) continue;
+            await github.rest.issues.createComment({ ...issue, body });
+          }

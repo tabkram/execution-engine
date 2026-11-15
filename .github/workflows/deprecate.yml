@@ -1,0 +1,24 @@
+name: Deprecate from NPM
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Exact prerelease version(s) to deprecate, comma-separated'
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  deprecate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Deprecate versions
+        uses: ./.github/actions/deprecate
+        with:
+          versions: ${{ inputs.version }}
+          npm_token: ${{ secrets.NPM_TOKEN }}

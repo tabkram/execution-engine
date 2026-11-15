@@ -1,0 +1,47 @@
+name: Deprecate NPM Versions by Prefix
+description: Find matching prereleases and verify their deprecation on npm.
+
+inputs:
+  version_prefix:
+    description: 'Prerelease prefix; ignored when pr_number is supplied'
+    required: false
+  pr_number:
+    description: 'PR number whose canaries should be deprecated across all base versions'
+    required: false
+  keep_version:
+    description: 'Exact deployment version to exclude from cleanup'
+    required: false
+  npm_token:
+    description: 'NPM token authorized to deprecate'
+    required: true
+outputs:
+  DEPRECATED_VERSIONS:
+    description: 'Versions newly deprecated and verified during this run'
+    value: ${{ steps.deprecate_versions.outputs.DEPRECATED_VERSIONS }}
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v7
+      with:
+        node-version: 24
+        registry-url: 'https://registry.npmjs.org/'
+        package-manager-cache: false
+
+    - name: Find matching versions
+      id: get_versions
+      shell: bash
+      env:
+        VERSION_PREFIX: ${{ inputs.version_prefix }}
+        PR_NUMBER: ${{ inputs.pr_number }}
+        KEEP_VERSION: ${{ inputs.keep_version }}
+      run: node .github/scripts/canary-cleanup.cjs discover
+
+    - name: Deprecate versions
+      id: deprecate_versions
+      if: steps.get_versions.outputs.versions != ''
+      uses: ./.github/actions/deprecate
+      with:
+        versions: ${{ steps.get_versions.outputs.versions }}
+        npm_token: ${{ inputs.npm_token }}
