@@ -36,7 +36,7 @@ export default defineConfig({
       { text: 'Engine', link: '/engine/trace', activeMatch: '/engine/' },
       { text: 'Examples', link: '/examples', activeMatch: '/examples' },
       {
-        text: 'v4',
+        text: 'v5',
         items: [
           { text: 'Changelog', link: `${REPO}/blob/main/CHANGELOG.md` },
           { text: 'Migration', link: '/reference/migration' },

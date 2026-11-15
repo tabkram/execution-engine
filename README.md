@@ -152,7 +152,7 @@ Explore the comprehensive __[documentation](https://tabkram.github.io/execution-
 - [Getting Started](https://tabkram.github.io/execution-engine/guide/getting-started) — install, requirements, first trace.
 - [Which API to use](https://tabkram.github.io/execution-engine/guide/which-api-to-use) — decorators or functions, and which engine.
 - [Engine trace format](https://tabkram.github.io/execution-engine/engine/trace) — nodes, edges, nesting and parallelism.
-- [Migration](https://tabkram.github.io/execution-engine/reference/migration) — upgrading to v4.
+- [Migration](https://tabkram.github.io/execution-engine/reference/migration) — upgrading to v5.
 
 ## Changelog 📝
 

@@ -1,6 +1,6 @@
 # Migration
 
-Every symbol listed here still works in v4. Replace it before the next major release, but an upgrade does not require
+Every symbol listed here still works in v5. Replace it before the next major release, but an upgrade does not require
 all renames at once.
 
 ## Renamed symbols
