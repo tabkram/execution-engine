@@ -1,3 +1,16 @@
+## [5.0.1](https://github.com/tabkram/execution-engine/compare/v5.0.0...v5.0.1) (2026-11-15)
+
+### Features
+
+* **ci:** add manual unpublish with browser 2FA ([1e37fea](https://github.com/tabkram/execution-engine/commit/1e37fea5d178edb8ddd3930e66d1db4f938e694b))
+* **retry:** add cancellable retry function and decorator ([70307cf](https://github.com/tabkram/execution-engine/commit/70307cff61a4f2e0ad72da6a794889dbd161c30e))
+
+### Bug Fixes
+
+* **cache:** hash memoize and cache keys without collisions ([b02c360](https://github.com/tabkram/execution-engine/commit/b02c360e23e155c21519e7d61bf99105395630af))
+* **ci:** publish canaries when deploy label is added ([828ba3c](https://github.com/tabkram/execution-engine/commit/828ba3c9b91b9d9d4cd1b4c9cf550d48159f37d2))
+* **ci:** verify canary deletion and clean all PR versions ([7b735a8](https://github.com/tabkram/execution-engine/commit/7b735a8c82379630c720d55ecb7f92543aced348))
+
 ## [5.0.0](https://github.com/tabkram/execution-engine/compare/v4.0.1...v5.0.0) (2026-11-14)
 
 ### Bug Fixes
