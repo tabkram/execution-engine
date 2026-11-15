@@ -1,0 +1,38 @@
+name: Deprecate NPM Versions
+description: Deprecate exact prerelease versions and verify their registry metadata.
+
+inputs:
+  versions:
+    description: 'Exact canary, dev or beta versions to deprecate (comma-separated)'
+    required: true
+  npm_token:
+    description: 'NPM token authorized to deprecate'
+    required: true
+outputs:
+  DEPRECATED_VERSIONS:
+    description: 'Versions whose deprecation was verified'
+    value: ${{ steps.deprecate_versions.outputs.DEPRECATED_VERSIONS }}
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v7
+      with:
+        node-version: 24
+        registry-url: 'https://registry.npmjs.org/'
+        package-manager-cache: false
+
+    - name: Deprecate and verify versions
+      id: deprecate_versions
+      shell: bash
+      env:
+        VERSIONS: ${{ inputs.versions }}
+        NODE_AUTH_TOKEN: ${{ inputs.npm_token }}
+      run: |
+        if [ -z "$NODE_AUTH_TOKEN" ]; then
+          echo "::error::NPM_TOKEN is not configured; obsolete versions cannot be deprecated."
+          exit 1
+        fi
+        npm whoami --registry=https://registry.npmjs.org/
+        node .github/scripts/canary-cleanup.cjs deprecate
