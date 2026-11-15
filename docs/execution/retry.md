@@ -1,9 +1,17 @@
-# Retry
+---
+description: Retry functions and methods with bounded attempts, backoff, jitter, per-call cancellation and optional execution graphs.
+---
+
+# Retry and @retry
 
 `retry(fn, options?)` wraps a function with bounded retries. `@retry(options?)` applies the same policy to a method.
 Both accept synchronous throws, rejected promises, and successful results. Every invocation returns a Promise,
 including when the original function is synchronous. Declare decorated methods `async` so their TypeScript return
 types match runtime behavior.
+
+No engine is required. By default, a call permits three executions and retries errors after 100 ms and then 200 ms.
+A successful result ends the call unless `shouldRetry` requests another attempt. See the
+[runnable example](../examples.md#retry-temporary-failures) for both forms without network requests.
 
 ## Usage
 
@@ -32,6 +40,7 @@ const invoice = await getInvoice('inv-123');
 
 The hooks receive a context object, rather than positional `error, attempt` arguments. Attempts count executions,
 so `attempts: 3` permits at most two retries. The first execution starts without a delay.
+`fetch` does not reject HTTP error responses, so this example throws explicitly and retries only HTTP 5xx errors.
 
 ### Decorator
 
@@ -109,16 +118,21 @@ be finite numbers between zero and `2_147_483_647`; invalid values throw `RangeE
 when creating the wrapper; custom delays are validated when evaluated. A zero delay still yields through a timer.
 
 ```ts
-import type { RetryContext, RetryBackoff } from 'execution-engine';
+import { retry, type RetryBackoff } from 'execution-engine';
 
 const backoff: RetryBackoff = ({ attempt }) => attempt * 250;
 
 // The predicate can retry successful results as well as errors.
 const poll = retry(() => fetch('/job/status'), {
   backoff,
-  shouldRetry: async ({ error, result }) => error !== undefined || result?.status === 202
+  shouldRetry: async (context) => 'error' in context || context.result?.status === 202
 });
+
+const response = await poll();
 ```
+
+Test for the presence of `error` when every failure should be retried: JavaScript permits `throw undefined`.
+The final response is returned even if its status is still `202` when the attempt budget is exhausted.
 
 ### `RetryContext<Result>`
 
@@ -159,6 +173,31 @@ const getStatus = retry(() => fetch('/status'), { engine });
 await getStatus();
 const graph = engine.getTrace();
 ```
+
+For a method, `this.engine` is discovered automatically. `@retry` records attempts without needing `@run`. If the
+method is also a workflow step, place `@run` above `@retry` to enclose the retry operation in that step:
+
+```ts
+import { engine, EngineTask, retry, run } from 'execution-engine';
+
+@engine()
+class BillingService extends EngineTask {
+  @run({ trace: { label: 'Get invoice' } })
+  @retry({ attempts: 3, initialDelay: 200 })
+  async getInvoice(id: string): Promise<unknown> {
+    const response = await fetch(`/invoices/${id}`);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return response.json();
+  }
+}
+
+const service = new BillingService();
+const invoice = await service.getInvoice('inv-123');
+const graph = service.engine.getTrace();
+```
+
+The graph contains the outer `Get invoice` step, a nested `retry getInvoice` operation, and its child attempts.
+The method returns the invoice directly in a Promise; read the graph from the engine afterwards.
 
 Attempt nodes record inputs, outputs or serialized failure reasons, and timing. Retried attempts have a narrative
 containing the planned delay and whether the retry came from an error or result. The parent records the final

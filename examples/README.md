@@ -4,24 +4,27 @@ Every file here runs on its own — `npx ts-node examples/<file>.ts` — and the
 next to themselves as JSON. The **Graph Results** links open that JSON in the
 [json-to-graph viewer](https://tabkram.github.io/json-to-graph/).
 
-The four marked **docs** are the ones shown on <https://tabkram.github.io/execution-engine/examples>, with their code
+The five marked **docs** are the ones shown on <https://tabkram.github.io/execution-engine/examples>, with their code
 beside the run they produced.
 
 ## One function at a time
 
-No engine and no graph: these wrap a single function and report what it did.
+No engine and no graph: these observe, optimize or retry a single function.
 
 | Example Code                                 | Output                                     | |
 |----------------------------------------------|--------------------------------------------|-------|
 | [execution-trace.ts](execution-trace.ts)     | [execution-trace.json](execution-trace.json) | docs |
 | [execution-cache.ts](execution-cache.ts)     | prints to the console                      | docs |
 | [execution-memoize.ts](execution-memoize.ts) | prints to the console                      | docs |
+| [execution-retry.ts](execution-retry.ts)     | prints to the console                      | docs |
 
 - **[execution-trace.ts](execution-trace.ts)**: `executionTrace` around one call — inputs, outputs, timing, returned as
   a record.
 - **[execution-cache.ts](execution-cache.ts)**: `@cache` keyed on the arguments; the repeat call never reaches the API.
 - **[execution-memoize.ts](execution-memoize.ts)**: `@memoize` storing the in-flight promise, so twelve simultaneous
   callers share one execution. Its zero TTL discards the entry at settlement, so an immediate later call starts fresh.
+- **[execution-retry.ts](execution-retry.ts)**: `retry` around a synchronous function and `@retry` on an async method.
+  Both recover from temporary failures, print retry delays, and return a Promise. No network requests are needed.
 
 ## A run as a graph
 

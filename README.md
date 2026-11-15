@@ -39,13 +39,15 @@ Two independent parts. Use either one without adopting the other.
 
 ### 1. Execution — one function at a time
 
-No engine and no graph: wrap a single call to see what it did, or to stop it from happening twice.
+Wrap a single function to observe calls, reuse work or retry failures. No engine is required.
 
 - **[Trace](https://tabkram.github.io/execution-engine/execution/trace):** Capture inputs, outputs, errors and timing
   of a single call.
 - **[Cache](https://tabkram.github.io/execution-engine/execution/cache):** Reuse a result for a configurable TTL.
 - **[Memoize](https://tabkram.github.io/execution-engine/execution/memoize):** Collapse duplicate concurrent calls
   into one. For asynchronous calls, set the TTL to `0` to share only in-flight work and allow immediate retries after completion or failure.
+- **[Retry](https://tabkram.github.io/execution-engine/execution/retry):** Use `retry(fn, options?)` or `@retry(options?)`
+  for bounded retries with backoff, cancellation and optional attempt tracing. Both always return a Promise.
 - **[Timer](https://tabkram.github.io/execution-engine/execution/timer):** Measure a code block, in ms and in words.
 
 ### 2. Engine — the whole run as a graph
@@ -126,7 +128,7 @@ the engine works them out from how the calls actually ran.
 ]
 ```
 
-Caching, memoization, decorators, engine context and the full trace format are covered in the
+Caching, memoization, retry, decorators, engine context and the full trace format are covered in the
 __[documentation](https://tabkram.github.io/execution-engine)__.
 
 ## Examples 📘
@@ -135,6 +137,8 @@ Runnable examples live in the __[/examples](examples)__ directory, each with the
 are shown beside their graphs on the __[Examples page](https://tabkram.github.io/execution-engine/examples)__.
 
 - [execution-trace.ts](examples/execution-trace.ts) — one call, recorded as a plain record. No engine, no graph.
+- [execution-retry.ts](examples/execution-retry.ts) — recover from temporary failures with `retry` and `@retry`,
+  showing the delay before each retry.
 - [engine-sequential.ts](examples/engine-sequential.ts) — the smallest graph there is: four calls, four nodes, three
   inferred edges.
 - [engine-checkout.ts](examples/engine-checkout.ts) — one checkout that exercises everything at once: a chain,

@@ -47,6 +47,48 @@ new MathOperations().add(2, 3);
 The method still returns `5`. For a plain function, use
 [`executionTrace`](../execution/trace.md#executiontrace) instead. [Trace](../execution/trace.md) documents both APIs.
 
+## Retry a function
+
+`retry` wraps a function; `@retry` applies the same policy to a method. Both always return a Promise.
+
+::: code-group
+
+```ts [retry]
+import { retry } from 'execution-engine';
+
+const getInvoice = retry(async (id: string) => {
+  const response = await fetch(`/invoices/${id}`);
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.json();
+}, { attempts: 3, initialDelay: 200 });
+
+const invoice = await getInvoice('inv-123');
+```
+
+```ts [@retry]
+import { retry } from 'execution-engine';
+
+class BillingService {
+  @retry({ attempts: 3, initialDelay: 200 })
+  async getInvoice(id: string): Promise<unknown> {
+    const response = await fetch(`/invoices/${id}`);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return response.json();
+  }
+}
+
+const invoice = await new BillingService().getInvoice('inv-123');
+```
+
+:::
+
+`attempts: 3` includes the first execution, so there are at most two retries. With exponential backoff (the default),
+these wait 200 ms and 400 ms. By default, every thrown error or rejected promise is retryable; a successful result
+ends the call. `fetch` does not reject HTTP error responses, so the examples throw explicitly.
+
+See [Retry](../execution/retry.md) for filtering errors with `shouldRetry`, retrying results, jitter, cancellation
+and recording attempts in a graph. The [runnable example](../examples.md#retry-temporary-failures) needs no network.
+
 ## Trace a workflow
 
 To capture how several calls relate, route them through an engine. Each call becomes a node; the engine connects the

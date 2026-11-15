@@ -10,13 +10,13 @@ outline: false
 Every example on this page is a file in the repository that was actually run. The code is on the left, what it produced
 is on the right, and the numbers are the ones that run recorded — not a sketch of them.
 
-Three small ones first, each wrapping a single function. Then one checkout, routed through an engine, that puts all of
-it into a single graph.
+Four small ones first, each wrapping a single function or method. Then one checkout, routed through an engine, that
+combines tracing, caching and memoization in a single graph.
 
 ## One function at a time
 
-No engine, nothing to wire up, and no graph — this half of the library wraps a **single function** and reports what it
-did. Start here if you want timings, a cache or deduplication and nothing else.
+These examples wrap a **single function** without an engine or a graph. Start here for timings, a cache,
+deduplication or retries.
 
 ### Trace one call
 
@@ -144,6 +144,41 @@ after the next call: 2 executions, 11 reused
 
 </template>
 </FlowExample>
+
+### Retry temporary failures
+
+[`retry`](./execution/retry.md) wraps a function; `@retry` applies the same policy to a method. The wrapper below
+retries synchronous throws and still returns a Promise. The decorator preserves the service instance and its
+arguments. Both use three executions at most, including the first call, and are imported with
+`import { retry } from 'execution-engine'`.
+
+<FlowExample id="retry" caption="what it printed">
+
+::: code-group
+
+<<< @/../examples/execution-retry.ts#function [retry]
+
+<<< @/../examples/execution-retry.ts#decorator [@retry]
+
+:::
+
+<template #out>
+
+```console
+retry: attempt 1, next in 10 ms
+retry: attempt 2, next in 20 ms
+retry: inv-123 after 3 executions
+@retry: attempt 1, next in 10 ms
+@retry: inv-456 after 2 executions
+```
+
+</template>
+</FlowExample>
+
+Run `npx ts-node examples/execution-retry.ts` from the repository root to execute both examples in order. The function
+uses exponential backoff; the decorator uses a fixed delay. `onRetry` runs before each retry delay and never after
+the final attempt. See [Retry](./execution/retry.md) for error filtering, result retries, cancellation and optional
+attempt tracing.
 
 ## A run as a graph
 

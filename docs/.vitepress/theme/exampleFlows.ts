@@ -49,6 +49,7 @@ export const exampleFlows: FlowExample[] = [
   { id: 'trace', source: 'examples/execution-trace.ts', trace: true },
   { id: 'cache', source: 'examples/execution-cache.ts' },
   { id: 'memoize', source: 'examples/execution-memoize.ts' },
+  { id: 'retry', source: 'examples/execution-retry.ts' },
 
   /* ---- One checkout, as a graph ---- */
 

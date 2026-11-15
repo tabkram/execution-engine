@@ -59,14 +59,14 @@ export default defineConfig({
         ]
       },
       {
-        // Part 1 — src/execution: one function at a time, no engine.
+        // Part 1 — src/execution: one function at a time, no engine required.
         text: 'Execution',
         collapsed: false,
         items: [
           { text: 'Trace', link: '/execution/trace' },
           { text: 'Cache', link: '/execution/cache' },
           { text: 'Memoize', link: '/execution/memoize' },
-          { text: 'Retry', link: '/execution/retry' },
+          { text: 'Retry and @retry', link: '/execution/retry' },
           { text: 'Timer', link: '/execution/timer' }
         ]
       },

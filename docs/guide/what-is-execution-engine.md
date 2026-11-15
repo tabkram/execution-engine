@@ -7,9 +7,10 @@ It has two independent modes: use **Execution** for one function, or **Engine** 
 
 ## Execution — individual functions {#execution-apis}
 
-Capture calls independently, with no engine and no graph. Use [Trace](../execution/trace.md) for call data,
+Observe or optimize individual functions without an engine. Use [Trace](../execution/trace.md) for call data,
 [Cache](../execution/cache.md) or [Memoize](../execution/memoize.md) to avoid repeated work, and
-[Timer](../execution/timer.md) for elapsed time.
+[Timer](../execution/timer.md) for elapsed time. Use [`retry` or `@retry`](../execution/retry.md) to retry temporary
+failures with a bounded attempt count, backoff and cancellation. Retry can also record attempts when given an engine.
 
 ## Engine — a whole run
 
@@ -29,9 +30,9 @@ Engine traces use a [**Cytoscape-compatible**](https://js.cytoscape.org/) shape.
 | | Execution | Engine |
 | --- | --- | --- |
 | Scope | One function | Many calls, and their relationships |
-| Output | One record per call, returned or sent to a callback | A JSON graph of nodes and edges |
+| Output | The function's value or a call record, depending on the API | A JSON graph of nodes and edges |
 | Setup | Nothing | An engine instance |
 | Order, nesting, parallelism | Not tracked | Tracked |
-| Use it for | Logging, metrics, debugging one function | Pipelines, workflows, orchestration |
+| Use it for | Logging, metrics, caching, deduplication, retries | Pipelines, workflows, orchestration |
 
 The two are independent; use either without adopting the other.

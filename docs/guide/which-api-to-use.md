@@ -68,6 +68,20 @@ someone else's function. `executeCache` and `executeMemoize` additionally requir
 method identity to derive one from. Their stores also live on `this`, so call them with the same receiver (for example,
 `const scope = { executeMemoize }`, then `scope.executeMemoize(...)`) when calls should share entries.
 
+## `retry` or `@retry`?
+
+Use [`retry(fn, options?)`](../execution/retry.md#usage) to create a reusable wrapper, or
+[`@retry(options?)`](../execution/retry.md#decorator) on an `async` method. Both return the function's value in a
+Promise, preserve arguments and `this`, and use an independent attempt budget for every invocation.
+
+By default, retry permits three executions with exponential delays of 100 ms and 200 ms after failures. Use
+`shouldRetry` to select retryable errors or results. Cancellation is per call: `wrapped.withOptions({ signal }, ...args)`
+for a wrapper, or `getSignal(args)` to select a method argument for a decorator.
+
+Retry does not reuse results or merge concurrent calls. It works without an engine; with `{ engine }` or an inferred
+`this.engine`, it records a parent operation and each attempt. See [trace integration](../execution/retry.md#trace-integration)
+for composition with `@run`.
+
 ## `@cache` or `@memoize`?
 
 Both optimize execution; neither adds trace records.

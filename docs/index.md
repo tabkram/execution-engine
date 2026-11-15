@@ -34,7 +34,7 @@ hero:
     <span class="ee-part-icon">🔍</span>
     <div>
       <h2>Execution</h2>
-      <p class="ee-part-sub">Trace and optimize a single function. No engine, no graph.</p>
+      <p class="ee-part-sub">Trace, optimize or retry a single function. No engine required.</p>
     </div>
   </div>
   <div class="ee-part-links">
@@ -49,6 +49,10 @@ hero:
     <a href="/execution-engine/execution/memoize">
       <span class="ee-link-title">Memoize</span>
       <span class="ee-link-desc">Collapse duplicate concurrent calls into one</span>
+    </a>
+    <a href="/execution-engine/execution/retry">
+      <span class="ee-link-title">Retry and @retry</span>
+      <span class="ee-link-desc">Retry temporary failures with backoff and per-call cancellation</span>
     </a>
     <a href="/execution-engine/execution/timer">
       <span class="ee-link-title">Timer</span>
