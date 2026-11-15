@@ -3,11 +3,7 @@ const { execFileSync } = require('node:child_process');
 const { join } = require('node:path');
 const { setTimeout: sleep } = require('node:timers/promises');
 const { parseVersions, readPackument } = require('./canary-cleanup.cjs');
-
-const registry = 'https://registry.npmjs.org';
-const packageName = 'execution-engine';
-const owner = 'tabkram';
-const confirmation = 'I confirm to unpublish';
+const { registry, registryTimeoutMs, packageName, npmUser: owner, unpublishConfirmation: confirmation } = require('./config.cjs');
 
 function sessionOptions(directory) {
   const env = Object.fromEntries(
@@ -43,7 +39,7 @@ async function verifyRemoved(version, { read = readPackument, fetchRegistry = fe
         method: 'HEAD',
         headers: { 'cache-control': 'no-cache' },
         cache: 'no-store',
-        signal: AbortSignal.timeout(15_000)
+        signal: AbortSignal.timeout(registryTimeoutMs)
       });
       if (response.status === 404 || response.status === 410) return;
       if (!response.ok) throw new Error(`Cannot verify the archive for ${version}: HTTP ${response.status}.`);
@@ -84,7 +80,7 @@ async function unpublishManually(
   writeFileSync(join(directory, 'global.npmrc'), '', { mode: 0o600 });
   const removed = [];
   try {
-    report('Open the npm login link below in your browser and authenticate as tabkram.');
+    report(`Open the npm login link below in your browser and authenticate as ${owner}.`);
     run(['login', '--auth-type=web', '--browser=false', `--registry=${registry}`, '--loglevel=error'], directory);
     const username = run(['whoami', `--registry=${registry}`, '--loglevel=error'], directory, { capture: true }).trim();
     if (username !== owner) throw new Error(`Expected npm account ${owner}; authenticated as ${username}. No versions were deleted.`);

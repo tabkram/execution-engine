@@ -27,6 +27,16 @@ jobs:
       RELEASE_TAG: ${{ github.event.release.tag_name || inputs.tag }}
       PRERELEASE: ${{ github.event.release.prerelease }}
     steps:
+      - name: Checkout CI configuration
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.workflow_sha }}
+          persist-credentials: false
+
+      - name: Read CI configuration
+        id: config
+        uses: ./.github/actions/config
+
       - name: Checkout release tag
         uses: actions/checkout@v7
         with:
@@ -36,12 +46,14 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v7
         with:
-          node-version: 24
-          registry-url: 'https://registry.npmjs.org'
+          node-version: ${{ steps.config.outputs.node-version }}
+          registry-url: ${{ steps.config.outputs.registry }}
           package-manager-cache: false
 
       - name: Install npm with OIDC support
-        run: npm install --global npm@11 --ignore-scripts
+        env:
+          NPM_VERSION: ${{ steps.config.outputs.npm-version }}
+        run: npm install --global "npm@$NPM_VERSION" --ignore-scripts
 
       - name: Verify release version
         run: |
@@ -61,10 +73,14 @@ jobs:
         run: npm run build
 
       - name: Publish to npm using OIDC
+        env:
+          PUBLISH_ACCESS: ${{ steps.config.outputs.publish-access }}
+          LATEST_TAG: ${{ steps.config.outputs.latest-tag }}
+          PRERELEASE_TAG: ${{ steps.config.outputs.prerelease-tag }}
         run: |
           VERSION=$(node -p "require('./package.json').version")
           if [[ "$PRERELEASE" == "true" || "$VERSION" == *-* ]]; then
-            npm publish --access public --tag next
+            npm publish --access "$PUBLISH_ACCESS" --tag "$PRERELEASE_TAG"
           else
-            npm publish --access public
+            npm publish --access "$PUBLISH_ACCESS" --tag "$LATEST_TAG"
           fi

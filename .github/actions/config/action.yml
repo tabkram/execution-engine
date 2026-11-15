@@ -1,0 +1,53 @@
+name: Read CI Configuration
+description: Expose shared runtime and publishing settings from config.cjs after checkout.
+
+outputs:
+  node-version:
+    description: Node.js version
+    value: ${{ steps.config.outputs.node-version }}
+  npm-version:
+    description: npm version for trusted publishing and manual unpublish
+    value: ${{ steps.config.outputs.npm-version }}
+  registry:
+    description: npm registry URL
+    value: ${{ steps.config.outputs.registry }}
+  package-url:
+    description: npm package page
+    value: ${{ steps.config.outputs.package-url }}
+  publish-access:
+    description: Published package access
+    value: ${{ steps.config.outputs.publish-access }}
+  latest-tag:
+    description: npm tag for stable releases
+    value: ${{ steps.config.outputs.latest-tag }}
+  prerelease-tag:
+    description: npm tag for prereleases
+    value: ${{ steps.config.outputs.prerelease-tag }}
+  canary-tag:
+    description: npm tag for PR canaries
+    value: ${{ steps.config.outputs.canary-tag }}
+
+runs:
+  using: composite
+  steps:
+    - id: config
+      shell: bash
+      working-directory: ${{ github.workspace }}
+      run: |
+        node <<'NODE'
+        const { appendFileSync } = require('node:fs');
+        const config = require('./.github/scripts/config.cjs');
+        const outputs = {
+          'node-version': config.nodeVersion,
+          'npm-version': config.npmVersion,
+          registry: config.registry,
+          'package-url': config.packageUrl,
+          'publish-access': config.publishAccess,
+          'latest-tag': config.tags.latest,
+          'prerelease-tag': config.tags.prerelease,
+          'canary-tag': config.tags.canary
+        };
+        for (const [name, value] of Object.entries(outputs)) {
+          appendFileSync(process.env.GITHUB_OUTPUT, `${name}=${value}\n`);
+        }
+        NODE

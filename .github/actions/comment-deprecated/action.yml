@@ -17,15 +17,16 @@ runs:
           const value = process.env.DEPRECATED_VERSIONS;
           if (!value) return;
           const { parseVersions } = require('./.github/scripts/canary-cleanup.cjs');
+          const { packageName, packageUrl, tags } = require('./.github/scripts/config.cjs');
           const versions = parseVersions(value);
           const issue = { ...context.repo, issue_number: context.issue.number };
           const comments = await github.paginate(github.rest.issues.listComments, issue);
           for (const version of versions) {
             const body = [
               `⚠️ **Deprecated Version:** \`${version}\``,
-              `📦 **Deprecated on NPM:** [View on NPM](https://www.npmjs.com/package/execution-engine/v/${version})`,
+              `📦 **Deprecated on NPM:** [View on NPM](${packageUrl}/v/${version})`,
               '',
-              '> This version is obsolete. Use `execution-engine@latest` for production.'
+              `> This version is obsolete. Use \`${packageName}@${tags.latest}\` for production.`
             ].join('\n');
             if (comments.some(comment => comment.user?.login === 'github-actions[bot]' && comment.body === body)) continue;
             await github.rest.issues.createComment({ ...issue, body });
