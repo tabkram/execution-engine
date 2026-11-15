@@ -37,16 +37,21 @@ jobs:
 
     outputs:
       canary_version: ${{ steps.generate_canary_version.outputs.canary_version }}
+      package_url: ${{ steps.config.outputs.package-url }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
 
+      - name: Read CI configuration
+        id: config
+        uses: ./.github/actions/config
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: 24
-          registry-url: "https://registry.npmjs.org"
+          node-version: ${{ steps.config.outputs.node-version }}
+          registry-url: ${{ steps.config.outputs.registry }}
 
       - name: Generate Canary Version
         id: generate_canary_version
@@ -106,21 +111,27 @@ jobs:
       pull-requests: write
     environment:
       name: canary
-      url: https://www.npmjs.com/package/execution-engine/v/${{ needs.compute-version.outputs.canary_version }}
+      url: ${{ needs.compute-version.outputs.package_url }}/v/${{ needs.compute-version.outputs.canary_version }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
 
+      - name: Read CI configuration
+        id: config
+        uses: ./.github/actions/config
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: 24
-          registry-url: "https://registry.npmjs.org"
+          node-version: ${{ steps.config.outputs.node-version }}
+          registry-url: ${{ steps.config.outputs.registry }}
           package-manager-cache: false
 
       - name: Install npm with OIDC support
-        run: npm install --global npm@11 --ignore-scripts
+        env:
+          NPM_VERSION: ${{ steps.config.outputs.npm-version }}
+        run: npm install --global "npm@$NPM_VERSION" --ignore-scripts
 
       - name: Install dependencies
         run: npm ci
@@ -131,9 +142,11 @@ jobs:
       - name: Bump version and publish canary using OIDC
         env:
           CANARY_VERSION: ${{ needs.compute-version.outputs.canary_version }}
+          PUBLISH_ACCESS: ${{ steps.config.outputs.publish-access }}
+          CANARY_TAG: ${{ steps.config.outputs.canary-tag }}
         run: |
           npm version "$CANARY_VERSION" --no-git-tag-version
-          npm publish --access public --tag canary
+          npm publish --access "$PUBLISH_ACCESS" --tag "$CANARY_TAG"
 
       - name: Comment on PR with deployed Version
         uses: peter-evans/create-or-update-comment@v5
@@ -142,9 +155,9 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             ✅ **Created Version:** `${{ needs.compute-version.outputs.canary_version }}`
-            📦 **Published on NPM:** [View on NPM](https://www.npmjs.com/package/execution-engine/v/${{ needs.compute-version.outputs.canary_version }})
+            📦 **Published on NPM:** [View on NPM](${{ steps.config.outputs.package-url }}/v/${{ needs.compute-version.outputs.canary_version }})
 
-            > The `canary` tag points to the latest canary.
+            > The `${{ steps.config.outputs.canary-tag }}` tag points to the latest canary.
           reactions: 'rocket'
 
   deprecate_versions:

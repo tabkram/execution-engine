@@ -20,10 +20,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
+      - name: Read CI configuration
+        id: config
+        uses: ./.github/actions/config
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version: ${{ steps.config.outputs.node-version }}
           cache: npm
 
       - name: Install dependencies

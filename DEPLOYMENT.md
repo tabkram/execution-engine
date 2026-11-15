@@ -3,6 +3,10 @@
 Publishing uses GitHub Actions OIDC instead of a long-lived npm publish token. The workflows use Node.js 24 and npm 11,
 which supports trusted publishing without changing to npm 12's installation defaults.
 
+Shared CI settings live in `.github/scripts/config.cjs`: Node/npm versions, the npm registry, publish access, tags
+and prerelease cleanup rules. The package name comes from `package.json`. Workflows load these values through
+`.github/actions/config`; triggers, permissions and job dependencies stay in the workflow files.
+
 ## One-time npm setup
 
 Open the [execution-engine package](https://www.npmjs.com/package/execution-engine) settings and add two GitHub Actions
